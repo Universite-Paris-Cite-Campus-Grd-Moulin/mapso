@@ -14,8 +14,16 @@ Ce projet est un jeu de Khet développé en Java en utilisant AWT et Swing. Suiv
 1. Décompressez le fichier du projet dans un répertoire de votre choix.
 2. Ouvrez Visual Studio Code.
 3. Sélectionnez `File > Open Folder...` et naviguez jusqu'au dossier du projet décompressé.
-4. Le point d'entrée principal du programme se trouve dans `src/.java`.
-5. Ouvrez le fichier `.java`, vous trouverez le main tout en bas du fichier, et exécutez-le en utilisant la fonctionnalité d'exécution de VSCode.
+4. Le point d'entrée principal du programme se trouve dans `khet/Main.java`.
+5. Ouvrez le fichier `Main.java`, vous trouverez le main tout en bas du fichier, et exécutez-le en utilisant la fonctionnalité d'exécution de VSCode.
+6. Sinon tapez les commmandes suivantes dans le terminals sous le dossier mapso:
+`javac -d bin khet/Main.java`
+puis :
+`java -cp bin khet.Main`
+
+ou bien seulement cette commande:
+`javac -d bin $(find . -name "*.java")``
+
 
 ### Utilisation d'Eclipse
 
@@ -23,8 +31,8 @@ Ce projet est un jeu de Khet développé en Java en utilisant AWT et Swing. Suiv
 2. Ouvrez Eclipse.
 3. Sélectionnez `File > Open Projects from File System...`.
 4. Utilisez le navigateur de fichiers pour sélectionner le dossier du projet décompressé et cliquez sur `Finish`.
-5. Naviguez jusqu'à `src/.java` dans l'explorateur de projets Eclipse.
-6. Ouvrez le fichier `.java`, vous trouverez le main tout en bas du fichier, et exécutez-le en tant qu'application Java.
+5. Naviguez jusqu'à `khet/Main.java` dans l'explorateur de projets Eclipse.
+6. Ouvrez le fichier `Main.java`, vous trouverez le main tout en bas du fichier, et exécutez-le en tant qu'application Java.
 
 ## Support
 

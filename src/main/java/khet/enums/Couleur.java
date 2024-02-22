@@ -3,5 +3,6 @@ package khet.enums;
 
 public enum Couleur {
     ROUGE,
-    JAUNE
+    JAUNE,
+    BLEU
 }

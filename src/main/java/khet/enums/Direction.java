@@ -2,22 +2,22 @@
 package khet.enums;
 
 public enum Direction {
-    N, E, S, W;
-    
-    private static final int di[] = {-1, 0, 1, 0};
-    private static final int dj[] = {0, 1, 0, -1};
-    
+    N, E, S, W, NONE;
+
+    private static final int di[] = { -1, 0, 1, 0 };
+    private static final int dj[] = { 0, 1, 0, -1 };
+
     static abstract class Behavior {
         abstract void m();
     }
 
     static Behavior behaviors[] = {
-        new Behavior() {
-            void m() {
+            new Behavior() {
+                void m() {
 
+                }
             }
-        }
-        //...
+            // ...
     };
 
     void m() {
@@ -27,6 +27,7 @@ public enum Direction {
     int di() {
         return di[this.ordinal()];
     }
+
     int dj() {
         return dj[this.ordinal()];
     }

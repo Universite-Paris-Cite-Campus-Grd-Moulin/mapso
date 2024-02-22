@@ -1,42 +1,57 @@
-//Realise par Paul
 package khet.model;
 
-// Modélise le plateau de jeu, en combinant les fonctionnalités des classes Board et Plateau
+import java.util.Scanner;
+
+import khet.enums.Couleur;
+
+// Modélise le plateau de jeu, intégrant la gestion des interactions utilisateur pour jouer
 public class Board {
-    private Piece[][] grille; // Utilisez Piece au lieu de Pion pour une cohérence avec le reste du projet
+    private Piece[][] grille; // Utilisation de Piece au lieu de Pion pour une cohérence
 
     public Board() {
-        // Crée une grille de pièces, par exemple, de taille 10x8
-        grille = new Piece[10][8];
-        initialiserPlateau();
+        grille = new Piece[10][8]; // Initialisation avec la taille souhaitée
+        initialiserPlateau(); // Assurez-vous d'implémenter cette méthode pour configurer le plateau initial
     }
 
+    // Méthode pour initialiser le plateau avec les pièces de départ
     private void initialiserPlateau() {
-        // Initialiser la grille avec les pièces de départ
-        // Assurez-vous que les classes des pièces (comme Pharaon, Obelisque) sont correctement définies et intégrées
-
-        // Exemple d'initialisation (les classes spécifiques des pièces doivent être définies ailleurs)
-        // grille[0][0] = new Pharaon(0, 0, Couleur.JAUNE); // Remarque: Assurez-vous que Couleur.BLEU est changé en Couleur.JAUNE si c'est la couleur utilisée
-        
-        // Ajouter d'autres pièces selon la configuration initiale du jeu Khet
-
-        // Exemple : Obélisque Rouge en (9, 7)
-        // grille[9][7] = new Obelisque(9, 7, Couleur.ROUGE);
+        // Initialisation des pièces sur le plateau
+        // Par exemple : grille[0][0] = new Pharaon(0, 0, Couleur.JAUNE);
     }
 
-    // Place une pièce sur le plateau
-    public void placePiece(Piece piece, int x, int y) {
-        grille[x][y] = piece;
+    public void jouer() {
+        Scanner scanner = new Scanner(System.in);
+        boolean finDuJeu = false;
+
+        while (!finDuJeu) {
+            afficherPlateau();
+
+            System.out.println("Sélectionnez la pièce à déplacer (format : x y) : ");
+            int xDepart = scanner.nextInt();
+            int yDepart = scanner.nextInt();
+            Piece pieceSelectionnee = getPion(xDepart, yDepart);
+
+            if (pieceSelectionnee != null && pieceSelectionnee.getCouleur() == Couleur.BLEU) {
+                System.out.println("Déplacez la pièce (format : x y) : ");
+                int xArrivee = scanner.nextInt();
+                int yArrivee = scanner.nextInt();
+
+                if (mouvementLegal(xDepart, yDepart, xArrivee, yArrivee)) {
+                    deplacerPiece(xDepart, yDepart, xArrivee, yArrivee);
+                } else {
+                    System.out.println("Mouvement non autorisé !");
+                }
+            } else {
+                System.out.println("Sélectionnez une pièce valide !");
+            }
+
+            // finDuJeu = conditionDeFinDeJeu(); // Implémentez selon les règles spécifiques de votre jeu
+        }
+
+        scanner.close();
     }
 
-    // Déplace une pièce sur le plateau
-    public void movePiece(int fromX, int fromY, int toX, int toY) {
-        Piece piece = grille[fromX][fromY];
-        grille[fromX][fromY] = null;
-        grille[toX][toY] = piece;
-    }
-
-    // Affiche le plateau dans la console - Utile pour le débogage
+    // Méthode pour afficher l'état actuel du plateau
     public void afficherPlateau() {
         for (int i = 0; i < grille.length; i++) {
             for (int j = 0; j < grille[i].length; j++) {
@@ -50,10 +65,23 @@ public class Board {
         }
     }
 
-    // Retourne la pièce située aux coordonnées (x, y)
+    // Méthode pour récupérer une pièce à une position spécifique
     public Piece getPion(int x, int y) {
         return grille[x][y];
     }
 
-    // Ajoutez d'autres méthodes nécessaires pour la logique spécifique du jeu
+    // Méthode pour déplacer une pièce
+    public void deplacerPiece(int xDepart, int yDepart, int xArrivee, int yArrivee) {
+        Piece piece = grille[xDepart][yDepart];
+        grille[xDepart][yDepart] = null;
+        grille[xArrivee][yArrivee] = piece;
+        // piece.move(xArrivee, yArrivee); // Assurez-vous que la méthode move soit implémentée dans Piece
+    }
+
+    private boolean mouvementLegal(int xDepart, int yDepart, int xArrivee, int yArrivee) {
+        // Implémentez la logique de validation du mouvement ici
+        return true; // Simplification pour l'exemple
+    }
+
+    // Ajoutez d'autres méthodes utiles pour la gestion du jeu
 }

@@ -1,54 +1,53 @@
-//Realise par Paul
 package khet.model;
 
 import khet.enums.Couleur;
-import khet.enums.TypeDePion;
+import khet.enums.Direction;
 
 // Représente une pièce générique sur le plateau de jeu
 public abstract class Piece {
-    protected TypeDePion type;
     protected int x, y; // Position sur le plateau
-    protected Couleur couleur; // Couleur de la pièce
+    protected Couleur couleur;
+    protected Direction direction; // Ajout de l'attribut direction
 
-    // Constructeur unifié qui inclut la couleur de la pièce
-    public Piece(TypeDePion type, int x, int y, Couleur couleur) {
-        this.type = type;
+    // Constructeur ajusté pour inclure la direction
+    public Piece(int x, int y, Couleur couleur, Direction direction) {
         this.x = x;
         this.y = y;
         this.couleur = couleur;
+        this.direction = direction; // Initialisation de la direction
     }
 
-    // Méthode abstraite pour déplacer la pièce. Cette méthode doit être implémentée par les classes dérivées
     public abstract void move(int newX, int newY);
 
-    // Méthode abstraite pour les actions spécifiques à chaque type de pièce
     public abstract void actionSpecifique();
 
-    // Getters pour accéder aux propriétés de la pièce
-    public TypeDePion getType() {
-        return type;
-    }
-
+    // Getters et setters ajustés pour inclure la direction
     public int getX() {
         return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
     }
 
     public int getY() {
         return y;
     }
 
-    public Couleur getCouleur() {
-        return couleur;
-    }
-
-    // Setters si nécessaire, pour permettre la modification des propriétés de la pièce
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public void setY(int y) {
         this.y = y;
     }
 
-    // Vous pouvez ajouter d'autres méthodes utiles ici selon les besoins du jeu
+    public Couleur getCouleur() {
+        return couleur;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
 }

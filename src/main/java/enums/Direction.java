@@ -1,32 +1,73 @@
 package src.main.java.enums;
 
 public enum Direction {
-    N, E, S, W;
-    
-    private static final int di[] = {-1, 0, 1, 0};
-    private static final int dj[] = {0, 1, 0, -1};
-    
-    static abstract class Behavior {
-        abstract void m();
-    }
-
-    static Behavior behaviors[] = {
-        new Behavior() {
-            void m() {
-
-            }
+    NORD(-1, 0) {
+        @Override
+        public Direction perpendiculaire() {
+            return EST;
         }
-        //...
+    },
+    EST(0, 1) {
+        @Override
+        public Direction perpendiculaire() {
+            return SUD;
+        }
+    },
+    SUD(1, 0) {
+        @Override
+        public Direction perpendiculaire() {
+            return OUEST;
+        }
+    },
+    OUEST(0, -1) {
+        @Override
+        public Direction perpendiculaire() {
+            return NORD;
+        }
+    },
+    NORD_EST(-1, 1) {
+        @Override
+        public Direction perpendiculaire() {
+            return SUD_EST;
+        }
+    },
+    SUD_EST(1, 1) {
+        @Override
+        public Direction perpendiculaire() {
+            return SUD_OUEST;
+        }
+    },
+    SUD_OUEST(1, -1) {
+        @Override
+        public Direction perpendiculaire() {
+            return NORD_OUEST;
+        }
+    },
+    NORD_OUEST(-1, -1) {
+        @Override
+        public Direction perpendiculaire() {
+            return NORD_EST;
+        }
     };
 
-    void m() {
-        behaviors[this.ordinal()].m();
+    static int[] tdi = {-1, 0, 1, 0};
+
+    private final int di;
+    private final int dj;
+
+    Direction(int di, int dj) {
+        this.di = di;
+        this.dj = dj;
     }
 
-    int di() {
-        return di[this.ordinal()];
+    public int getDi() {
+        return tdi[this.ordinal()];
+        //return di;
     }
-    int dj() {
-        return dj[this.ordinal()];
+
+    public int getDj() {
+        return dj;
     }
+
+    public abstract Direction perpendiculaire();
 }

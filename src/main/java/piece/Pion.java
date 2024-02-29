@@ -2,39 +2,45 @@ package src.main.java.piece;
 
 import src.main.java.enums.Couleur;
 import src.main.java.enums.TypeDePion;
+import src.main.java.enums.Direction;
 
-public abstract class Pion {
+public class Pion {
     protected TypeDePion type;
-    protected int positionX;
-    protected int positionY;
+    protected Direction direction ;
     protected Couleur couleur;
 
-    public Pion(TypeDePion type, int positionX, int positionY, Couleur couleur) {
+    public Pion(TypeDePion type, Direction direction, Couleur couleur) {
         this.type = type;
-        this.positionX = positionX;
-        this.positionY = positionY;
+        this.direction = direction;
         this.couleur = couleur;
     }
 
     // Méthodes abstraites pour les actions spécifiques à chaque pion
-    public abstract void deplacer(int nouvelleX, int nouvelleY);
-    public abstract void actionSpecifique();
+    
 
     // Getters et Setters
     public TypeDePion getType() {
         return type;
     }
 
-    public int getPositionX() {
-        return positionX;
-    }
-
-    public int getPositionY() {
-        return positionY;
-    }
-
     public Couleur getCouleur() {
         return couleur;
+    }
+
+    public void setType(TypeDePion type) {
+        this.type = type;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public void setCouleur(Couleur couleur) {
+        this.couleur = couleur;
     }
 
     // Vous pouvez ajouter d'autres méthodes utiles ici

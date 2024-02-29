@@ -39,12 +39,7 @@ public class Djed extends Piece {
         if (newX < 0 || newX >= 10 || newY < 0 || newY >= 8) {
             return false; // Le mouvement est en dehors du plateau
         }
-        // Vérifiez si la case cible est occupée par une autre pièce.
-        Piece targetPiece = board.getPieceAt(newX, newY);
-        if (targetPiece != null) {
-            // Si la pièce cible existe et n'est pas de la même couleur, le Djed peut échanger de place avec elle.
-            return this.couleur != targetPiece.getCouleur();
-        }
+        // Vérifiez si la case cible est occupée par une autre pièce.(djed ou pharaon)
 
         // Si la case cible n'est pas occupée, le mouvement est valide.
         return true;
@@ -61,15 +56,44 @@ public class Djed extends Piece {
         }
     }
 
-    @Override
     public Direction interactWithLaser(Direction laserDirection) {
-        // Réfléchit le laser à un angle de +/- 90 degrés.
-        // Cette logique simplifiée suppose que le Djed réfléchit toujours le laser perpendiculairement.
-        // La logique réelle dépendra de la direction du Djed et de la direction d'où vient le laser.
-        if (laserDirection == Direction.NORD || laserDirection == Direction.SUD) {
-            return laserDirection.rotate90Degrees();
-        } else {
-            return laserDirection.rotate90Degrees();
+        // Détermine si le laser frappe le miroir ou le dos de la Pyramide.
+        boolean hitsMirror = false;
+    
+        switch (this.direction) {
+            case NORD:
+                // Le miroir réfléchit le laser venant de l'EST vers le SUD, et de l'OUEST vers le NORD.
+                if (laserDirection == Direction.EST) {
+                    return Direction.SUD;
+                } else if (laserDirection == Direction.OUEST) {
+                    return Direction.NORD;
+                }
+                break;
+            case SUD:
+                // Le miroir réfléchit le laser venant de l'OUEST vers le SUD, et de l'EST vers le NORD.
+                if (laserDirection == Direction.OUEST) {
+                    return Direction.SUD;
+                } else if (laserDirection == Direction.EST) {
+                    return Direction.NORD;
+                }
+                break;
+            case EST:
+                // Le miroir réfléchit le laser venant du NORD vers l'EST, et du SUD vers l'OUEST.
+                if (laserDirection == Direction.NORD) {
+                    return Direction.EST;
+                } else if (laserDirection == Direction.SUD) {
+                    return Direction.OUEST;
+                }
+                break;
+            case OUEST:
+                // Le miroir réfléchit le laser venant du SUD vers l'EST, et du NORD vers l'OUEST.
+                if (laserDirection == Direction.SUD) {
+                    return Direction.EST;
+                } else if (laserDirection == Direction.NORD) {
+                    return Direction.OUEST;
+                }
+                break;
         }
+        return null; // Ou une valeur spéciale indiquant la destruction de la pièce.
     }
 }

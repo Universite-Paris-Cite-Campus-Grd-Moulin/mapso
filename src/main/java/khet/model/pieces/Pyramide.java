@@ -40,20 +40,31 @@ public class Pyramide extends Piece {
     }
 
     @Override
-    public Direction interactWithLaser(Direction laserDirection) {
-        // Exemple de réflexion basique, à ajuster selon l'orientation réelle et la direction d'arrivée du laser.
-        if (this.direction == Direction.NORD || this.direction == Direction.SUD) {
-            // Si la direction est nord ou sud, supposons que le laser venant de l'est ou de l'ouest est réfléchi vers le haut ou le bas.
-            if (laserDirection == Direction.EST || laserDirection == Direction.OUEST) {
-                return laserDirection.rotate90Degrees();
-            }
-        } else if (this.direction == Direction.EST || this.direction == Direction.OUEST) {
-            // Si la direction est est ou ouest, supposons que le laser venant du nord ou du sud est réfléchi vers la gauche ou la droite.
-            if (laserDirection == Direction.NORD || laserDirection == Direction.SUD) {
-                return laserDirection.rotate90Degrees();
-            }
-        }
-        // Si le laser ne rencontre pas le miroir de manière à être réfléchi, il continue dans sa direction initiale (ce cas peut varier selon votre logique de jeu).
-        return laserDirection;
+public Direction interactWithLaser(Direction laserDirection) {
+    switch (this.direction) {
+        case NORD:
+            if (laserDirection == Direction.OUEST) return Direction.SUD;
+            if (laserDirection == Direction.SUD) return Direction.OUEST;
+            break;
+        case SUD:
+            if (laserDirection == Direction.EST) return Direction.NORD;
+            if (laserDirection == Direction.NORD) return Direction.EST;
+            break;
+        case EST:
+            if (laserDirection == Direction.NORD) return Direction.OUEST;
+            if (laserDirection == Direction.OUEST) return Direction.NORD;
+            break;
+        case OUEST:
+            if (laserDirection == Direction.SUD) return Direction.EST;
+            if (laserDirection == Direction.EST) return Direction.SUD;
+            break;
     }
+    // Si le laser arrive dans une direction incompatible avec l'orientation de la Pyramide,
+    // cela signifie qu'il frappe le dos et la Pyramide est retirée du jeu.
+    this.kill();
+    return null;
+}
+
+
+
 }

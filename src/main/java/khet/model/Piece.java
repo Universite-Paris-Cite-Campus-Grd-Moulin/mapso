@@ -75,9 +75,6 @@ public abstract class Piece {
     public abstract void move(int newX, int newY);
     
     public boolean isMoveValid(Board board, int newX, int newY) {
-        // Vérifications précédentes...
-
-        // Vérifier si la case est occupée
         return !board.isOccupied(newX, newY);
     }
 

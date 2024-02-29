@@ -55,7 +55,7 @@ public class Obelisque extends Piece {
         if (isStacked) {
             // Si cet Obélisque est la partie supérieure d'un double, il est retiré du jeu,
             // mais l'état isStacked doit être géré par la logique globale du jeu pour le reste de l'Obélisque.
-            this.kill();
+            isStacked = false;
             // Signal à la logique globale du jeu que l'Obélisque supérieur a été retiré
             return null;
         } else {

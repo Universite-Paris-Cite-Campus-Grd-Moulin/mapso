@@ -3,5 +3,11 @@ package khet.view.components;
 import javax.swing.JPanel;
 
 public class BoardPanel extends JPanel {
-    // Panneau personnalisé pour le plateau de jeu
+    public BoardPanel() {
+        // Configurer le panneau du plateau de jeu
+    }
+
+    public void updateBoard() {
+        // Mettre à jour l'affichage du plateau
+    }
 }

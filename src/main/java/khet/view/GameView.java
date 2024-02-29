@@ -1,5 +1,11 @@
 package khet.view;
 
 public class GameView {
-    // Logique de l'affichage du jeu
+    public void displayBoard() {
+        // Afficher le plateau de jeu
+    }
+
+    public void update() {
+        // Mettre à jour l'affichage
+    }
 }

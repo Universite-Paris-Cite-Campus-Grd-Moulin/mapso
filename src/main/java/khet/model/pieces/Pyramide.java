@@ -3,12 +3,13 @@ package khet.model.pieces;
 import khet.enums.Couleur;
 import khet.enums.Direction;
 import khet.enums.TypeDePion;
+import khet.model.Board;
 import khet.model.Piece;
 
 public class Pyramide extends Piece {
 
-    public Pyramide(Couleur couleur, Direction direction, int x, int y) {
-        super(couleur, direction, TypeDePion.PYRAMIDE, x, y);
+    public Pyramide(Board board, Couleur couleur, Direction direction, int x, int y) {
+        super(board, couleur, direction, TypeDePion.PYRAMIDE, x, y);
     }
 
     public void move(int newX, int newY) {
@@ -28,10 +29,8 @@ public class Pyramide extends Piece {
         if (newX < 0 || newX >= 10 || newY < 0 || newY >= 8) {
             return false; // Le mouvement est en dehors du plateau
         }
-        
-        // Ecrire la suite au cas la case est reserve par un autre piece ou limitation de mvt
-    
-        return true; // Le mouvement est valide
+        // Vérifier si la case est occupée
+        return !board.isOccupied(newX, newY);
     }
 
     @Override

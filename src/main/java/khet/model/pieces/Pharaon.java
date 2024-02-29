@@ -3,12 +3,13 @@ package khet.model.pieces;
 import khet.enums.Couleur;
 import khet.enums.Direction;
 import khet.enums.TypeDePion;
+import khet.model.Board;
 import khet.model.Piece;
 
 public class Pharaon extends Piece {
 
-    public Pharaon(Couleur couleur, int x, int y, boolean isAlive) {
-        super(couleur, Direction.NORD, TypeDePion.PHARAON, x, y, isAlive);
+    public Pharaon(Board board, Couleur couleur, int x, int y, boolean isAlive) {
+        super(board, couleur, Direction.NORD, TypeDePion.PHARAON, x, y);
     }
 
     @Override

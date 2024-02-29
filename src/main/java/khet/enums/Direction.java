@@ -29,52 +29,32 @@ public enum Direction {
 
     // Retourne la direction suivante dans le sens horaire
     public Direction nextClockwise() {
-        switch (this) {
-            case NORD:
-                return EST;
-            case EST:
-                return SUD;
-            case SUD:
-                return OUEST;
-            case OUEST:
-                return NORD;
-            //Cas pour les directions diagonales
-            case NORD_OUEST:
-                return NORD_OUEST;
-            case SUD_OUEST:
-                return SUD_OUEST;
-            case NORD_EST:
-                return NORD_EST;
-            case SUD_EST:
-                return SUD_EST;
-            default:
-                return NONE;
-        }
+        return switch (this) {
+            case NORD -> EST;
+            case EST -> SUD;
+            case SUD -> OUEST;
+            case OUEST -> NORD;
+            case NORD_EST -> SUD_EST;
+            case SUD_EST -> SUD_OUEST;
+            case SUD_OUEST -> NORD_OUEST;
+            case NORD_OUEST -> NORD_EST;
+            case NONE -> NONE; // Aucune rotation pour NONE
+        };
     }
 
     // Retourne la direction suivante dans le sens anti-horaire
     public Direction nextCounterClockwise() {
-        switch (this) {
-            case NORD:
-                return OUEST;
-            case OUEST:
-                return SUD;
-            case SUD:
-                return EST;
-            case EST:
-                return NORD;
-            //Cas pour les directions diagonales
-            case NORD_OUEST:
-                return NORD_OUEST;
-            case SUD_OUEST:
-                return SUD_OUEST;
-            case NORD_EST:
-                return NORD_EST;
-            case SUD_EST:
-                return SUD_EST;
-            default:
-                return NONE;
-        }
+        return switch (this) {
+            case NORD -> OUEST;
+            case OUEST -> SUD;
+            case SUD -> EST;
+            case EST -> NORD;
+            case NORD_EST -> NORD_OUEST;
+            case NORD_OUEST -> SUD_OUEST;
+            case SUD_OUEST -> SUD_EST;
+            case SUD_EST -> NORD_EST;
+            case NONE -> NONE; // Aucune rotation pour NONE
+        };
     }
 
     // Retourne la direction après une rotation de 90 degrés, selon la direction du laser

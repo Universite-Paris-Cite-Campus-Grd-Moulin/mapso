@@ -3,38 +3,52 @@ package khet.model.pieces;
 import khet.enums.Couleur;
 import khet.enums.Direction;
 import khet.enums.TypeDePion;
+import khet.model.Board;
 import khet.model.Piece;
 
 public class Djed extends Piece {
 
-    public Djed(Couleur couleur, int x, int y) {
-        super(couleur, Direction.NORD, TypeDePion.DJED, x, y);
+    public Djed(Board board, Couleur couleur, int x, int y) {
+        super(board, couleur, Direction.NORD, TypeDePion.DJED, x, y);
     }
 
     @Override
-public void move(int newX, int newY) {
-    // Vérification si le mouvement est valide
-    if (isMoveValid(newX, newY)) {
-        // Si le mouvement est valide, mettez à jour la position de la pièce
-        this.x = newX;
-        this.y = newY;
-    } else {
-        // Si le mouvement n'est pas valide, vous pourriez lancer une exception ou gérer l'erreur d'une autre manière
-        throw new IllegalArgumentException("Mouvement invalide.");
+    public void move(int newX, int newY) {
+        if (isMoveValid(board, newX, newY)) {
+            Piece targetPiece = board.getPieceAt(newX, newY);
+            if (targetPiece != null) {
+                // Échangez les positions du Djed et de la pièce cible.
+                int tempX = this.x;
+                int tempY = this.y;
+                this.x = newX;
+                this.y = newY;
+                targetPiece.setX(tempX);
+                targetPiece.setY(tempY);
+            } else {
+                // Si la case est vide, déplacez simplement le Djed.
+                this.x = newX;
+                this.y = newY;
+            }
+        } else {
+            throw new IllegalArgumentException("Mouvement invalide.");
+        }
     }
-}
 
-private boolean isMoveValid(int newX, int newY) {
-    // Vérifiez les limites du plateau (en supposant un plateau de taille 10x8 pour cet exemple)
-    if (newX < 0 || newX >= 10 || newY < 0 || newY >= 8) {
-        return false; // Le mouvement est en dehors du plateau
+    private boolean isMoveValid(int newX, int newY) {
+        // Vérifiez les limites du plateau (en supposant un plateau de taille 10x8 pour cet exemple)
+        if (newX < 0 || newX >= 10 || newY < 0 || newY >= 8) {
+            return false; // Le mouvement est en dehors du plateau
+        }
+        // Vérifiez si la case cible est occupée par une autre pièce.
+        Piece targetPiece = board.getPieceAt(newX, newY);
+        if (targetPiece != null) {
+            // Si la pièce cible existe et n'est pas de la même couleur, le Djed peut échanger de place avec elle.
+            return this.couleur != targetPiece.getCouleur();
+        }
+
+        // Si la case cible n'est pas occupée, le mouvement est valide.
+        return true;
     }
-    
-    // Ecrire la suite au cas la case est reserve par un autre piece
-    //Mais normalement il est tjrs true car il joue le role de la reine
-
-    return true; // Le mouvement est valide
-}
 
 
     @Override

@@ -13,24 +13,16 @@ import khet.enums.TypeDePion;
 
 public abstract class Piece {
     //Attribut
+    protected Board board; // Référence au plateau de jeu
     protected final Couleur couleur;
     protected Direction direction;
     protected TypeDePion type;
     protected int x, y; // Position sur le plateau
-    protected boolean isAlive;
+    protected boolean isAlive = true;
 
-    //Constructeur pour le Pharaon et Obelisque
-    public Piece(Couleur couleur, Direction direction, TypeDePion type, int x, int y, boolean isAlive) {
-        this.couleur = couleur;
-        this.direction = direction;
-        this.type = type;
-        this.x = x;
-        this.y = y;
-        this.isAlive = true; // Toutes les pièces commencent vivantes
-    }
-
-    //Constructeur pour le reste des pieces
-    public Piece(Couleur couleur, Direction direction, TypeDePion type, int x, int y) {
+    //Constructeur
+    public Piece(Board board, Couleur couleur, Direction direction, TypeDePion type, int x, int y) {
+        this.board = board;
         this.couleur = couleur;
         this.direction = direction;
         this.type = type;
@@ -71,8 +63,23 @@ public abstract class Piece {
         return y;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     // Déplace la pièce sur le plateau
     public abstract void move(int newX, int newY);
+    
+    public boolean isMoveValid(Board board, int newX, int newY) {
+        // Vérifications précédentes...
+
+        // Vérifier si la case est occupée
+        return !board.isOccupied(newX, newY);
+    }
 
     // Tourne la pièce dans une direction donnée
     public abstract void rotate(boolean clockwise);

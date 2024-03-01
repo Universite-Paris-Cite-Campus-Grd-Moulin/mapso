@@ -1,18 +1,21 @@
 package khet.model.pieces;
 
+import java.util.List;
+
 import khet.enums.Couleur;
 import khet.enums.Direction;
 import khet.enums.TypeDePion;
 import khet.model.Board;
+import khet.model.LaserTrajectory;
 import khet.model.Piece;
 
 public class Obelisque extends Piece {
 
     private boolean isStacked; // Indique si cet Obélisque fait partie d'un double
 
-    public Obelisque(Board board, Couleur couleur, int x, int y) {
+    public Obelisque(Board board, Couleur couleur, int x, int y, boolean isStacked) {
         super(board, couleur, Direction.NONE, TypeDePion.OBELISQUE, x, y);
-        this.isStacked = false; // Initialisé à false, peut être modifié via setStacked
+        this.isStacked = isStacked;
     }
 
     public boolean isStacked() {
@@ -25,7 +28,7 @@ public class Obelisque extends Piece {
 
     public void move(int newX, int newY) {
         // Vérification si le mouvement est valide
-        if (isMoveValid(newX, newY)) {
+        if (super.isMoveValid(newX, newY)) {
             // Si le mouvement est valide, mettez à jour la position de la pièce
             this.x = newX;
             this.y = newY;
@@ -35,14 +38,6 @@ public class Obelisque extends Piece {
         }
     }
     
-    private boolean isMoveValid(int newX, int newY) {
-        // Vérifiez les limites du plateau (en supposant un plateau de taille 10x8 pour cet exemple)
-        if (newX < 0 || newX >= 10 || newY < 0 || newY >= 8) {
-            return false; // Le mouvement est en dehors du plateau
-        }
-        // Vérifier si la case est occupée
-        return !board.isOccupied(newX, newY);
-    }
 
     @Override
     public void rotate(boolean clockwise) {
@@ -50,8 +45,7 @@ public class Obelisque extends Piece {
     }
 
     @Override
-    public Direction interactWithLaser(Direction laserDirection) {
-        // Gère l'interaction de l'Obélisque avec le laser
+    public List<LaserTrajectory> interactWithLaser(Direction laserDirection, int startX, int startY) {        // Gère l'interaction de l'Obélisque avec le laser
         if (isStacked) {
             // Si cet Obélisque est la partie supérieure d'un double, il est retiré du jeu,
             // mais l'état isStacked doit être géré par la logique globale du jeu pour le reste de l'Obélisque.

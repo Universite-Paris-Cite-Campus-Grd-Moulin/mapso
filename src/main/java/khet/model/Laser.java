@@ -14,7 +14,6 @@
 
 package khet.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import khet.enums.Direction;
@@ -34,31 +33,25 @@ public class Laser {
             x += direction.getDeltaX();
             y += direction.getDeltaY();
 
-            // Vérifiez si le laser sort du plateau
             if (x < 0 || x >= board.getWidth() || y < 0 || y >= board.getHeight()) {
+                // Vérifiez si le laser sort du plateau
                 break;
             }
 
             Piece piece = board.getPiece(x, y);
             if (piece != null) {
-                // Gérez l'interaction du laser avec la pièce
-                Direction newDirection = piece.interactWithLaser(direction);
-                if (newDirection == null) {
-                    // La pièce est touchée et potentiellement retirée
+                List<LaserTrajectory> newTrajectories = piece.interactWithLaser(direction, x, y);
+                // Gérez l'interaction du laser avec la pièce et vérifiez si la pièce est toujours en vie
+                if (!piece.isAlive()) {
+                    // La pièce est touchée et doit être retirée
+                    board.removePiece(x, y); // Supposons que cette méthode existe pour retirer une pièce du plateau
                     break;
                 }
-                direction = newDirection; // Change la direction du laser si réfléchi
+
+                // Sinon, mettez à jour la direction du laser selon les nouvelles trajectoires, si nécessaire
+                // Note: Ceci est une simplification. Vous devrez adapter cette logique pour gérer correctement les multiples trajectoires, etc.
+                direction = newTrajectories.get(0).getDirection(); // Exemple simplifié
             }
-        }
-    }
-
-    public void shootLaser2(int startX, int startY, Direction direction) {
-        List<LaserTrajectory> trajectories = new ArrayList<>();
-        trajectories.add(new LaserTrajectory(direction, startX, startY)); // Trajectoire initiale
-
-        for (LaserTrajectory trajectory : trajectories) {
-            // Ici, vous simuleriez le mouvement du laser pour chaque trajectoire
-            // et ajouteriez de nouvelles trajectoires au besoin (par exemple, après interaction avec Horus).
         }
     }
 }

@@ -35,16 +35,16 @@ public class Board {
             endX < 0 || endX >= width || endY < 0 || endY >= height) {
             return false; // Vérifie si les coordonnées sont hors limites
         }
-
+    
         Piece piece = grid[startY][startX];
-        if (piece != null && piece.isMoveValid(this, endX, endY)) {
+        if (piece != null && piece.isMoveValid(endX, endY)) {
             grid[endY][endX] = piece;
             grid[startY][startX] = null;
             piece.setX(endX);
             piece.setY(endY);
             return true;
         }
-
+    
         return false;
     }
 
@@ -63,5 +63,10 @@ public class Board {
         return grid[y][x];
     }
 
+    public void removePiece(int x, int y) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            grid[y][x] = null; // Supprime la pièce de la grille
+        }
+    }
     
 }

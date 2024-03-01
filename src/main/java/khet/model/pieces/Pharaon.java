@@ -1,9 +1,12 @@
 package khet.model.pieces;
 
+import java.util.List;
+
 import khet.enums.Couleur;
 import khet.enums.Direction;
 import khet.enums.TypeDePion;
 import khet.model.Board;
+import khet.model.LaserTrajectory;
 import khet.model.Piece;
 
 public class Pharaon extends Piece {
@@ -25,7 +28,7 @@ public class Pharaon extends Piece {
     }
 
     @Override
-    public Direction interactWithLaser(Direction laserDirection) {
+    public List<LaserTrajectory> interactWithLaser(Direction laserDirection, int startX, int startY) {
         // Le Pharaon est retiré du jeu s'il est touché par le laser
         // Donc on retourne null (ou une direction spéciale indiquant la fin du jeu)
         return null;

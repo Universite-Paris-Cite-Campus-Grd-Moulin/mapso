@@ -56,44 +56,22 @@ public class Djed extends Piece {
         }
     }
 
+    @Override
     public Direction interactWithLaser(Direction laserDirection) {
-        // Détermine si le laser frappe le miroir ou le dos de la Pyramide.
-        boolean hitsMirror = false;
-    
         switch (this.direction) {
-            case NORD:
-                // Le miroir réfléchit le laser venant de l'EST vers le SUD, et de l'OUEST vers le NORD.
-                if (laserDirection == Direction.EST) {
-                    return Direction.SUD;
-                } else if (laserDirection == Direction.OUEST) {
-                    return Direction.NORD;
-                }
+            case NORD, SUD:
+                if (laserDirection == Direction.OUEST) return Direction.SUD;
+                if (laserDirection == Direction.SUD) return Direction.OUEST;
+                if (laserDirection == Direction.EST) return Direction.NORD;
+                if (laserDirection == Direction.NORD) return Direction.EST;
                 break;
-            case SUD:
-                // Le miroir réfléchit le laser venant de l'OUEST vers le SUD, et de l'EST vers le NORD.
-                if (laserDirection == Direction.OUEST) {
-                    return Direction.SUD;
-                } else if (laserDirection == Direction.EST) {
-                    return Direction.NORD;
-                }
-                break;
-            case EST:
-                // Le miroir réfléchit le laser venant du NORD vers l'EST, et du SUD vers l'OUEST.
-                if (laserDirection == Direction.NORD) {
-                    return Direction.EST;
-                } else if (laserDirection == Direction.SUD) {
-                    return Direction.OUEST;
-                }
-                break;
-            case OUEST:
-                // Le miroir réfléchit le laser venant du SUD vers l'EST, et du NORD vers l'OUEST.
-                if (laserDirection == Direction.SUD) {
-                    return Direction.EST;
-                } else if (laserDirection == Direction.NORD) {
-                    return Direction.OUEST;
-                }
+            case EST, OUEST:
+                if (laserDirection == Direction.NORD) return Direction.OUEST;
+                if (laserDirection == Direction.OUEST) return Direction.NORD;
+                if (laserDirection == Direction.SUD) return Direction.EST;
+                if (laserDirection == Direction.EST) return Direction.SUD;
                 break;
         }
-        return null; // Ou une valeur spéciale indiquant la destruction de la pièce.
+        return null;
     }
 }

@@ -59,9 +59,6 @@ public Direction interactWithLaser(Direction laserDirection) {
             if (laserDirection == Direction.EST) return Direction.SUD;
             break;
     }
-    // Si le laser arrive dans une direction incompatible avec l'orientation de la Pyramide,
-    // cela signifie qu'il frappe le dos et la Pyramide est retirée du jeu.
-    this.kill();
     return null;
 }
 

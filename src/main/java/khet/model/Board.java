@@ -18,7 +18,6 @@ public class Board {
         // Initialisez ici le plateau avec les pièces dans leurs positions de départ
         this.grid[0][0] = new Pharaon(this, Couleur.ROUGE, 0, 0, true);
         this.grid[7][9] = new Pharaon(this, Couleur.JAUNE, 9, 7, true);
-        // Ajoutez les autres pièces ici, en vous assurant de fournir tous les paramètres requis
     }
     
 

@@ -44,7 +44,7 @@ public class Laser {
                 // Gérez l'interaction du laser avec la pièce et vérifiez si la pièce est toujours en vie
                 if (!piece.isAlive()) {
                     // La pièce est touchée et doit être retirée
-                    board.removePiece(x, y); // Supposons que cette méthode existe pour retirer une pièce du plateau
+                    board.removePiece(x, y);
                     break;
                 }
 

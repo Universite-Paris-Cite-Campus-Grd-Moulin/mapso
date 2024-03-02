@@ -17,20 +17,16 @@ public class Pyramide extends Piece {
     }
 
     public void move(int newX, int newY) {
-        // Vérification si le mouvement est valide
         if (super.isMoveValid(newX, newY)) {
-            // Si le mouvement est valide, mettez à jour la position de la pièce
             this.x = newX;
             this.y = newY;
         } else {
-            // Si le mouvement n'est pas valide, vous pourriez lancer une exception ou gérer l'erreur d'une autre manière
             throw new IllegalArgumentException("Mouvement invalide.");
         }
     }
     
     @Override
     public void rotate(boolean clockwise) {
-        // Rotation de la Pyramide de +/- 90 degrés
         this.direction = clockwise ? this.direction.nextClockwise() : this.direction.nextCounterClockwise();
     }
 
@@ -63,7 +59,7 @@ public class Pyramide extends Piece {
                 break;
         }
 
-        // Si le laser peut être réfléchi, ajoutez cette nouvelle trajectoire à la liste
+        // Si le laser peut être réfléchi, ajoutez une nouvelle trajectoire à la liste
         if (newDirection != null) {
             trajectories.add(new LaserTrajectory(newDirection, startX, startY));
         }

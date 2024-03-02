@@ -54,6 +54,6 @@ public abstract class Piece {
         if (newX < 0 || newX >= board.getWidth() || newY < 0 || newY >= board.getHeight()) {
             return false;
         }
-        return !board.isOccupied(newX, newY);
+        return true;
     }
 }

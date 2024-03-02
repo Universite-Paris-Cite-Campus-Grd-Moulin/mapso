@@ -19,7 +19,7 @@ public class Horus extends Piece {
     @Override
     public void move(int newX, int newY) {
         // Vérification et mise à jour de la position si le mouvement est valide
-        if (isMoveValid(board, newX, newY)) {
+        if (super.isMoveValid(newX, newY)) {
             this.x = newX;
             this.y = newY;
         } else {
@@ -43,8 +43,4 @@ public class Horus extends Piece {
         return trajectories;
     }
 
-    private boolean isMoveValid(Board board, int newX, int newY) {
-        // Implémentez la logique de validation du mouvement ici
-        return !board.isOccupied(newX, newY);
-    }
 }

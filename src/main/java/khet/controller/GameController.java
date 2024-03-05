@@ -1,5 +1,6 @@
 package khet.controller;
 
+import khet.enums.Couleur;
 import khet.model.Board;
 import khet.model.Game;
 import khet.model.Piece;
@@ -22,7 +23,7 @@ public class GameController {
         if (success) {
             // Après un mouvement réussi, tirez le laser.
             shootLaser();
-            // Mettez à jour la vue graphique §§§§§§§§§§
+            // Mettre à jour la vue graphique §§§§§§§§§§
         } else {
             // Gérez l'échec de l'action (par exemple, mouvement invalide).§§§§§§§§§
         }
@@ -32,7 +33,7 @@ public class GameController {
         Piece piece = board.getPieceAt(x, y);
         if (piece != null) {
             piece.rotate(clockwise);
-            // Après une rotation réussie, tirez le laser.
+            // Après une rotation réussie, tirer le laser.
             shootLaser();
             // Mettez à jour la vue §§§§§§§§
         }
@@ -47,10 +48,31 @@ public class GameController {
     }
 
     private void checkWinConditions() {
-        // Implémentez la logique pour vérifier si le jeu est terminé (par exemple, si un Pharaon est touché).
         if (game.isGameOver()) {
-            // Gérez la fin du jeu.
-            // Par exemple, affichez le joueur gagnant et proposez de recommencer ou de quitter le jeu.
+            // Déterminez le joueur gagnant
+            // Note : Cette implémentation suppose que vous avez une manière de déterminer le joueur actuel et le joueur adverse.
+            String winningPlayer = (game.getCurrentPlayer() == Couleur.ROUGE) ? "Jaune" : "Rouge";
+
+            // Affichez le résultat du jeu
+            //ui.displayGameOver(winningPlayer);                                               Grapiquement
+            System.out.println("Le jeu est terminé. Le joueur " + winningPlayer + " gagne !"); //Termmianl
+
+            // Option pour recommencer ou quitter le jeu
+            // int response = ui.promptForRestart();
+            // if (response == RESTART) {
+            //     restartGame();
+            // } else {
+            //     System.exit(0);
+            // }
         }
     }
+
+    public void restartGame() {
+        // Réinitialisez le plateau et commencez un nouveau jeu
+        this.board = new Board();
+        this.game = new Game(board);
+        startGame();
+        // Assurez-vous également de réinitialiser l'affichage de l'interface utilisateur ici.
+    }
+
 }

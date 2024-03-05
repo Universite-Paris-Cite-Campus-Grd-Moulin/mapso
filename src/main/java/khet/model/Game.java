@@ -55,4 +55,9 @@ public class Game {
             isGameOver = true;
         }
     }
+
+    // Méthode pour obtenir le joueur actuel
+    public Couleur getCurrentPlayer() {
+        return this.currentPlayer;
+    }
 }

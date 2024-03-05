@@ -22,7 +22,7 @@ public class BoardPanel extends JPanel {
         // Ajoutez des PieceComponent avec des chemins d'images valides
         for (int i = 0; i < 80; i++) {
             // Exemple : ajouter un PieceComponent avec une image spécifique
-            add(new PieceComponent("/home/ajinou/Gris.png"));
+            add(new PieceComponent("src/main/resources/images/Gris.png"));
         }
     }
 }

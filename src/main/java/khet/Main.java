@@ -4,12 +4,14 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
 
 public class Main {
     private JFrame mainFrame;
@@ -35,23 +37,77 @@ public class Main {
         settingsButton.addActionListener(e -> openSettings());
         exitButton.addActionListener(e -> System.exit(0));
 
-        placeComponents(backgroundPanel, startButton, settingsButton, exitButton);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 0, 0, 0); // pas de marge extérieure
+
+        // espace supérieur qui pousse les boutons vers le bas
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = GridBagConstraints.REMAINDER; // prenez tout l'espace restant
+        gbc.weighty = 1; // poids en Y élevé pour pousser les composants vers le bas
+        gbc.fill = GridBagConstraints.VERTICAL; // étendre verticalement
+        backgroundPanel.add(Box.createVerticalGlue(), gbc);
+
+        // Réinitialiser le weighty pour les boutons
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE; // ne pas étendre les boutons
+        gbc.gridwidth = 1; // chaque bouton dans une seule cellule de grille
+
+        // Boutons centrés
+        gbc.gridy++; // passer à la ligne suivante pour les boutons
+        gbc.anchor = GridBagConstraints.CENTER; // centrer les boutons
+
+        // Ajouter un espace horizontal invisible pour centrer les boutons
+        gbc.weightx = 1;
+        backgroundPanel.add(Box.createHorizontalGlue(), gbc);
+
+        // Ajouter les boutons
+        gbc.gridx++;
+        backgroundPanel.add(startButton, gbc);
+
+        gbc.gridx++;
+        backgroundPanel.add(settingsButton, gbc);
+
+        gbc.gridx++;
+        backgroundPanel.add(exitButton, gbc);
+
+        // espace inférieur qui prend 1/4 de l'espace
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.weighty = 0.333; // poids y réduit pour occuper moins d'espace
+        gbc.gridwidth = GridBagConstraints.REMAINDER; // étendre sur toute la largeur restante
+        backgroundPanel.add(Box.createVerticalGlue(), gbc);
 
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
     }
 
+
     private void placeComponents(BackgroundPanel panel, JButton start, JButton settings, JButton exit) {
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.NONE;
-
+        gbc.gridwidth = 1; // set gridwidth to 1 for each button
+        gbc.gridx = 0; // start with first column
+        gbc.gridy = 0; // all in the first row
+        gbc.weightx = 1; // distribute space
+        gbc.fill = GridBagConstraints.NONE; // do not resize the button
         gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.anchor = GridBagConstraints.PAGE_END; // anchor buttons to the bottom of the screen
+    
+        panel.add(Box.createHorizontalGlue(), gbc);
+    
+        gbc.gridx++;
         panel.add(start, gbc);
+    
+        gbc.gridx++;
         panel.add(settings, gbc);
+    
+        gbc.gridx++;
         panel.add(exit, gbc);
+    
+        gbc.gridx++;
+        panel.add(Box.createHorizontalGlue(), gbc);
     }
+    
 
     private JButton createButton(String imagePath) {
         ImageIcon buttonIcon = new ImageIcon(imagePath);
@@ -65,11 +121,11 @@ public class Main {
 
     private void showGameOptions() {
         JDialog gameOptionsDialog = new JDialog(mainFrame, "Choose Game Mode", true);
-        gameOptionsDialog.setLayout(new GridLayout(0, 1));
+        gameOptionsDialog.setLayout(new GridLayout(1, 0));
         gameOptionsDialog.setSize(300, 200);
         gameOptionsDialog.setLocationRelativeTo(mainFrame);
 
-        JButton classicButton = new JButton("Classique");
+        JButton classicButton = new JButton("Classic");
         JButton imhotepButton = new JButton("Imhotep");
         JButton dynastyButton = new JButton("Dynastie");
 

@@ -1,4 +1,4 @@
-package khet.model;
+package model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,13 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import khet.enums.Couleur;
-import khet.enums.Direction;
-import khet.model.pieces.Djed;
-import khet.model.pieces.Horus;
-import khet.model.pieces.Obelisque;
-import khet.model.pieces.Pharaon;
-import khet.model.pieces.Pyramide;
+import enums.Couleur;
+import enums.Direction;
+import model.pieces.Djed;
+import model.pieces.Horus;
+import model.pieces.Obelisque;
+import model.pieces.Pharaon;
+import model.pieces.Pyramide;
 
 public class Board {
     private Piece[][] grid; // Tableau 2D pour stocker les pièces

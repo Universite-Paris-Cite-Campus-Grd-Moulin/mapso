@@ -1,9 +1,9 @@
-package khet.view;
+package view;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import khet.view.components.BoardPanel;
+import view.components.BoardPanel;
 
 public class GameView extends JFrame {
 

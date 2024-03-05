@@ -1,4 +1,4 @@
-package khet.view.components;
+package view.components;
 
 import java.awt.GridLayout;
 

@@ -1,14 +1,14 @@
-package khet.model.pieces;
+package model.pieces;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import khet.enums.Couleur;
-import khet.enums.Direction;
-import khet.enums.TypeDePion;
-import khet.model.Board;
-import khet.model.LaserTrajectory;
-import khet.model.Piece;
+import enums.Couleur;
+import enums.Direction;
+import enums.TypeDePion;
+import model.Board;
+import model.LaserTrajectory;
+import model.Piece;
 
 public class Pyramide extends Piece {
 

@@ -1,4 +1,4 @@
-package khet.enums;
+package enums;
 
 public enum Couleur {
     ROUGE,

@@ -1,6 +1,6 @@
-package khet.model;
+package model;
 
-import khet.enums.Couleur;
+import enums.Couleur;
 
 public class Game {
     private Board board;

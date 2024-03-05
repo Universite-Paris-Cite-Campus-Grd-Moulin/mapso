@@ -1,9 +1,9 @@
-package khet.controller;
+package controller;
 
-import khet.enums.Couleur;
-import khet.model.Board;
-import khet.model.Game;
-import khet.model.Piece;
+import enums.Couleur;
+import model.Board;
+import model.Game;
+import model.Piece;
 
 public class GameController {
     private Game game;

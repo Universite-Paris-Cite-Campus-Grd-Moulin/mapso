@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="khet/" kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/java/khet"/>
+	<classpathentry excluding="controller/|view/|enums/|view/components/|model/|model/pieces/" kind="src" path="src/test/java/khet"/>
+	<classpathentry kind="src" path="src/test/java/khet/controller"/>
+	<classpathentry kind="src" path="src/test/java/khet/enums"/>
+	<classpathentry excluding="pieces/" kind="src" path="src/test/java/khet/model"/>
+	<classpathentry kind="src" path="src/test/java/khet/model/pieces"/>
+	<classpathentry excluding="components/" kind="src" path="src/test/java/khet/view"/>
+	<classpathentry kind="src" path="src/test/java/khet/view/components"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

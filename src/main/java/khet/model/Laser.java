@@ -12,11 +12,11 @@
     retirée).
  */
 
-package khet.model;
+package model;
 
 import java.util.List;
 
-import khet.enums.Direction;
+import enums.Direction;
 
 public class Laser {
     private final Board board;

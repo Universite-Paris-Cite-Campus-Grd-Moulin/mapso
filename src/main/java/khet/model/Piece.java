@@ -1,10 +1,10 @@
-package khet.model;
+package model;
 
 import java.util.List;
 
-import khet.enums.Couleur;
-import khet.enums.Direction;
-import khet.enums.TypeDePion;
+import enums.Couleur;
+import enums.Direction;
+import enums.TypeDePion;
 
 public abstract class Piece {
     protected Board board; // Référence au plateau de jeu

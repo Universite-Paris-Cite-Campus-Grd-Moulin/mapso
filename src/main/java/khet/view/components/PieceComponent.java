@@ -1,4 +1,4 @@
-package khet.view.components;
+package view.components;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;

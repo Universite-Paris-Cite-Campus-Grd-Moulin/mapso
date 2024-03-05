@@ -11,9 +11,9 @@
     comme avec l'Horus, où un laser peut à la fois continuer dans sa direction
     actuelle et être réfléchi dans une nouvelle direction.
  */
-package khet.model;
+package model;
 
-import khet.enums.Direction;
+import enums.Direction;
 
 public class LaserTrajectory {
     private Direction direction;

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import khet.controller.GameController;
+import controller.GameController;
 import model.Board;
 import model.Game;
 import model.Piece;

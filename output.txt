@@ -1,0 +1,428 @@
+src/test/java/khet/MainTest.java:1: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/view/GameViewTest.java:1: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/view/components/BoardPanelTest.java:1: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/view/components/BoardPanelTest.java:3: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/view/components/PieceComponentTest.java:1: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/controller/GameControllerTest.java:3: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/controller/GameControllerTest.java:5: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.BeforeEach;
+                            ^
+src/test/java/khet/controller/GameControllerTest.java:6: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/PieceTest.java:1: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/model/PieceTest.java:3: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/BoardTest.java:3: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/model/BoardTest.java:5: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.BeforeEach;
+                            ^
+src/test/java/khet/model/BoardTest.java:6: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/LaserTrajectoryTest.java:1: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/model/LaserTrajectoryTest.java:3: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/LaserTest.java:1: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/model/LaserTest.java:3: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.BeforeEach;
+                            ^
+src/test/java/khet/model/LaserTest.java:4: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/GameTest.java:3: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.BeforeEach;
+                            ^
+src/test/java/khet/model/GameTest.java:4: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/pieces/PharaonTest.java:1: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/model/pieces/PharaonTest.java:3: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/pieces/ObelisqueTest.java:1: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/model/pieces/ObelisqueTest.java:3: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/pieces/DjedTest.java:1: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/model/pieces/DjedTest.java:3: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/pieces/HorusTest.java:3: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/model/pieces/HorusTest.java:5: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.BeforeEach;
+                            ^
+src/test/java/khet/model/pieces/HorusTest.java:6: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/model/pieces/PyramideTest.java:3: error: package org.junit.jupiter.api does not exist
+import static org.junit.jupiter.api.Assertions.*;
+                                   ^
+src/test/java/khet/model/pieces/PyramideTest.java:5: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.BeforeEach;
+                            ^
+src/test/java/khet/model/pieces/PyramideTest.java:6: error: package org.junit.jupiter.api does not exist
+import org.junit.jupiter.api.Test;
+                            ^
+src/test/java/khet/MainTest.java:5: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class MainTest
+src/test/java/khet/MainTest.java:11: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class MainTest
+src/test/java/khet/MainTest.java:40: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class MainTest
+src/test/java/khet/MainTest.java:48: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class MainTest
+src/test/java/khet/MainTest.java:68: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class MainTest
+src/test/java/khet/view/GameViewTest.java:7: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class GameViewTest
+src/test/java/khet/view/components/BoardPanelTest.java:9: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class BoardPanelTest
+src/test/java/khet/view/components/PieceComponentTest.java:7: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class PieceComponentTest
+src/test/java/khet/controller/GameControllerTest.java:19: error: cannot find symbol
+    @BeforeEach
+     ^
+  symbol:   class BeforeEach
+  location: class GameControllerTest
+src/test/java/khet/controller/GameControllerTest.java:26: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class GameControllerTest
+src/test/java/khet/controller/GameControllerTest.java:32: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class GameControllerTest
+src/test/java/khet/controller/GameControllerTest.java:46: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class GameControllerTest
+src/test/java/khet/controller/GameControllerTest.java:59: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class GameControllerTest
+src/test/java/khet/controller/GameControllerTest.java:64: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class GameControllerTest
+src/test/java/khet/controller/GameControllerTest.java:69: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class GameControllerTest
+src/test/java/khet/model/PieceTest.java:12: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class PieceTest
+src/test/java/khet/model/BoardTest.java:14: error: cannot find symbol
+    @BeforeEach
+     ^
+  symbol:   class BeforeEach
+  location: class BoardTest
+src/test/java/khet/model/BoardTest.java:19: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class BoardTest
+src/test/java/khet/model/LaserTrajectoryTest.java:10: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class LaserTrajectoryTest
+src/test/java/khet/model/LaserTrajectoryTest.java:22: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class LaserTrajectoryTest
+src/test/java/khet/model/LaserTest.java:15: error: cannot find symbol
+    @BeforeEach
+     ^
+  symbol:   class BeforeEach
+  location: class LaserTest
+src/test/java/khet/model/LaserTest.java:21: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class LaserTest
+src/test/java/khet/model/GameTest.java:12: error: cannot find symbol
+    @BeforeEach
+     ^
+  symbol:   class BeforeEach
+  location: class GameTest
+src/test/java/khet/model/GameTest.java:17: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class GameTest
+src/test/java/khet/model/pieces/PharaonTest.java:13: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class PharaonTest
+src/test/java/khet/model/pieces/ObelisqueTest.java:10: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class ObelisqueTest
+src/test/java/khet/model/pieces/DjedTest.java:11: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class DjedTest
+src/test/java/khet/model/pieces/DjedTest.java:29: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class DjedTest
+src/test/java/khet/model/pieces/HorusTest.java:19: error: cannot find symbol
+    @BeforeEach
+     ^
+  symbol:   class BeforeEach
+  location: class HorusTest
+src/test/java/khet/model/pieces/HorusTest.java:25: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class HorusTest
+src/test/java/khet/model/pieces/PyramideTest.java:19: error: cannot find symbol
+    @BeforeEach
+     ^
+  symbol:   class BeforeEach
+  location: class PyramideTest
+src/test/java/khet/model/pieces/PyramideTest.java:25: error: cannot find symbol
+    @Test
+     ^
+  symbol:   class Test
+  location: class PyramideTest
+src/test/java/khet/MainTest.java:15: error: createAndShowGUI() has private access in Main
+        main.createAndShowGUI();
+            ^
+src/test/java/khet/MainTest.java:20: error: cannot find symbol
+        BackgroundPanel panel = new BackgroundPanel();
+        ^
+  symbol:   class BackgroundPanel
+  location: class MainTest
+src/test/java/khet/MainTest.java:20: error: cannot find symbol
+        BackgroundPanel panel = new BackgroundPanel();
+                                    ^
+  symbol:   class BackgroundPanel
+  location: class MainTest
+src/test/java/khet/MainTest.java:21: error: cannot find symbol
+        JButton start = new JButton();
+        ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:21: error: cannot find symbol
+        JButton start = new JButton();
+                            ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:22: error: cannot find symbol
+        JButton settings = new JButton();
+        ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:22: error: cannot find symbol
+        JButton settings = new JButton();
+                               ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:23: error: cannot find symbol
+        JButton exit = new JButton();
+        ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:23: error: cannot find symbol
+        JButton exit = new JButton();
+                           ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:27: error: cannot find symbol
+        GridBagConstraints gbc = new GridBagConstraints();
+        ^
+  symbol:   class GridBagConstraints
+  location: class MainTest
+src/test/java/khet/MainTest.java:27: error: cannot find symbol
+        GridBagConstraints gbc = new GridBagConstraints();
+                                     ^
+  symbol:   class GridBagConstraints
+  location: class MainTest
+src/test/java/khet/MainTest.java:32: error: cannot find symbol
+        gbc.fill = GridBagConstraints.NONE;
+                   ^
+  symbol:   variable GridBagConstraints
+  location: class MainTest
+src/test/java/khet/MainTest.java:33: error: cannot find symbol
+        gbc.insets = new Insets(20, 20, 20, 20);
+                         ^
+  symbol:   class Insets
+  location: class MainTest
+src/test/java/khet/MainTest.java:34: error: cannot find symbol
+        gbc.anchor = GridBagConstraints.PAGE_END;
+                     ^
+  symbol:   variable GridBagConstraints
+  location: class MainTest
+src/test/java/khet/MainTest.java:43: error: cannot find symbol
+        JButton button = Main.createButton(imagePath);
+        ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:43: error: createButton(String) has private access in Main
+        JButton button = Main.createButton(imagePath);
+                             ^
+src/test/java/khet/MainTest.java:44: error: cannot find symbol
+        ImageIcon expectedIcon = new ImageIcon(imagePath);
+        ^
+  symbol:   class ImageIcon
+  location: class MainTest
+src/test/java/khet/MainTest.java:44: error: cannot find symbol
+        ImageIcon expectedIcon = new ImageIcon(imagePath);
+                                     ^
+  symbol:   class ImageIcon
+  location: class MainTest
+src/test/java/khet/MainTest.java:51: error: cannot find symbol
+        JDialog gameOptionsDialog = mock(JDialog.class);
+        ^
+  symbol:   class JDialog
+  location: class MainTest
+src/test/java/khet/MainTest.java:51: error: cannot find symbol
+        JDialog gameOptionsDialog = mock(JDialog.class);
+                                         ^
+  symbol:   class JDialog
+  location: class MainTest
+src/test/java/khet/MainTest.java:52: error: mainFrame has private access in Main
+        main.mainFrame = mock(JFrame.class);
+            ^
+src/test/java/khet/MainTest.java:52: error: cannot find symbol
+        main.mainFrame = mock(JFrame.class);
+                              ^
+  symbol:   class JFrame
+  location: class MainTest
+src/test/java/khet/MainTest.java:53: error: cannot find symbol
+        when(main.mainFrame.getContentPane()).thenReturn(gameOptionsDialog);
+        ^
+  symbol:   method when(Container)
+  location: class MainTest
+src/test/java/khet/MainTest.java:53: error: mainFrame has private access in Main
+        when(main.mainFrame.getContentPane()).thenReturn(gameOptionsDialog);
+                 ^
+src/test/java/khet/MainTest.java:54: error: cannot find symbol
+        JButton classicButton = mock(JButton.class);
+        ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:54: error: cannot find symbol
+        JButton classicButton = mock(JButton.class);
+                                     ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:55: error: cannot find symbol
+        JButton imhotepButton = mock(JButton.class);
+        ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:55: error: cannot find symbol
+        JButton imhotepButton = mock(JButton.class);
+                                     ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:56: error: cannot find symbol
+        JButton dynastyButton = mock(JButton.class);
+        ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:56: error: cannot find symbol
+        JButton dynastyButton = mock(JButton.class);
+                                     ^
+  symbol:   class JButton
+  location: class MainTest
+src/test/java/khet/MainTest.java:62: error: showGameOptions() has private access in Main
+        main.showGameOptions();
+            ^
+src/test/java/khet/MainTest.java:64: error: cannot find symbol
+        verify(classicButton, times(1)).addActionListener(any());
+                              ^
+  symbol:   method times(int)
+  location: class MainTest
+src/test/java/khet/MainTest.java:64: error: cannot find symbol
+        verify(classicButton, times(1)).addActionListener(any());
+                                                          ^
+  symbol:   method any()
+  location: class MainTest
+src/test/java/khet/MainTest.java:65: error: cannot find symbol
+        verify(imhotepButton, times(1)).addActionListener(any());
+                              ^
+  symbol:   method times(int)
+  location: class MainTest
+src/test/java/khet/MainTest.java:65: error: cannot find symbol
+        verify(imhotepButton, times(1)).addActionListener(any());
+                                                          ^
+  symbol:   method any()
+  location: class MainTest
+src/test/java/khet/MainTest.java:66: error: cannot find symbol
+        verify(dynastyButton, times(1)).addActionListener(any());
+                              ^
+  symbol:   method times(int)
+  location: class MainTest
+100 errors
+only showing the first 100 errors, of 196 total; use -Xmaxerrs if you would like to see more

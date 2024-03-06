@@ -7,16 +7,15 @@ import javax.swing.JPanel;
 
 public class BoardPanel extends JPanel {
 
-    public void updateBoard() {
-        // Mettre à jour l'affichage du plateau
-    }
     public BoardPanel() {
         // Supposons un plateau 8x10 pour l'exemple
         setLayout(new GridLayout(8, 10));
         initBoard();
     }
 
-    
+    public void updateBoard() {
+        // Mettre à jour l'affichage du plateau
+    }
 
     private void initBoard() {
         // Ajoutez des PieceComponent avec des chemins d'images valides

@@ -11,20 +11,20 @@ public enum Direction {
     SUD_OUEST(-1, 1),
     NONE(0, 0);
 
-    private final int deltaX;
-    private final int deltaY;
+    private final int di;
+    private final int dj;
 
-    Direction(int deltaX, int deltaY) {
-        this.deltaX = deltaX;
-        this.deltaY = deltaY;
+    Direction(int di, int dj) {
+        this.di = di;
+        this.dj = dj;
     }
 
-    public int getDeltaX() {
-        return deltaX;
+    public int getDi() {
+        return di;
     }
 
-    public int getDeltaY() {
-        return deltaY;
+    public int getDj() {
+        return dj;
     }
 
     // Retourne la direction suivante dans le sens horaire

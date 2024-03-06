@@ -126,65 +126,65 @@ public class Board {
     }
 
     // Méthode shootLaser simulant le tir du laser et retournant vrai si un Pharaon est touché
-public boolean shootLaser(Couleur couleurLaser) {
-    int startX, startY;
-    Direction directionLaser;
+    public boolean shootLaser(Couleur couleurLaser) {
+        int startX, startY;
+        Direction directionLaser;
 
-    // Déterminez le point de départ du laser basé sur la couleur du joueur actuel
-    if (couleurLaser == Couleur.ROUGE) {
-        startX = 0; // Supposons que le laser rouge commence à gauche du plateau
-        startY = 0; // Supposons une position Y arbitraire pour le début
-        directionLaser = Direction.EST; // Le laser rouge se déplace vers la droite
-    } else {
-        startX = width - 1; // Supposons que le laser jaune commence à droite du plateau
-        startY = height - 1; // Supposons une position Y arbitraire pour le début
-        directionLaser = Direction.OUEST; // Le laser jaune se déplace vers la gauche
-    }
-
-    int x = startX;
-    int y = startY;
-    boolean pharaohHit = false;
-
-    while (true) {
-        // Calculez la nouvelle position du laser après un mouvement
-        x += directionLaser.getDeltaX();
-        y += directionLaser.getDeltaY();
-
-        // Vérifiez si le laser sort du plateau
-        if (x < 0 || x >= width || y < 0 || y >= height) {
-            break; // Le laser sort du plateau
+        // Déterminez le point de départ du laser basé sur la couleur du joueur actuel
+        if (couleurLaser == Couleur.ROUGE) {
+            startX = 0; // Supposons que le laser rouge commence à gauche du plateau
+            startY = 0; // Supposons une position Y arbitraire pour le début
+            directionLaser = Direction.EST; // Le laser rouge se déplace vers la droite
+        } else {
+            startX = width - 1; // Supposons que le laser jaune commence à droite du plateau
+            startY = height - 1; // Supposons une position Y arbitraire pour le début
+            directionLaser = Direction.OUEST; // Le laser jaune se déplace vers la gauche
         }
 
-        // Obtenez la pièce à la nouvelle position
-        Piece piece = getPieceAt(x, y);
-        if (piece != null) {
-            // Interagissez avec la pièce
-            List<LaserTrajectory> trajectories = piece.interactWithLaser(directionLaser, x, y);
-            if (trajectories.isEmpty() || piece instanceof Pharaon) {
-                // Si le laser touche le Pharaon, le jeu est terminé
-                pharaohHit = true;
-                break;
-            } else {
-                // Changez la direction du laser en fonction de la première trajectoire retournée
-                directionLaser = trajectories.get(0).getDirection();
+        int x = startX;
+        int y = startY;
+        boolean pharaohHit = false;
+
+        while (true) {
+            // Calculez la nouvelle position du laser après un mouvement
+            x += directionLaser.getDi();
+            y += directionLaser.getDj();
+
+            // Vérifiez si le laser sort du plateau
+            if (x < 0 || x >= width || y < 0 || y >= height) {
+                break; // Le laser sort du plateau
+            }
+
+            // Obtenez la pièce à la nouvelle position
+            Piece piece = getPieceAt(x, y);
+            if (piece != null) {
+                // Interagissez avec la pièce
+                List<LaserTrajectory> trajectories = piece.interactWithLaser(directionLaser, x, y);
+                if (trajectories.isEmpty() || piece instanceof Pharaon) {
+                    // Si le laser touche le Pharaon, le jeu est terminé
+                    pharaohHit = true;
+                    break;
+                } else {
+                    // Changez la direction du laser en fonction de la première trajectoire retournée
+                    directionLaser = trajectories.get(0).getDirection();
+                }
             }
         }
+
+        return pharaohHit;
     }
 
-    return pharaohHit;
-}
-
-public boolean isPharaohHit() {
-    // Parcourez toutes les pièces sur le plateau
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            Piece piece = grid[y][x];
-            if (piece instanceof Pharaon && !piece.isAlive()) {
-                return true; // Un Pharaon a été touché et n'est plus en vie
+    public boolean isPharaohHit() {
+        // Parcourez toutes les pièces sur le plateau
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Piece piece = grid[y][x];
+                if (piece instanceof Pharaon && !piece.isAlive()) {
+                    return true; // Un Pharaon a été touché et n'est plus en vie
+                }
             }
         }
+        return false; // Aucun Pharaon n'a été touché
     }
-    return false; // Aucun Pharaon n'a été touché
-}
 
 }

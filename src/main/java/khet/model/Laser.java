@@ -30,8 +30,8 @@ public class Laser {
         int y = startY;
 
         while (true) {
-            x += direction.getDeltaX();
-            y += direction.getDeltaY();
+            x += direction.getDj();
+            y += direction.getDi();
 
             if (x < 0 || x >= board.getWidth() || y < 0 || y >= board.getHeight()) {
                 // Vérifiez si le laser sort du plateau

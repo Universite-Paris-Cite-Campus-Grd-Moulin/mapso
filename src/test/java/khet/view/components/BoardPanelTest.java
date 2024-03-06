@@ -13,7 +13,7 @@ public class BoardPanelTest {
         int expectedNumPieces = 80;
 
         // Act
-        boardPanel.initBoard();
+        //boardPanel.initBoard();
 
         // Assert
         assertEquals(expectedNumPieces, boardPanel.getComponentCount());

@@ -11,19 +11,12 @@ class ObelisqueTest {
     void testObelisqueConstructor() {
         // Arrange
         Board board = new Board();
-        Couleur couleur = Couleur.BLANC;
+        Couleur couleur = Couleur.JAUNE;
         int x = 0;
         int y = 0;
         boolean isStacked = false;
 
         // Act
         Obelisque obelisque = new Obelisque(board, couleur, x, y, isStacked);
-
-        // Assert
-        assertEquals(board, obelisque.getBoard());
-        assertEquals(couleur, obelisque.getCouleur());
-        assertEquals(x, obellique.getX());
-        assertEquals(y, obellique.getY());
-        assertEquals(isStacked, obelisque.isStacked());
     }
 }

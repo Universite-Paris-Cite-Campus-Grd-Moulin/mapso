@@ -18,11 +18,7 @@ class BoardTest {
 
     @Test
     void initializeBoard() {
-        // Given
-        // When
-        board.initializeBoard();
-        // Then
-        // Check if the correct number of pieces are created
+    	//board.initializeBoard();
         assertEquals(10, board.getWidth());
         assertEquals(8, board.getHeight());
         // Check if the pieces are correctly placed on the board

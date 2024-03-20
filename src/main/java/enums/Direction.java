@@ -50,8 +50,6 @@ public enum Direction {
         }
     };
 
-    static int[] tdi = {-1, 0, 1, 0};
-
     private final int di;
     private final int dj;
 
@@ -61,8 +59,7 @@ public enum Direction {
     }
 
     public int getDi() {
-        return tdi[this.ordinal()];
-        //return di;
+        return di;
     }
 
     public int getDj() {

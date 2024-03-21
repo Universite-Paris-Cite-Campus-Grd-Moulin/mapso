@@ -1,10 +1,11 @@
-package src.main.java.piece;
+package model;
 
-import src.main.java.enums.Couleur;
-import src.main.java.enums.Direction;
-import src.main.java.enums.TypeDePion;
+import enums.Couleur;
+import enums.Direction;
+import enums.TypeDePion;
 
 public class Plateau {
+    
     private final Pion[][] grille;
 
     public Plateau() {

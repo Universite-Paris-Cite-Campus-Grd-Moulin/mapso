@@ -1,8 +1,8 @@
-package src.main.java.piece;
+package model;
 
-import src.main.java.enums.Couleur;
-import src.main.java.enums.TypeDePion;
-import src.main.java.enums.Direction;
+import model.enums.Couleur;
+import model.enums.Direction;
+import model.enums.TypeDePion;
 
 public class Pion {
     protected TypeDePion type;
@@ -41,6 +41,16 @@ public class Pion {
 
     public void setCouleur(Couleur couleur) {
         this.couleur = couleur;
+    }
+
+    public void getPieceAt(Direction a){
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPieceAt'");
+    }
+
+    public void rotate(boolean clockwise) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'rotate'");
     }
 
     // Vous pouvez ajouter d'autres méthodes utiles ici

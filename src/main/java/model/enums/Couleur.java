@@ -1,6 +1,7 @@
-package src.main.java.enums;
+package model.enums;
 
 public enum Couleur {
     ROUGE,
+    GRIS,
     JAUNE
 }

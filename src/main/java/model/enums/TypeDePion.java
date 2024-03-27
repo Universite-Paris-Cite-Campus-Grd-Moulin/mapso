@@ -5,6 +5,24 @@ import model.Pion;
 
 public enum TypeDePion {
 
+    NONE {
+        @Override
+        public void deplacer(Direction direction, Plateau plateau, Pion pion) {
+            // Aucun Pion ne peut se déplacer
+            throw new UnsupportedOperationException("Aucun Pion ne peut se déplacer.");
+        }
+        @Override
+        public void empiler(Plateau plateau, Pion pion) {
+            // Aucun Pion ne peut être empilé
+            throw new UnsupportedOperationException("Aucun Pion ne peut être empilé.");
+        }
+        @Override
+        public void depiler(Plateau plateau, Pion pion) {
+            // Le Pharaon ne peut pas être dépilé
+            throw new UnsupportedOperationException("Le Pharaon ne peut pas être dépilé.");
+        }
+    },
+
     PHARAON {
         @Override
         public void deplacer(Direction direction, Plateau plateau, Pion pion) {

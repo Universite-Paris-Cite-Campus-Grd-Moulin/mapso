@@ -1,49 +1,102 @@
 package view.components;
 
-import javax.swing.JPanel;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import model.Pion;
+import model.Plateau;
+import model.enums.Couleur;
+import model.enums.Direction;
+import model.enums.TypeDePion;
 
-public class BoardPanel extends JPanel {
+public class BoardPanel extends JPanel implements MouseListener {
+
+    private Plateau board; // MVCCCCCC
 
     public BoardPanel() {
         setLayout(new GridLayout(8, 10));
         initBoard();
+        JButton b = new JButton();
+        b.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                put(new Pion(TypeDePion.DJED,Direction.SUD,Couleur.JAUNE));
+            }
+        });
+        b.setSize(new Dimension(100,100));
+        add(b);
+
     }
 
     private void initBoard() {
-        // Initialise le plateau avec les PieceComponent pour chaque case
+        // Initialise le plateau avec les PiecePanel pour chaque case
         removeAll(); // Enlève tous les composants précédemment ajoutés si nécessaire
-        for (int i = 0; i < 80; i++) {
-            add(new PieceComponent("ressources/sprites_khet.png"));
-        }
+        Plateau board = new Plateau();
+        this.board = board;
+        
     }
 
-    public void updateBoard(Object[][] boardData) {
-        removeAll(); // Enlève tous les composants avant de les ajouter à nouveau
-
-        // Parcourez l'état actuel du plateau pour placer les sprites corrects
-        for (int row = 0; row < boardData.length; row++) {
-            for (int col = 0; col < boardData[row].length; col++) {
-                // Obtenez l'image appropriée pour l'état de cette case
-                String imagePath = getImagePathForPiece(boardData[row][col]);
-                add(new PieceComponent(imagePath));
+    @Override
+    public void paintComponent(java.awt.Graphics g) {
+        super.paintComponent(g);
+        for (int i = 0; i <8 ; i++) {
+            for (int j = 0; j < 10; j++) {
+                g.drawImage(  PiecePanel.draw(g,board.getGrille()[i][j]),i*100,j*100, this);
             }
         }
-        
-        revalidate(); // Indique au layout manager de rafraîchir le layout
-        repaint(); // Indique à Swing de repeindre le panel
     }
-    
-    // Méthode helper pour obtenir le chemin de l'image basé sur l'objet pièce
-    private String getImagePathForPiece(Object piece) {
-        // Logique pour choisir l'image appropriée en fonction de l'objet pièce
-        // par exemple:
-        if (piece instanceof Pion) {
-            return "ressources/sprites_khet.png";
-        }
-        // Vous pouvez étendre cette logique en fonction de l'implémentation de vos pièces
-        return "ressources/sprites_khet.png"; // Une image par défaut si la pièce n'est pas reconnue
+
+
+    public void put ( Pion p ) {
+        //placer dans le board 
+        //board.deplacerPion(p);*
+        board.getGrille()[2][2] = new Pion(TypeDePion.DJED,Direction.SUD,Couleur.JAUNE);
+        repaint();
+    }
+
+
+
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Plateau");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new BoardPanel());
+        frame.setSize(1000, 1000);
+        frame.setVisible(true);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
     }
 }

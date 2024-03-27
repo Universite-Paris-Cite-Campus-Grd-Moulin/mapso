@@ -1,7 +1,7 @@
 package model.enums;
 
 public enum Couleur {
-    ROUGE,
     GRIS,
+    ROUGE,
     JAUNE
 }

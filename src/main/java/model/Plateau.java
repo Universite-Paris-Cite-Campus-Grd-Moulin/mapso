@@ -5,11 +5,20 @@ import model.enums.Direction;
 import model.enums.TypeDePion;
 
 public class Plateau {
-    private final Pion[][] grille;
+    private  Pion[][] grille;
+
+    public Pion[][] getGrille(){
+        return grille;
+    }
 
     public Plateau() {
-        this.grille = new Pion[10][8];
-        initialiserPlateau();
+        this.grille = new Pion[8][10];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 10; j++) {
+                this.grille[i][j] = new Pion(TypeDePion.NONE,Direction.NORD,Couleur.GRIS);
+            }
+        }
+        //initialiserPlateau();
     }
 
     private void initialiserPlateau() {

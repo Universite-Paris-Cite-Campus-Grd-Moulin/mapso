@@ -1,6 +1,8 @@
 package view.components;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,14 +24,14 @@ public class BoardPanel extends JPanel implements MouseListener {
     public BoardPanel() {
         setLayout(new GridLayout(8, 10));
         initBoard();
-        JButton b = new JButton();
-        b.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                put(new Pion(TypeDePion.DJED,Direction.SUD,Couleur.JAUNE));
-            }
-        });
-        b.setSize(new Dimension(100,100));
-        add(b);
+        // JButton b = new JButton();
+        // b.addActionListener(new java.awt.event.ActionListener() {
+        //     public void actionPerformed(java.awt.event.ActionEvent evt) {
+        //         put(new Pion(TypeDePion.DJED,Direction.SUD,Couleur.JAUNE));
+        //     }
+        // });
+        // b.setSize(new Dimension(100,100));
+        // add(b);
 
     }
 
@@ -42,11 +44,14 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     @Override
-    public void paintComponent(java.awt.Graphics g) {
+    public void paintComponent(Graphics g) {
+        //on inverse i et j car dans la vue le coordonnee x est prportionnel au nombre de colonne donc j et le y est en relation avec le nombre
+        // de lignes qui est i
         super.paintComponent(g);
-        for (int i = 0; i <8 ; i++) {
+        for (int i = 0; i < 8 ; i++) {
             for (int j = 0; j < 10; j++) {
-                g.drawImage(  PiecePanel.draw(g,board.getGrille()[i][j]),i*100,j*100, this);
+                g.drawImage( PiecePanel.draw(g,new Pion(TypeDePion.NONE, Direction.NORD,board.initCouleur(i,j) )),j*75,i*75, this);
+                g.drawImage(  PiecePanel.draw(g,board.getGrille()[i][j]),j*75,i*75, this);
             }
         }
     }

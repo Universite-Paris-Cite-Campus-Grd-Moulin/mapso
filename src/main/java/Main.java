@@ -130,6 +130,7 @@ public class Main {
         JButton dynastyButton = new JButton("Dynastie");
 
         gameOptionsDialog.add(classicButton);
+        
         gameOptionsDialog.add(imhotepButton);
         gameOptionsDialog.add(dynastyButton);
 

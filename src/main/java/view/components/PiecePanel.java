@@ -43,22 +43,29 @@ public class PiecePanel extends JPanel {
         //this.image = null ; static 
     }
 
-    public static BufferedImage draw( java.awt.Graphics g , Pion p) {
-        int colonne =p.getType().ordinal();
-        int ligne = p.getCouleur().ordinal();
-        int rotation = p.getDirection().ordinal()*90;
-        BufferedImage pieceImage = khet.getSubimage(colonne*100, ligne*100, 100, 100);
+    public static BufferedImage draw(java.awt.Graphics g, Pion p) {
+    int colonne = p.getType().ordinal();
+    int ligne = p.getCouleur().ordinal();
+    int rotation = p.getDirection().ordinal() * 90;
+    // Extraire la sous-image correspondante au pion
+    BufferedImage pieceImage = khet.getSubimage(colonne * 100, ligne * 100, 100, 100);
 
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(rotation),50,50);
-        BufferedImage pieceImage2 = new BufferedImage(100,100, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D gg = pieceImage2.createGraphics();
-        gg.setTransform(transform);
-        gg.drawImage(pieceImage, 0, 0, null);
-        gg.dispose();
-    
-        return pieceImage2;
-    }
+    // Taille désirée pour le redimensionnement
+    int desiredWidth = 75; // ou 50 pour une taille encore plus petite
+    int desiredHeight = 75; // ou 50 selon la largeur
+
+    AffineTransform transform = new AffineTransform();
+    transform.rotate(Math.toRadians(rotation), desiredWidth / 2.0, desiredHeight / 2.0);
+    BufferedImage resizedImage = new BufferedImage(desiredWidth, desiredHeight, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D gg = resizedImage.createGraphics();
+    gg.setTransform(transform);
+    // Redimensionner et dessiner l'image sur le nouveau BufferedImage
+    gg.drawImage(pieceImage, 0, 0, desiredWidth, desiredHeight, null);
+    gg.dispose();
+
+    return resizedImage;
+}
+
 
 
     @Override

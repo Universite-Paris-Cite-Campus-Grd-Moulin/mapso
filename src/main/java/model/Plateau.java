@@ -12,14 +12,42 @@ public class Plateau {
     }
 
     public Plateau() {
-        this.grille = new Pion[8][10];
+        this.grille = new Pion[8][10]; // Création d'une grille de 8x10
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
-                this.grille[i][j] = new Pion(TypeDePion.NONE,Direction.NORD,Couleur.GRIS);
+                if (j == 0) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
+                }
+                else if (j == 9) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
+                }
+                else if(j == 1 && i == 0 || j == 1 && i == 7) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
+                }
+                else if(j == 8 && i == 0 || j == 8 && i == 7){
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
+                }
+                else {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.GRIS);
+                }
+
+                if(j == 2 && i == 0 || j == 1 && i == 2 || j == 4 && i ==7){
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
+                }
+                if(i == 0 && j == 0){
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
+                }
+                if(j == 5 && i == 5){
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.JAUNE);
+                }
+                if(i == 7 && j == 9){
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.JAUNE);
+                }
             }
         }
         //initialiserPlateau();
     }
+    
 
     private void initialiserPlateau() {
         // Configuration initiale pour un côté du plateau
@@ -115,5 +143,17 @@ public class Plateau {
     public boolean estTourneeDemandee(Pion pion) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'estTourneeDemandee'");
+    }
+
+    public Couleur initCouleur(int i, int j) {
+        //j represente la colonne et i est la ligne 
+        // TODO Auto-generated method stub
+        if( j == 0){
+            return Couleur.ROUGE;
+        } else if (j == 9) {
+            return Couleur.JAUNE;
+        } else {
+            return Couleur.GRIS;
+        }
     }
 }

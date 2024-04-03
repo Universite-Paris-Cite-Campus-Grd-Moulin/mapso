@@ -2,11 +2,15 @@ package controller;
 
 import model.enums.Couleur;
 import model.enums.Direction;
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import model.Game;
 import model.Pion;
 import model.Plateau;
 
-public class GameController {
+public class GameController implements MouseListener {
     private static final int Direction = 0;
     private Game game;
     private Plateau board;
@@ -75,6 +79,36 @@ public class GameController {
         this.game = new Game(board);
         startGame();
         // Assurez-vous également de réinitialiser l'affichage de l'interface utilisateur ici.
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
     }
 
 }

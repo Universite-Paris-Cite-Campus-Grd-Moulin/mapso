@@ -17,7 +17,7 @@ import model.enums.Couleur;
 import model.enums.Direction;
 import model.enums.TypeDePion;
 
-public class BoardPanel extends JPanel implements MouseListener {
+public class BoardPanel extends JPanel {
 
     private Plateau board; // MVCCCCCC
 
@@ -26,9 +26,9 @@ public class BoardPanel extends JPanel implements MouseListener {
         initBoard();
         // JButton b = new JButton();
         // b.addActionListener(new java.awt.event.ActionListener() {
-        //     public void actionPerformed(java.awt.event.ActionEvent evt) {
-        //         put(new Pion(TypeDePion.DJED,Direction.SUD,Couleur.JAUNE));
-        //     }
+        // public void actionPerformed(java.awt.event.ActionEvent evt) {
+        // put(new Pion(TypeDePion.DJED,Direction.SUD,Couleur.JAUNE));
+        // }
         // });
         // b.setSize(new Dimension(100,100));
         // add(b);
@@ -40,32 +40,30 @@ public class BoardPanel extends JPanel implements MouseListener {
         removeAll(); // Enlève tous les composants précédemment ajoutés si nécessaire
         Plateau board = new Plateau();
         this.board = board;
-        
+
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        //on inverse i et j car dans la vue le coordonnee x est prportionnel au nombre de colonne donc j et le y est en relation avec le nombre
+        // on inverse i et j car dans la vue le coordonnee x est prportionnel au nombre
+        // de colonne donc j et le y est en relation avec le nombre
         // de lignes qui est i
         super.paintComponent(g);
-        for (int i = 0; i < 8 ; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
-                g.drawImage( PiecePanel.draw(g,new Pion(TypeDePion.NONE, Direction.NORD,board.initCouleur(i,j) )),j*75,i*75, this);
-                g.drawImage(  PiecePanel.draw(g,board.getGrille()[i][j]),j*75,i*75, this);
+                g.drawImage(PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j))),
+                        j * 75, i * 75, this);
+                g.drawImage(PiecePanel.draw(g, board.getGrille()[i][j]), j * 75, i * 75, this);
             }
         }
     }
 
-
-    public void put ( Pion p ) {
-        //placer dans le board 
-        //board.deplacerPion(p);*
-        board.getGrille()[2][2] = new Pion(TypeDePion.DJED,Direction.SUD,Couleur.JAUNE);
+    public void put(Pion p) {
+        // placer dans le board
+        // board.deplacerPion(p);*
+        board.getGrille()[2][2] = new Pion(TypeDePion.DJED, Direction.SUD, Couleur.JAUNE);
         repaint();
     }
-
-
-
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Plateau");
@@ -73,35 +71,5 @@ public class BoardPanel extends JPanel implements MouseListener {
         frame.add(new BoardPanel());
         frame.setSize(1000, 1000);
         frame.setVisible(true);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
     }
 }

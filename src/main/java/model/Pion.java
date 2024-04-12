@@ -10,6 +10,9 @@ public class Pion {
     protected Couleur couleur;
     private int x; // Coordonnée x sur le plateau
     private int y; // Coordonnée y sur le plateau
+    private boolean isMarkedForSplitting; // Indicateur pour la séparation
+    private boolean isRotationRequested; // Indicateur pour la rotation demandée
+    private boolean estEmpile; // Indicateur si le pion est empilé
 
     public Pion(TypeDePion type, Direction direction, Couleur couleur) {
         this.type = type;
@@ -82,6 +85,35 @@ public class Pion {
     // Rotation du pion
     public void rotate(boolean clockwise) {
         this.direction = clockwise ? this.direction.nextClockwise() : this.direction.nextCounterClockwise();
+    }
+
+    public boolean peutPivoter() {
+        // Ajouter la logique pour déterminer si le pion peut pivoter. Par exemple:
+        return this.type == TypeDePion.DJED || this.type == TypeDePion.PYRAMIDE || this.type == TypeDePion.HORUS;
+    }
+
+    public boolean isMarkedForSplitting() {
+        return this.isMarkedForSplitting;
+    }
+
+    public void setMarkedForSplitting(boolean marked) {
+        this.isMarkedForSplitting = marked;
+    }
+
+    public boolean isRotationRequested() {
+        return this.isRotationRequested;
+    }
+
+    public void setRotationRequested(boolean requested) {
+        this.isRotationRequested = requested;
+    }
+
+    public boolean estEmpile() {
+        return estEmpile;
+    }
+
+    public void setEmpiled(boolean empile) {
+        estEmpile = empile;
     }
 
 }

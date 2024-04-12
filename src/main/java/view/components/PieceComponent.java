@@ -1,11 +1,12 @@
 package view.components;
 
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 // PieceComponent pourrait ressembler à ceci
 public class PieceComponent extends JLabel {
@@ -20,6 +21,5 @@ public class PieceComponent extends JLabel {
             // Gérer l'exception comme vous le souhaitez ici
         }
     }
-    
-    // Vous pouvez ajouter des méthodes pour mettre à jour l'image, etc.
+
 }

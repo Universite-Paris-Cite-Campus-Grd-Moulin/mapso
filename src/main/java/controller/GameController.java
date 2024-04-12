@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -15,6 +16,8 @@ public class GameController implements MouseListener {
     private Plateau board;
     private GameView gameView; // Ajouté pour illustrer la mise à jour de la vue
     private Pion selectedPiece = null;
+    private static final int BOARD_COLUMNS = 10; // nombre de colonnes du plateau
+    private static final int BOARD_ROWS = 8; // nombre de lignes du plateau
 
     public GameController() {
         this.board = new Plateau();
@@ -136,20 +139,54 @@ public class GameController implements MouseListener {
      * }
      */
 
+    /*
+     * @Override
+     * public void mouseClicked(MouseEvent e) {
+     * int cellSize = gameView.getCellSize();
+     * int x = e.getX() / cellSize;
+     * int y = e.getY() / cellSize;
+     * 
+     * if (selectedPiece == null) {
+     * // Select piece
+     * selectedPiece = board.getPieceAt(x, y);
+     * if (selectedPiece != null && selectedPiece.getCouleur() ==
+     * game.getCurrentPlayer()) {
+     * System.out.println("Piece selected at (" + x + ", " + y + ")");
+     * } else {
+     * selectedPiece = null;
+     * gameView.
+     * displayMessage("Invalid selection. Please select one of your pieces.");
+     * }
+     * } else {
+     * // Move piece
+     * if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), x, y)) {
+     * System.out.println("Piece moved to (" + x + ", " + y + ")");
+     * selectedPiece = null; // Deselect piece after moving
+     * gameView.update(); // Update view
+     * } else {
+     * System.out.println("Invalid move.");
+     * gameView.displayMessage("Invalid move. Please try again.");
+     * }
+     * }
+     * }
+     */
+
     @Override
     public void mouseClicked(MouseEvent e) {
         int cellSize = gameView.getCellSize();
         int x = e.getX() / cellSize;
         int y = e.getY() / cellSize;
 
-        if (x < 0 || x >= gameView.getBoardColumns() || y < 0 || y >= gameView.getBoardRows()) {
-            return; // Clique en dehors du plateau
-        }
-
-        if (selectedPiece == null) {
-            selectPiece(x, y);
-        } else {
-            moveSelectedPiece(x, y);
+        // Utiliser les méthodes de GameView pour obtenir le nombre de colonnes et de
+        // lignes
+        if (x >= 0 && x < gameView.getBoardColumns() && y >= 0 && y < gameView.getBoardRows()) {
+            if (selectedPiece == null) {
+                selectPiece(x, y);
+            } else {
+                moveSelectedPiece(x, y);
+                // Un appel à update pour rafraîchir l'affichage
+                gameView.update();
+            }
         }
     }
 
@@ -181,17 +218,35 @@ public class GameController implements MouseListener {
     // laisser vides si elles ne sont pas utilisées
     @Override
     public void mousePressed(MouseEvent e) {
+        // Vous pourriez vouloir ajouter une logique ici si vous souhaitez gérer
+        // l'événement de pression de souris.
+        // Par exemple, vous pourriez initier un "drag" visuel ici si vous implémentez
+        // un drag-and-drop.
+        System.out.println("Mouse pressed at (" + e.getX() + ", " + e.getY() + ")");
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        // Cela pourrait être utile si vous gérez un drag-and-drop, pour finaliser le
+        // déplacement d'une pièce.
+        System.out.println("Mouse released at (" + e.getX() + ", " + e.getY() + ")");
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        // Peut être utilisé pour changer le curseur lorsque la souris entre dans une
+        // zone spécifique,
+        // indiquant que l'utilisateur peut interagir avec quelque chose.
+        gameView.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        System.out.println("Mouse entered the game area");
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        // Réinitialiser le curseur à la normale quand la souris quitte une zone
+        // interactive.
+        gameView.setCursor(Cursor.getDefaultCursor());
+        System.out.println("Mouse exited the game area");
     }
+
 }

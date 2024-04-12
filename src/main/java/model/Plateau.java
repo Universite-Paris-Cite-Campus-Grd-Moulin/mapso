@@ -6,6 +6,8 @@ import model.enums.TypeDePion;
 
 public class Plateau {
     private Pion[][] grille;
+    private int largeurDuPlateau = 10; // selon la largeur de votre grille
+    private int hauteurDuPlateau = 8; // selon la hauteur de votre grille
 
     public Pion[][] getGrille() {
         return grille;
@@ -105,71 +107,57 @@ public class Plateau {
         throw new UnsupportedOperationException("Unimplemented method shootLaser");
     }
 
-    /*
-     * public boolean movePiece(int startX, int startY, int endX, int endY) {
-     * // Vérifie si les coordonnées de départ et darrivée sont valides
-     * if (!isCoordonneeValide(startX, startY) || !isCoordonneeValide(endX, endY)) {
-     * return false; // Coordonnées hors limites
-     * }
-     * 
-     * Pion pieceADeplacer = grille[startY][startX];
-     * 
-     * // Vérifie si il y a bien un pion à déplacer et que la destination est valide
-     * // selon les règles du jeu
-     * if (pieceADeplacer != null && isDeplacementValide(pieceADeplacer, startX,
-     * startY, endX, endY)) {
-     * // Effectue le déplacement
-     * grille[endY][endX] = pieceADeplacer;
-     * grille[startY][startX] = null;
-     * 
-     * // Mise à jour de la position du pion (si les pions gardent trace de leur
-     * // position)
-     * pieceADeplacer.setPosition(endX, endY);
-     * 
-     * return true;
-     * }
-     * 
-     * return false;
-     * }
-     */
+    public boolean movePiece(int startX, int startY, int endX, int endY) {
+        // Ajoutez ici toute validation nécessaire pour le déplacement
+        // Comme vérifier si le déplacement est valide pour le type de pièce etc.
+
+        Pion piece = getPieceAt(startX, startY);
+        if (piece == null || grille[endY][endX] != null) {
+            return false; // Pas de pièce à déplacer ou la case de destination n'est pas vide
+        }
+
+        // Déplacement de la pièce
+        grille[endY][endX] = piece;
+        grille[startY][startX] = null;
+        piece.setPosition(endX, endY); // Important: mettre à jour la position de la pièce
+
+        return true; // Le déplacement a été effectué
+    }
 
     private boolean isCoordonneeValide(int x, int y) {
         return x >= 0 && x < grille[0].length && y >= 0 && y < grille.length;
     }
 
-    /*
-     * private boolean isDeplacementValide(Pion pion, int startX, int startY, int
-     * endX, int endY) {
-     * // Vérifie si le mouvement est hors limites
-     * if (!estDansLimites(startX, startY) || !estDansLimites(endX, endY)) return
-     * false;
-     * 
-     * // Vérifie si le mouvement est d'une seule case
-     * if (!estMouvementDuneCase(startX, startY, endX, endY) && !pion.peutPivoter())
-     * return false;
-     * 
-     * // Cas spécifique pour l'échange de position avec le Djed
-     * if (pion.getType() == TypeDePion.DJED) {
-     * return peutEchangerAvecDjed(pion, startX, startY, endX, endY);
-     * }
-     * 
-     * // Cas spécifique pour l'empilement/dépilement des Obélisques
-     * if (pion.getType() == TypeDePion.OBELISQUE || pion.getType() ==
-     * TypeDePion.DOUBLE_OBELISQUE) {
-     * return peutEmpilerOuDepilerObelisque(pion, startX, startY, endX, endY);
-     * }
-     * 
-     * // Vérifie si la destination est occupée (sauf pour Djed)
-     * if (grille[endY][endX] != null) return false;
-     * 
-     * // Vérification de la couleur des cases pour Rouge et Jaune
-     * return estCaseValidePourCouleur(pion.getCouleur(), endX, endY);
-     * }
-     * 
-     * private boolean estDansLimites(int x, int y) {
-     * return x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau;
-     * }
-     */
+    private boolean isDeplacementValide(Pion pion, int startX, int startY, int endX, int endY) {
+        // Vérifie si le mouvement est hors limites
+        if (!estDansLimites(startX, startY) || !estDansLimites(endX, endY))
+            return false;
+
+        // Vérifie si le mouvement est d'une seule case
+        if (!estMouvementDuneCase(startX, startY, endX, endY) && !pion.peutPivoter())
+            return false;
+
+        // Cas spécifique pour l'échange de position avec le Djed
+        if (pion.getType() == TypeDePion.DJED) {
+            return peutEchangerAvecDjed(pion, startX, startY, endX, endY);
+        }
+
+        // Cas spécifique pour l'empilement/dépilement des Obélisques
+        if (pion.getType() == TypeDePion.OBELISQUE || pion.getType() == TypeDePion.DOUBLE_OBELISQUE) {
+            return peutEmpilerOuDepilerObelisque(pion, startX, startY, endX, endY);
+        }
+
+        // Vérifie si la destination est occupée (sauf pour Djed)
+        if (grille[endY][endX] != null)
+            return false;
+
+        // Vérification de la couleur des cases pour Rouge et Jaune
+        return estCaseValidePourCouleur(pion.getCouleur(), endX, endY);
+    }
+
+    private boolean estDansLimites(int x, int y) {
+        return x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau;
+    }
 
     private boolean estMouvementDuneCase(int startX, int startY, int endX, int endY) {
         return Math.abs(endX - startX) <= 1 && Math.abs(endY - startY) <= 1;
@@ -198,38 +186,32 @@ public class Plateau {
                       // destination n'est pas adjacente
     }
 
-    /*
-     * private boolean peutEmpilerOuDepilerObelisque(Pion pion, int startX, int
-     * startY, int endX, int endY) {
-     * // Assurez-vous que la destination est adjacente et dans les limites du
-     * plateau
-     * if (!estMouvementDuneCase(startX, startY, endX, endY))
-     * return false;
-     * 
-     * Pion pieceDestination = grille[endY][endX];
-     * Pion pieceSource = grille[startY][startX];
-     * 
-     * // Cas d'empilement : la destination contient un Obélisque de même couleur
-     * if (pieceDestination != null &&
-     * pieceDestination.getType() == TypeDePion.OBELISQUE &&
-     * pieceSource.getCouleur() == pieceDestination.getCouleur() &&
-     * !pieceSource.estEmpile() && // Assurez-vous que l'Obélisque source n'est pas
-     * déjà empilé
-     * !pieceDestination.estEmpile()) { // et l'Obélisque destination n'est pas non
-     * plus empilé
-     * return true; // Empilement possible
-     * }
-     * 
-     * // Cas de dépilement : si l'Obélisque source est empilé, il peut se déplacer
-     * // seul à condition que la destination soit libre
-     * if (pieceSource.estEmpile() && pieceDestination == null) {
-     * return true; // Dépilement possible
-     * }
-     * 
-     * // Déplacement normal : un Obélisque seul se déplace vers une case vide
-     * return pieceDestination == null && !pieceSource.estEmpile();
-     * }
-     */
+    private boolean peutEmpilerOuDepilerObelisque(Pion pion, int startX, int startY, int endX, int endY) {
+        // Assurez-vous que la destination est adjacente et dans les limites du plateau
+        if (!estMouvementDuneCase(startX, startY, endX, endY))
+            return false;
+
+        Pion pieceDestination = grille[endY][endX];
+        Pion pieceSource = grille[startY][startX];
+
+        // Cas d'empilement : la destination contient un Obélisque de même couleur
+        if (pieceDestination != null &&
+                pieceDestination.getType() == TypeDePion.OBELISQUE &&
+                pieceSource.getCouleur() == pieceDestination.getCouleur() &&
+                !pieceSource.estEmpile() && // Assurez-vous que l'Obélisque source n'est pas déjà empilé
+                !pieceDestination.estEmpile()) { // et l'Obélisque destination n'est pas non plus empilé
+            return true; // Empilement possible
+        }
+
+        // Cas de dépilement : si l'Obélisque source est empilé, il peut se déplacer
+        // seul à condition que la destination soit libre
+        if (pieceSource.estEmpile() && pieceDestination == null) {
+            return true; // Dépilement possible
+        }
+
+        // Déplacement normal : un Obélisque seul se déplace vers une case vide
+        return pieceDestination == null && !pieceSource.estEmpile();
+    }
 
     private boolean estCaseValidePourCouleur(Couleur couleur, int x, int y) {
         // Supposons que tu as une matrice définissant les couleurs des cases du plateau
@@ -337,13 +319,14 @@ public class Plateau {
     }
 
     public boolean estEmpile(Pion pion) {
-        // Déterminer si le pion est empilé
-        return false; // Exemple de valeur de retour
+        // Check if the pion is a Double Obelisque, indicating it is stacked
+        return pion.getType() == TypeDePion.DOUBLE_OBELISQUE;
     }
 
+    // This method could depend on some user interaction or game state checks
     public boolean estSeparationDemandee(Pion pion) {
-        // Déterminer si une séparation est demandée
-        return false; // Exemple de valeur de retour
+        // Example: Check if a split command or action was triggered for this pion
+        return pion.isMarkedForSplitting();
     }
 
     public Pion getPieceAt(int x, int y) {
@@ -354,7 +337,9 @@ public class Plateau {
     }
 
     public boolean estTourneeDemandee(Pion pion) {
-        throw new UnsupportedOperationException("Unimplemented method estTourneeDemandee");
+        // Implementation depends on game mechanics for rotating pieces
+        // Could check a flag or a game state that records the last command
+        return pion.isRotationRequested();
     }
 
     public Couleur initCouleur(int i, int j) {
@@ -371,4 +356,5 @@ public class Plateau {
             return Couleur.GRIS;
         }
     }
+
 }

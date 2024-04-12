@@ -1,9 +1,8 @@
 package model;
 
 public class ArbreTrajectoire {
-    private NoeudTrajectoire racine; // La racine de l'arbre de trajectoire
+    private NoeudTrajectoire racine;
 
-    // Constructeur
     public ArbreTrajectoire(NoeudTrajectoire racine) {
         this.racine = racine;
     }
@@ -15,5 +14,4 @@ public class ArbreTrajectoire {
     public void setRacine(NoeudTrajectoire racine) {
         this.racine = racine;
     }
-
 }

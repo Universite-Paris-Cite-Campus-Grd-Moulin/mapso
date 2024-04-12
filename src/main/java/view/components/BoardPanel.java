@@ -14,7 +14,7 @@ import model.enums.TypeDePion;
 
 public class BoardPanel extends JPanel {
 
-    private Plateau board; // MVCCCCCC
+    private Plateau board;
 
     public BoardPanel() {
         setLayout(new GridLayout(8, 10));

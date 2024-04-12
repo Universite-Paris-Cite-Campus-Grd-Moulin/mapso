@@ -8,18 +8,37 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-// PieceComponent pourrait ressembler à ceci
 public class PieceComponent extends JLabel {
     private BufferedImage image;
 
     public PieceComponent(String imagePath) {
+        loadImage(imagePath);
+    }
+
+    private void loadImage(String imagePath) {
         try {
-            image = ImageIO.read(new File(imagePath));
-            setIcon(new ImageIcon(image));
+            File file = new File(imagePath);
+            if (file.exists()) {
+                image = ImageIO.read(file);
+                setIcon(new ImageIcon(image));
+            } else {
+                handleMissingImage();
+            }
         } catch (IOException e) {
-            e.printStackTrace();
-            // Gérer l'exception comme vous le souhaitez ici
+            System.err.println("Error loading image: " + e.getMessage());
+            handleMissingImage();
         }
     }
 
+    private void handleMissingImage() {
+        // Log an error or display a default image
+        System.err.println("Image file not found, displaying default image.");
+        try {
+            image = ImageIO.read(getClass().getResource("/path/to/default/image.png"));
+            setIcon(new ImageIcon(image));
+        } catch (IOException e) {
+            System.err.println("Failed to load default image: " + e.getMessage());
+            this.setText("Image not available");
+        }
+    }
 }

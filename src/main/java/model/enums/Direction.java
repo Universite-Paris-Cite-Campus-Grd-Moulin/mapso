@@ -33,32 +33,6 @@ public enum Direction {
         return DELTAS[this.ordinal()][1];
     }
 
-    public Direction perpendiculaire() {
-        return PERPENDICULAIRES[this.ordinal()];
-    }
-
-    // Vous pouvez ajouter d'autres méthodes pour gérer la réflexion du laser
-    // Par exemple, pour retourner une direction réfléchie en fonction du type de
-    // miroir rencontré
-    public Direction reflechirSurMiroir45() {
-        return null;
-        // Logique de réflexion sur un miroir à 45 degrés
-        // Cela dépendra de la règle exacte de réflexion pour votre jeu
-    }
-
-    public Direction reflechirSurMiroir135() {
-        return null;
-        // Logique de réflexion sur un miroir à 135 degrés
-        // Cela dépendra de la règle exacte de réflexion pour votre jeu
-    }
-
-    // Une méthode pour gérer la division du laser en rencontrant un Horus
-    public Direction[] diviserSurHorus() {
-        // Retourne les deux nouvelles directions après la division
-        return new Direction[] { this.perpendiculaire(), this }; // exemple simplifié
-    }
-
-    // Retourne la direction suivante dans le sens horaire
     public Direction nextClockwise() {
         return switch (this) {
             case NORD -> EST;
@@ -72,7 +46,6 @@ public enum Direction {
         };
     }
 
-    // Retourne la direction suivante dans le sens anti-horaire
     public Direction nextCounterClockwise() {
         return switch (this) {
             case NORD -> OUEST;
@@ -86,12 +59,23 @@ public enum Direction {
         };
     }
 
-    // Retourne la direction après une rotation de 90 degrés, selon la direction du
-    // laser
     public Direction rotate90Degrees() {
-        // Cette méthode pourrait être adaptée en fonction de votre logique spécifique
-        // de réflexion du laser
-        return nextClockwise(); // Exemple simplifié : rotation de 90 degrés = prochaine direction dans le sens
-                                // horaire
+        return nextClockwise();
+    }
+
+    public Direction perpendiculaire() {
+        return PERPENDICULAIRES[this.ordinal()];
+    }
+
+    public Direction reflechirSurMiroir45() {
+        return null;
+    }
+
+    public Direction reflechirSurMiroir135() {
+        return null;
+    }
+
+    public Direction[] diviserSurHorus() {
+        return new Direction[] { this.perpendiculaire(), this };
     }
 }

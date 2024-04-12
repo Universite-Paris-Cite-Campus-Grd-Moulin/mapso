@@ -6,8 +6,10 @@ import model.enums.TypeDePion;
 
 public class Pion {
     protected TypeDePion type;
-    protected Direction direction ;
+    protected Direction direction;
     protected Couleur couleur;
+    private int x; // Coordonnée x sur le plateau
+    private int y; // Coordonnée y sur le plateau
 
     public Pion(TypeDePion type, Direction direction, Couleur couleur) {
         this.type = type;
@@ -15,16 +17,19 @@ public class Pion {
         this.couleur = couleur;
     }
 
+    public Pion(TypeDePion type, Direction direction, Couleur couleur, int x, int y) {
+        this.type = type;
+        this.direction = direction;
+        this.couleur = couleur;
+        this.x = x;
+        this.y = y;
+    }
+
     // Méthodes abstraites pour les actions spécifiques à chaque pion
-    
 
     // Getters et Setters
     public TypeDePion getType() {
         return type;
-    }
-
-    public Couleur getCouleur() {
-        return couleur;
     }
 
     public void setType(TypeDePion type) {
@@ -39,20 +44,44 @@ public class Pion {
         this.direction = direction;
     }
 
+    public Couleur getCouleur() {
+        return couleur;
+    }
+
     public void setCouleur(Couleur couleur) {
         this.couleur = couleur;
     }
 
-    public void getPieceAt(Direction a){
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void getPieceAt(Direction a) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getPieceAt'");
     }
 
-    public void rotate(boolean clockwise) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'rotate'");
+    // Méthode pour définir de nouvelles coordonnées
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    // Vous pouvez ajouter d'autres méthodes utiles ici
-}
+    // Rotation du pion
+    public void rotate(boolean clockwise) {
+        this.direction = clockwise ? this.direction.nextClockwise() : this.direction.nextCounterClockwise();
+    }
 
+}

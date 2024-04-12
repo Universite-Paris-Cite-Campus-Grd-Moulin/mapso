@@ -5,17 +5,21 @@ import model.enums.TypeInteraction;
 
 public class Laser {
     private ArbreTrajectoire arbreTrajectoire;
-    // Autres attributs...
 
     public Laser(Direction directionInitiale, int positionI, int positionJ) {
-        this.arbreTrajectoire = new ArbreTrajectoire(new NoeudTrajectoire(directionInitiale, positionI, positionJ, TypeInteraction.NONE));
+        this.arbreTrajectoire = new ArbreTrajectoire(
+                new NoeudTrajectoire(directionInitiale, positionI, positionJ, TypeInteraction.NONE));
         // Initialisation des autres attributs...
     }
 
-    // Méthode pour mettre à jour l'arbre de trajectoire en fonction des actions du jeu
-    public void mettreAJourTrajectoire(Direction nouvelleDirection, int nouvellePositionI, int nouvellePositionJ, TypeInteraction typeInteraction) {
-        NoeudTrajectoire nouveauNoeud = new NoeudTrajectoire(nouvelleDirection, nouvellePositionI, nouvellePositionJ, typeInteraction);
-        // Ici, vous devez déterminer le noeud parent correct à partir duquel ajouter le nouveau noeud
+    // Méthode pour mettre à jour l'arbre de trajectoire en fonction des actions du
+    // jeu
+    public void mettreAJourTrajectoire(Direction nouvelleDirection, int nouvellePositionI, int nouvellePositionJ,
+            TypeInteraction typeInteraction) {
+        NoeudTrajectoire nouveauNoeud = new NoeudTrajectoire(nouvelleDirection, nouvellePositionI, nouvellePositionJ,
+                typeInteraction);
+        // Ici, vous devez déterminer le noeud parent correct à partir duquel ajouter le
+        // nouveau noeud
         // ...
     }
 

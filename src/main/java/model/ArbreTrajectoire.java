@@ -16,6 +16,4 @@ public class ArbreTrajectoire {
         this.racine = racine;
     }
 
-    // Méthodes pour manipuler l'arbre
-    // ...
 }

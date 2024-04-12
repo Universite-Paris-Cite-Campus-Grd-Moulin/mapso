@@ -1,0 +1,6 @@
+Des Librairies pour faire fonctionner les Testes Unitaires (JUnit)
+
+junit-platform-console-standalone-1.10.2.jar : Ce fichier JAR contient à la fois l'API JUnit Jupiter et le ConsoleLauncher nécessaire pour exécuter vos tests.
+junit-jupiter-api-5.x.x.jar                  : Pour écrire les tests.
+junit-jupiter-engine-5.x.x.jar               : Pour exécuter les tests.
+apiguardian-api-1.x.x.jar                    : Car il est souvent requis par JUnit.

@@ -1,7 +1,7 @@
 package model.enums;
 
-import model.Plateau;
 import model.Pion;
+import model.Plateau;
 
 public enum TypeDePion {
 
@@ -11,11 +11,13 @@ public enum TypeDePion {
             // Aucun Pion ne peut se déplacer
             throw new UnsupportedOperationException("Aucun Pion ne peut se déplacer.");
         }
+
         @Override
         public void empiler(Plateau plateau, Pion pion) {
             // Aucun Pion ne peut être empilé
             throw new UnsupportedOperationException("Aucun Pion ne peut être empilé.");
         }
+
         @Override
         public void depiler(Plateau plateau, Pion pion) {
             // Le Pharaon ne peut pas être dépilé
@@ -112,8 +114,6 @@ public enum TypeDePion {
         }
     },
 
-   
-
     OBELISQUE {
         @Override
         public void deplacer(Direction direction, Plateau plateau, Pion pion) {
@@ -131,7 +131,8 @@ public enum TypeDePion {
 
         @Override
         public void depiler(Plateau plateau, Pion pion) {
-            // L'Obélisque ne peut pas être dépilé car il ne s'empile pas sur d'autres types de pions
+            // L'Obélisque ne peut pas être dépilé car il ne s'empile pas sur d'autres types
+            // de pions
             throw new UnsupportedOperationException("L'Obélisque ne peut pas être dépilé.");
         }
     },
@@ -161,6 +162,8 @@ public enum TypeDePion {
     };
 
     public abstract void deplacer(Direction direction, Plateau plateau, Pion pion);
+
     public abstract void empiler(Plateau plateau, Pion pion);
+
     public abstract void depiler(Plateau plateau, Pion pion);
 }

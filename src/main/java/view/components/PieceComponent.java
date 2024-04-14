@@ -31,7 +31,6 @@ public class PieceComponent extends JLabel {
     }
 
     private void handleMissingImage() {
-        // Log an error or display a default image
         System.err.println("Image file not found, displaying default image.");
         try {
             image = ImageIO.read(getClass().getResource("/path/to/default/image.png"));

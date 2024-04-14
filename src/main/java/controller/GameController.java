@@ -17,6 +17,7 @@ public class GameController implements MouseListener {
     private Pion selectedPiece = null;
     private static final int BOARD_COLUMNS = 10; // Nombre de colonnes du plateau
     private static final int BOARD_ROWS = 8; // Nombre de lignes du plateau
+    private int startX, startY; // Ajout pour stocker la position initiale lors du glisser
 
     public GameController() {
         this.board = new Plateau();
@@ -124,6 +125,7 @@ public class GameController implements MouseListener {
     public void mouseExited(MouseEvent e) {
         gameView.setCursor(Cursor.getDefaultCursor());
     }
+
 }
 
 // Autre methode peut etre valable

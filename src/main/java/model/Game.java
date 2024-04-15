@@ -7,8 +7,9 @@ public class Game {
     private Couleur currentPlayer;
     private boolean isGameOver;
 
-    public Game() {
-        this(new Plateau());
+    // Modification du constructeur pour accepter un type de plateau
+    public Game(String type) {
+        this(new Plateau(type)); // Crée un plateau du type spécifié
     }
 
     public Game(Plateau board) {

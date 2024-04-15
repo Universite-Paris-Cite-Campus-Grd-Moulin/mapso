@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import model.Plateau;
+import view.components.BoardPanel;
 
 public class Main {
     private JFrame mainFrame;
@@ -82,7 +84,6 @@ public class Main {
         mainFrame.setVisible(true);
     }
 
-
     private void placeComponents(BackgroundPanel panel, JButton start, JButton settings, JButton exit) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = 1; // set gridwidth to 1 for each button
@@ -92,22 +93,21 @@ public class Main {
         gbc.fill = GridBagConstraints.NONE; // do not resize the button
         gbc.insets = new Insets(20, 20, 20, 20);
         gbc.anchor = GridBagConstraints.PAGE_END; // anchor buttons to the bottom of the screen
-    
+
         panel.add(Box.createHorizontalGlue(), gbc);
-    
+
         gbc.gridx++;
         panel.add(start, gbc);
-    
+
         gbc.gridx++;
         panel.add(settings, gbc);
-    
+
         gbc.gridx++;
         panel.add(exit, gbc);
-    
+
         gbc.gridx++;
         panel.add(Box.createHorizontalGlue(), gbc);
     }
-    
 
     private JButton createButton(String imagePath) {
         ImageIcon buttonIcon = new ImageIcon(imagePath);
@@ -130,15 +130,32 @@ public class Main {
         JButton dynastyButton = new JButton("Dynastie");
 
         gameOptionsDialog.add(classicButton);
-        
         gameOptionsDialog.add(imhotepButton);
         gameOptionsDialog.add(dynastyButton);
 
-        classicButton.addActionListener(e -> {/* Start Classique mode */ gameOptionsDialog.dispose();});
-        imhotepButton.addActionListener(e -> {/* Start Imhotep mode */ gameOptionsDialog.dispose();});
-        dynastyButton.addActionListener(e -> {/* Start Dynastie mode */ gameOptionsDialog.dispose();});
+        classicButton.addActionListener(e -> {
+            openBoard("Classic");
+            gameOptionsDialog.dispose();
+        });
+        imhotepButton.addActionListener(e -> {
+            openBoard("Imhotep");
+            gameOptionsDialog.dispose();
+        });
+        dynastyButton.addActionListener(e -> {
+            openBoard("Dynastie");
+            gameOptionsDialog.dispose();
+        });
 
         gameOptionsDialog.setVisible(true);
+    }
+
+    private void openBoard(String type) {
+        JFrame boardFrame = new JFrame(type);
+        boardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        boardFrame.add(new BoardPanel(new Plateau(type)));
+        boardFrame.setSize(1000, 800);
+        boardFrame.setLocationRelativeTo(null);
+        boardFrame.setVisible(true);
     }
 
     private void openSettings() {

@@ -33,6 +33,7 @@ public class PiecePanel extends JPanel {
 
     private Pion pion; // MVC et pas en attribut
     private BufferedImage image; // image du pion extrait
+    private static final BufferedImage[] images = new BufferedImage[TypeDePion.values().length];
 
     public PiecePanel(Pion p) {
         this.pion = p;
@@ -69,7 +70,15 @@ public class PiecePanel extends JPanel {
         g.drawImage(image, 0, 0, null);
     }
 
-    // Vous pouvez ajouter des méthodes pour mettre à jour l'image, etc.
+    /*
+     * protected void paintComponent(Graphics g) {
+     * super.paintComponent(g);
+     * if (pion != null && images[pion.getType().ordinal()] != null) {
+     * g.drawImage(images[pion.getType().ordinal()], 0, 0, getWidth(), getHeight(),
+     * this);
+     * }
+     * }
+     */
 
     public static void main(String[] args) {
         Pion pion = new Pion(TypeDePion.PHARAON, Direction.EST, Couleur.JAUNE);
@@ -82,5 +91,20 @@ public class PiecePanel extends JPanel {
         j.setSize(new Dimension(300, 300));
         j.add(panel);
         j.setVisible(true);
+    }
+
+    private static void loadImages() {
+        // Supposons que les images soient stockées dans un dossier "images/"
+        try {
+            for (TypeDePion type : TypeDePion.values()) {
+                images[type.ordinal()] = ImageIO.read(new File("images/" + type.name() + ".png"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setPion(Pion pion) {
+        this.pion = pion;
     }
 }

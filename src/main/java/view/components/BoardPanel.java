@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 
 import model.Pion;
 import model.Plateau;
-import model.enums.Couleur;
 import model.enums.Direction;
 import model.enums.TypeDePion;
 
@@ -20,43 +19,48 @@ public class BoardPanel extends JPanel implements MouseListener {
     private Pion selectedPiece;
     private int startX, startY;
 
+    // Constructor for default initial board
     public BoardPanel() {
+        this(new Plateau("Classic")); // Default to "Classic" if no type is specified
+    }
+
+    // Constructor that accepts a Plateau, allows for different types of boards
+    public BoardPanel(Plateau board) {
+        this.board = board;
         setLayout(new GridLayout(8, 10));
         initBoard();
         addMouseListener(this);
     }
 
     private void initBoard() {
-        // Initialise le plateau avec les PiecePanel pour chaque case
-        removeAll(); // Enlève tous les composants précédemment ajoutés si nécessaire
-        Plateau board = new Plateau();
-        this.board = board;
-
+        // Assumes the board is already initialized with the right type
+        removeAll(); // Clears any existing components
+        revalidate();
+        repaint(); // Repaint after removing components
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        // on inverse i et j car dans la vue le coordonnee x est prportionnel au nombre
-        // de colonne donc j et le y est en relation avec le nombre
-        // de lignes qui est i
         super.paintComponent(g);
+        // Draw the board pieces
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 g.drawImage(PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j))),
                         j * 75, i * 75, this);
-                g.drawImage(PiecePanel.draw(g, board.getGrille()[i][j]), j * 75, i * 75, this);
+                if (board.getGrille()[i][j] != null) {
+                    g.drawImage(PiecePanel.draw(g, board.getGrille()[i][j]), j * 75, i * 75, this);
+                }
             }
         }
     }
 
     public void put(Pion p) {
-        // placer dans le board
-        // board.deplacerPion(p);*
-        board.getGrille()[2][2] = new Pion(TypeDePion.DJED, Direction.SUD, Couleur.JAUNE);
+        // Place a piece on the board, example for adding a piece dynamically
+        board.getGrille()[2][2] = p;
         repaint();
     }
 
-    // MouseListener methods need to be implemented, even if they do nothing
+    // Implementation of MouseListener methods
     @Override
     public void mouseClicked(MouseEvent e) {
     }
@@ -68,7 +72,6 @@ public class BoardPanel extends JPanel implements MouseListener {
         int row = e.getY() / cellSize;
         selectedPiece = board.getPieceAt(row, col);
         System.out.println("Mouse pressed at cell (" + col + ", " + row + ")");
-        // Implement logic to select a piece
     }
 
     @Override
@@ -80,7 +83,6 @@ public class BoardPanel extends JPanel implements MouseListener {
             selectedPiece = null;
             repaint(); // Redraw the board to reflect the piece's new position
         }
-        System.out.println("Mouse released at cell (" + col + ", " + row + ")");
     }
 
     @Override
@@ -98,5 +100,4 @@ public class BoardPanel extends JPanel implements MouseListener {
         frame.setSize(1000, 1000);
         frame.setVisible(true);
     }
-
 }

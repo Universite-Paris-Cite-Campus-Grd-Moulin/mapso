@@ -9,14 +9,36 @@ public class Plateau {
     private int largeurDuPlateau = 10;
     private int hauteurDuPlateau = 8;
 
+    public boolean Classic = false;
+    public boolean Dynastie = false;
+    public boolean Imhotep = false;
+
     public Pion[][] getGrille() {
         return grille;
     }
 
-    public Plateau() {
-        this.grille = new Pion[8][10]; // Création dune grille de 8x10
+    public Plateau(String type) {
+        this.grille = new Pion[hauteurDuPlateau][largeurDuPlateau];
+        switch (type) {
+            case "Classic":
+                initializeClassic();
+                break;
+            case "Dynastie":
+                initializeDynastie();
+                break;
+            case "Imhotep":
+                initializeImhotep();
+                break;
+            default:
+                initializeClassic(); // default to Classic if unspecified
+        }
+    }
+
+    private void initializeClassic() {
+        this.grille = new Pion[8][10];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
+                // Configuration de base des cellules
                 if (j == 0) {
                     this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
                 } else if (j == 9) {
@@ -76,6 +98,102 @@ public class Plateau {
         }
     }
 
+    private void initializeDynastie() {
+        this.grille = new Pion[8][10];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 10; j++) {
+                // Set empty spaces and boundary conditions
+                if (j == 0) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
+                } else if (j == 9) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
+                } else if (j == 1 && (i == 0 || i == 7)) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
+                } else if (j == 8 && (i == 0 || i == 7)) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
+                } else {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.GRIS);
+                }
+
+                // Position strategic pieces differently for the Dynastie setup
+                // Double Obelisques and special guards for Pharaohs to emphasize the dynastic
+                // power
+                if ((i == 0 && j == 2) || (i == 0 && j == 8)) {
+                    this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.ROUGE);
+                }
+                if ((i == 7 && j == 2) || (i == 7 && j == 8)) {
+                    this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.JAUNE);
+                }
+                if (i == 0 && j == 5) {
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.ROUGE);
+                }
+                if (i == 7 && j == 4) {
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.JAUNE);
+                }
+                if ((i == 1 && j == 1) || (i == 6 && j == 8)) {
+                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST,
+                            (i == 1) ? Couleur.ROUGE : Couleur.JAUNE);
+                }
+                if ((i == 1 && j == 9) || (i == 6 && j == 0)) {
+                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.OUEST,
+                            (i == 1) ? Couleur.ROUGE : Couleur.JAUNE);
+                }
+                // A dynamic central setup with Djed and Pyramids to control the middle of the
+                // board
+                if ((i == 4 && j == 5) || (i == 3 && j == 4)) {
+                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.NORD,
+                            (i == 4) ? Couleur.JAUNE : Couleur.ROUGE);
+                }
+                if ((i == 4 && j == 4) || (i == 3 && j == 5)) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD,
+                            (i == 4) ? Couleur.JAUNE : Couleur.ROUGE);
+                }
+            }
+        }
+    }
+
+    private void initializeImhotep() {
+        this.grille = new Pion[8][10];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 10; j++) {
+                // Set empty spaces and boundary conditions
+                if (j == 0) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
+                } else if (j == 9) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
+                } else if (j == 1 && (i == 0 || i == 7)) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
+                } else if (j == 8 && (i == 0 || i == 7)) {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
+                } else {
+                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.GRIS);
+                }
+
+                // Position strategic pieces differently for the Imhotep setup
+                if ((i == 0 && j == 3) || (i == 0 && j == 7)) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
+                }
+                if (i == 7 && (j == 3 || j == 7)) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.JAUNE);
+                }
+                if (i == 1 && j == 4) {
+                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.SUD, Couleur.ROUGE);
+                }
+                if (i == 6 && j == 5) {
+                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.SUD, Couleur.JAUNE);
+                }
+                if ((i == 0 && j == 5) || (i == 7 && j == 4)) {
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD,
+                            (i == 0) ? Couleur.ROUGE : Couleur.JAUNE);
+                }
+                if ((i == 2 && j == 2) || (i == 5 && j == 8)) {
+                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.EST,
+                            (i == 2) ? Couleur.ROUGE : Couleur.JAUNE);
+                }
+            }
+        }
+    }
+
     public boolean deplacerPion(int iDepart, int jDepart, int iArrivee, int jArrivee) {
         if (iDepart < 0 || iDepart >= grille.length || jDepart < 0 || jDepart >= grille[0].length ||
                 iArrivee < 0 || iArrivee >= grille.length || jArrivee < 0 || jArrivee >= grille[0].length) {
@@ -90,17 +208,15 @@ public class Plateau {
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
-        if (!isCoordonneeValide(startX, startY) || !isCoordonneeValide(endX, endY)) {
-            return false;
+        // Just move without validation for testing
+        if (getPieceAt(startX, startY) != null && getPieceAt(endX, endY) == null) {
+            Pion piece = grille[startY][startX];
+            grille[endY][endX] = piece;
+            grille[startY][startX] = null;
+            piece.setPosition(endX, endY); // Ensure your Pion class updates its position correctly
+            return true;
         }
-        Pion piece = getPieceAt(startX, startY);
-        if (piece == null || grille[endY][endX] != null) {
-            return false;
-        }
-        grille[endY][endX] = piece;
-        grille[startY][startX] = null;
-        piece.setPosition(endX, endY);
-        return true;
+        return false;
     }
 
     private boolean isCoordonneeValide(int x, int y) {

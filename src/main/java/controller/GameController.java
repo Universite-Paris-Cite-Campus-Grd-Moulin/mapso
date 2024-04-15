@@ -65,6 +65,7 @@ public class GameController implements MouseListener {
         if (game.isGameOver()) {
             String winner = game.getCurrentPlayer() == Couleur.ROUGE ? "Jaune" : "Rouge";
             System.out.println("Le jeu est terminé. Le joueur " + winner + " gagne !");
+            restartGame();
         }
     }
 
@@ -94,7 +95,8 @@ public class GameController implements MouseListener {
             selectedPiece = piece;
             System.out.println("Pièce sélectionnée en " + x + ", " + y);
         } else {
-            gameView.displayMessage("Sélection invalide. Sélectionnez une de vos pièces.");
+            selectedPiece = null; // Désélectionnez si non valide
+            System.out.println("Sélection invalide ou ce n'est pas le tour du joueur.");
         }
     }
 
@@ -125,5 +127,28 @@ public class GameController implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         gameView.setCursor(Cursor.getDefaultCursor());
+    }
+
+    private void handleMouseClick(int x, int y) {
+        int cellSize = gameView.getCellSize();
+        int col = x / cellSize;
+        int row = y / cellSize;
+
+        if (selectedPiece == null) {
+            // Select piece
+            selectedPiece = board.getPieceAt(row, col);
+            if (selectedPiece != null && selectedPiece.getCouleur() != game.getCurrentPlayer()) {
+                selectedPiece = null; // Ensure that player can only move their own pieces
+                gameView.displayMessage("Invalid selection. Please select your own piece.");
+            }
+        } else {
+            // Move piece
+            if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
+                gameView.update(); // Update the view to reflect the new board state
+                selectedPiece = null; // Deselect piece after move
+            } else {
+                gameView.displayMessage("Invalid move. Try again.");
+            }
+        }
     }
 }

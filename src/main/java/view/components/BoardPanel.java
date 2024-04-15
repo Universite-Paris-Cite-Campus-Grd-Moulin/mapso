@@ -61,23 +61,33 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int cellSize = 75; // Simplified cell size retrieval
+        int cellSize = Math.min(getWidth() / 10, getHeight() / 8); // Assure that the cell size adapts to panel size
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
-        selectedPiece = board.getPieceAt(row, col);
-        System.out.println("Mouse pressed at cell (" + col + ", " + row + ")");
+
+        if (col >= 0 && col < 10 && row >= 0 && row < 8) {
+            selectedPiece = board.getPieceAt(row, col);
+            System.out.println("Mouse pressed at cell (" + col + ", " + row + ")");
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        int cellSize = 75; // Direct use of cell size for consistency
+        int cellSize = Math.min(getWidth() / 10, getHeight() / 8); // Consistent with mousePressed
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
-        if (selectedPiece != null && board.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
-            selectedPiece = null;
-            repaint();
+
+        if (selectedPiece != null && col >= 0 && col < 10 && row >= 0 && row < 8) {
+            if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
+                selectedPiece = null;
+                repaint();
+                System.out.println("Piece moved successfully.");
+            } else {
+                System.out.println("Failed to move the piece.");
+            }
+        } else {
+            System.out.println("Mouse released out of bounds (" + col + ", " + row + ")");
         }
-        System.out.println("Mouse released at (" + e.getX() + ", " + e.getY() + ")");
     }
 
     @Override

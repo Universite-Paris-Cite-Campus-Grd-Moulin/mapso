@@ -208,15 +208,41 @@ public class Plateau {
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
-        // Just move without validation for testing
-        if (getPieceAt(startX, startY) != null && getPieceAt(endX, endY) == null) {
-            Pion piece = grille[startY][startX];
-            grille[endY][endX] = piece;
-            grille[startY][startX] = null;
-            piece.setPosition(endX, endY); // Ensure your Pion class updates its position correctly
-            return true;
+        if (!isValidPosition(startX, startY) || !isValidPosition(endX, endY)) {
+            System.out.println("Start or end position is out of bounds.");
+            return false;
         }
-        return false;
+        Pion movingPiece = grille[startY][startX];
+        Pion destinationPiece = grille[endY][endX];
+
+        if (movingPiece == null) {
+            System.out.println("No piece at the starting position.");
+            return false;
+        }
+        if (destinationPiece != null) {
+            // Si la pièce de destination est un ennemi, permettre la capture
+            if (destinationPiece.getCouleur() != movingPiece.getCouleur()) {
+                System.out.println("Enemy piece captured.");
+                grille[endY][endX] = movingPiece; // Capture the piece
+                grille[startY][startX] = null;
+                movingPiece.setPosition(endX, endY);
+                return true;
+            } else {
+                System.out.println("End position is occupied by a friendly piece.");
+                return false;
+            }
+        }
+
+        // Si la case de destination est vide, simplement déplacer la pièce
+        grille[endY][endX] = movingPiece;
+        grille[startY][startX] = null;
+        movingPiece.setPosition(endX, endY);
+        System.out.println("Piece moved successfully.");
+        return true;
+    }
+
+    private boolean isValidPosition(int x, int y) {
+        return (x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau);
     }
 
     private boolean isCoordonneeValide(int x, int y) {

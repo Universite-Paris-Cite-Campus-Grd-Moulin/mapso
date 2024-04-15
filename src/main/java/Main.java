@@ -19,6 +19,7 @@ public class Main {
     private JFrame mainFrame;
 
     public static void main(String[] args) {
+        // Debut de l'execution
         SwingUtilities.invokeLater(new Main()::createAndShowGUI);
     }
 

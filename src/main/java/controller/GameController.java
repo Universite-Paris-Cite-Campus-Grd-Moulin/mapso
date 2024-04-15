@@ -19,13 +19,14 @@ public class GameController implements MouseListener {
     private static final int BOARD_ROWS = 8; // Nombre de lignes du plateau
     private int startX, startY; // Ajout pour stocker la position initiale lors du glisser
 
-    public GameController() {
-        this.board = new Plateau();
+    public GameController(String boardType) {
+        this.board = new Plateau(boardType); // Create board with a specific type
         this.game = new Game(board);
     }
 
-    public GameController(GameView gameView) {
-        this();
+    public GameController(GameView gameView, String boardType) {
+        this.board = new Plateau(boardType); // Create board with a specific type
+        this.game = new Game(board);
         this.gameView = gameView;
     }
 
@@ -68,7 +69,7 @@ public class GameController implements MouseListener {
     }
 
     public void restartGame() {
-        this.board = new Plateau();
+        this.board = new Plateau("Classic"); // or any other default or selected type
         this.game = new Game(board);
         startGame();
     }
@@ -125,81 +126,4 @@ public class GameController implements MouseListener {
     public void mouseExited(MouseEvent e) {
         gameView.setCursor(Cursor.getDefaultCursor());
     }
-
 }
-
-// Autre methode peut etre valable
-/*
- * @Override
- * public void mouseClicked(MouseEvent e) {
- * int cellSize = gameView.getCellSize();
- * int x = e.getX() / cellSize;
- * int y = e.getY() / cellSize;
- * 
- * // Assurez-vous que le clic est dans les limites du plateau
- * if (x >= 0 && x < gameView.getBoardColumns() && y >= 0 && y <
- * gameView.getBoardRows()) {
- * // Si aucune pièce n'est actuellement sélectionnée
- * if (selectedPiece == null) {
- * Pion piece = board.getPieceAt(x, y);
- * // Si une pièce est présente à ces coordonnées
- * if (piece != null) {
- * // Vérifie si la pièce appartient au joueur actuel
- * if (piece.getCouleur() == game.getCurrentPlayer()) {
- * selectedPiece = piece;
- * System.out.println("Pièce sélectionnée en " + x + ", " + y);
- * } else {
- * // Informe l'utilisateur que la pièce sélectionnée n'appartient pas au joueur
- * // actuel
- * System.out.println("Cette pièce ne vous appartient pas.");
- * gameView.displayMessage(
- * "Cette pièce ne vous appartient pas. Veuillez sélectionner une de vos pièces."
- * );
- * }
- * }
- * } else {
- * // Tentative de déplacement de la pièce sélectionnée
- * if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), x, y)) {
- * System.out.println("Pièce déplacée à " + x + ", " + y);
- * selectedPiece = null; // Désélectionner après le mouvement
- * gameView.update(); // Mise à jour de l'affichage
- * } else {
- * System.out.println("Déplacement invalide.");
- * gameView.displayMessage("Déplacement invalide. Veuillez essayer à nouveau.");
- * }
- * }
- * }
- * }
- */
-
-/*
- * @Override
- * public void mouseClicked(MouseEvent e) {
- * int cellSize = gameView.getCellSize();
- * int x = e.getX() / cellSize;
- * int y = e.getY() / cellSize;
- * 
- * if (selectedPiece == null) {
- * // Select piece
- * selectedPiece = board.getPieceAt(x, y);
- * if (selectedPiece != null && selectedPiece.getCouleur() ==
- * game.getCurrentPlayer()) {
- * System.out.println("Piece selected at (" + x + ", " + y + ")");
- * } else {
- * selectedPiece = null;
- * gameView.
- * displayMessage("Invalid selection. Please select one of your pieces.");
- * }
- * } else {
- * // Move piece
- * if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), x, y)) {
- * System.out.println("Piece moved to (" + x + ", " + y + ")");
- * selectedPiece = null; // Deselect piece after moving
- * gameView.update(); // Update view
- * } else {
- * System.out.println("Invalid move.");
- * gameView.displayMessage("Invalid move. Please try again.");
- * }
- * }
- * }
- */

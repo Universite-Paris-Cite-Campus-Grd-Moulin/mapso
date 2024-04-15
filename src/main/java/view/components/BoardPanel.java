@@ -19,12 +19,10 @@ public class BoardPanel extends JPanel implements MouseListener {
     private Pion selectedPiece;
     private int startX, startY;
 
-    // Constructor for default initial board
     public BoardPanel() {
-        this(new Plateau("Classic")); // Default to "Classic" if no type is specified
+        this(new Plateau("Classic"));
     }
 
-    // Constructor that accepts a Plateau, allows for different types of boards
     public BoardPanel(Plateau board) {
         this.board = board;
         setLayout(new GridLayout(8, 10));
@@ -33,16 +31,14 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     private void initBoard() {
-        // Assumes the board is already initialized with the right type
-        removeAll(); // Clears any existing components
+        removeAll();
         revalidate();
-        repaint(); // Repaint after removing components
+        repaint();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Draw the board pieces
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 g.drawImage(PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j))),
@@ -55,19 +51,17 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     public void put(Pion p) {
-        // Place a piece on the board, example for adding a piece dynamically
         board.getGrille()[2][2] = p;
         repaint();
     }
 
-    // Implementation of MouseListener methods
     @Override
     public void mouseClicked(MouseEvent e) {
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int cellSize = 75;
+        int cellSize = 75; // Simplified cell size retrieval
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
         selectedPiece = board.getPieceAt(row, col);
@@ -76,13 +70,14 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        int cellSize = 75;
+        int cellSize = 75; // Direct use of cell size for consistency
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
         if (selectedPiece != null && board.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
             selectedPiece = null;
-            repaint(); // Redraw the board to reflect the piece's new position
+            repaint();
         }
+        System.out.println("Mouse released at (" + e.getX() + ", " + e.getY() + ")");
     }
 
     @Override

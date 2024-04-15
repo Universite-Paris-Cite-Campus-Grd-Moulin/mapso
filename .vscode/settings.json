@@ -1,5 +1,251 @@
 {
     "java.debug.settings.onBuildFailureProceed": true,
     "java.addExports": ["javax.swing","java.awt"],
+    "tabnine.experimentalAutoImports": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "editor.linkedEditing": true,
+    "editor.minimap.enabled": false,
+    "editor.rulers": [
+        {
+            "column": 80,
+            "color": "#00FF0010"
+        },
+        {
+            "column": 100,
+            "color": "#BDB76B15"
+        },
+        {
+            "column": 120,
+            "color": "#FA807219"
+        }
+    ],
+    "editor.unicodeHighlight.includeComments": true,
+    "emmet.variables": {
+        "lang": "fr"
+    },
+    "workbench.colorCustomizations": {
+        "[Default Dark Modern]": {
+            "tab.activeBorderTop": "#00FF00",
+            "tab.unfocusedActiveBorderTop": "#00FF0088",
+            "textCodeBlock.background": "#00000055"
+        },
+        "editor.wordHighlightStrongBorder": "#FF6347",
+        "editor.wordHighlightBorder": "#FFD700",
+        "editor.selectionHighlightBorder": "#A9A9A9"
+    },
+    "workbench.editor.revealIfOpen": true,
+    "workbench.tree.indent": 20,
+    "files.eol": "\n",
+    "[bat]": {
+        "files.eol": "\r\n"
+    },
+    "terminal.integrated.tabs.hideCondition": "never",
+    "terminal.integrated.enablePersistentSessions": false,
+    "java.configuration.detectJdksAtStart": false,
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.debug.settings.hotCodeReplace": "auto",
+    "java.sources.organizeImports.staticStarThreshold": 1,
+    "cSpell.diagnosticLevel": "Hint",
+    "trailing-spaces.includeEmptyLines": false,
+    "maven.executable.path": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\maven\\latest\\bin\\mvn",
+    "java.import.gradle.home": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\gradle\\latest",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-1.8",
+            "path": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\8"
+        },
+        {
+            "name": "JavaSE-11",
+            "path": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\11"
+        },
+        {
+            "name": "JavaSE-17",
+            "path": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\17"
+        },
+        {
+            "name": "JavaSE-21",
+            "path": "C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.2.13-hotspot",
+            "default": true
+        }
+    ],
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Ubuntu (WSL)": {
+            "path": "C:\\Windows\\System32\\wsl.exe",
+            "args": [
+                "-d",
+                "Ubuntu"
+            ]
+        },
+        "JavaSE-1.8": {
+            "overrideName": true,
+            "env": {
+                "PATH": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\8\\bin;${env:PATH}",
+                "JAVA_HOME": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\8"
+            },
+            "path": "cmd"
+        },
+        "JavaSE-11": {
+            "overrideName": true,
+            "env": {
+                "PATH": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\11\\bin;${env:PATH}",
+                "JAVA_HOME": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\11"
+            },
+            "path": "cmd"
+        },
+        "JavaSE-17": {
+            "overrideName": true,
+            "env": {
+                "PATH": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\17\\bin;${env:PATH}",
+                "JAVA_HOME": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\17"
+            },
+            "path": "cmd"
+        },
+        "JavaSE-21": {
+            "overrideName": true,
+            "env": {
+                "PATH": "C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.2.13-hotspot\\bin;${env:PATH}",
+                "JAVA_TOOL_OPTIONS": "-Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8",
+                "JAVA_HOME": "C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.2.13-hotspot"
+            },
+            "path": "cmd",
+            "args": [
+                "/k",
+                "chcp",
+                "65001"
+            ]
+        }
+    },
+    "terminal.integrated.env.windows": {
+        "JAVA_HOME": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\17",
+        "PATH": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\17\\bin;${env:PATH}"
+    },
+    "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
+    "maven.terminal.customEnv": [
+        {
+            "environmentVariable": "JAVA_HOME",
+            "value": "/usr/lib/jvm/java-21-openjdk-amd64"
+        }
+    ],
+    "java.import.gradle.java.home": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\17",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "env": {
+                "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64"
+            },
+            "args": [
+                "--rcfile",
+                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
+            ]
+        },
+        "JavaSE-1.8": {
+            "overrideName": true,
+            "env": {
+                "JAVA_HOME": "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/java/8"
+            },
+            "path": "bash",
+            "args": [
+                "--rcfile",
+                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
+            ]
+        },
+        "JavaSE-11": {
+            "overrideName": true,
+            "env": {
+                "JAVA_HOME": "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/java/11"
+            },
+            "path": "bash",
+            "args": [
+                "--rcfile",
+                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
+            ]
+        },
+        "JavaSE-17": {
+            "overrideName": true,
+            "env": {
+                "JAVA_HOME": "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/java/17"
+            },
+            "path": "bash",
+            "args": [
+                "--rcfile",
+                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
+            ]
+        },
+        "JavaSE-21": {
+            "overrideName": true,
+            "env": {
+                "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64"
+            },
+            "path": "bash",
+            "args": [
+                "--rcfile",
+                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "JavaSE-21",
+    "redhat.telemetry.enabled": true,
+    "rsp-ui.rsp.java.home": "/usr/lib/jvm/java-21-openjdk-amd64",
+    "security.allowedUNCHosts": [
+        "wsl.localhost"
+    ],
+    "workbench.settings.applyToAllProfiles": [
+        "terminal.integrated.useWslProfiles"
+    ],
+    "vs-kubernetes": {
+        "vscode-kubernetes.helm-path-linux": "/home/nano/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
+        "vscode-kubernetes.kubectl-path-linux": "/home/nano/.local/state/vs-kubernetes/tools/kubectl/kubectl",
+        "vscode-kubernetes.minikube-path-linux": "/home/nano/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube"
+    },
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "workbench.editorAssociations": {
+        "*.pdf": "default"
+    },
+    "terminal.integrated.automationProfile.windows": {
+        "path": "cmd"
+    },
+    "rsp-ui.enableStartServerOnActivation": [
+        {
+            "id": "redhat.vscode-community-server-connector",
+            "name": "Community Server Connector",
+            "startOnActivation": true
+        }
+    ],
+    "trailing-spaces.backgroundColor": "rgba(255,0,0,0.1)",
+    "java.test.config": {
+        "vmArgs": [
+            "-Dstdout.encoding=UTF-8",
+            "-Dstderr.encoding=UTF-8"
+        ]
+    },
+    "workbench.colorTheme": "Copilot Theme",
+    "java.completion.favoriteStaticMembers": [
 
+        "org.junit.Assert.*",
+        "org.junit.Assume.*",
+        "org.junit.jupiter.api.Assertions.*",
+        "org.junit.jupiter.api.Assumptions.*",
+        "org.junit.jupiter.api.DynamicContainer.*",
+        "org.junit.jupiter.api.DynamicTest.*",
+        "org.mockito.Mockito.*",
+        "org.mockito.ArgumentMatchers.*",
+        "org.mockito.Answers.*"
+    ]
 }

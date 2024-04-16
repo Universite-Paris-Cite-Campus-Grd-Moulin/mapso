@@ -66,24 +66,34 @@ public class BoardPanel extends JPanel implements MouseListener {
         int row = e.getY() / cellSize;
 
         if (col >= 0 && col < 10 && row >= 0 && row < 8) {
-            selectedPiece = board.getPieceAt(row, col);
-            System.out.println("Mouse pressed at cell (" + col + ", " + row + ")");
+            Pion clickedPiece = board.getPieceAt(row, col);
+            if (clickedPiece != null && clickedPiece.getType() != TypeDePion.NONE) {
+                selectedPiece = clickedPiece;
+                startX = col; // Save the start position
+                startY = row;
+                System.out.println("Souris appuyée sur la cellule (" + col + ", " + row + ")");
+            } else {
+                System.out.println("Aucune pièce valide dans la cellule (" + col + ", " + row + ")");
+            }
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        int cellSize = Math.min(getWidth() / 10, getHeight() / 8); // Consistent with mousePressed
+        int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
 
         if (selectedPiece != null && col >= 0 && col < 10 && row >= 0 && row < 8) {
-            if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
+            if (board.movePiece(startX, startY, col, row)) {
                 selectedPiece = null;
                 repaint();
-                System.out.println("Piece moved successfully.");
+                System.out
+                        .println("Pièce déplacée de (" + startX + ", " + startY + ") vers (" + col + ", " + row + ")");
             } else {
-                System.out.println("Failed to move the piece.");
+                System.out.println(
+                        "Échec du déplacement de la pièce de (" + startX + ", " + startY + ") vers (" + col + ", " + row
+                                + ")");
             }
         } else {
             System.out.println("Mouse released out of bounds (" + col + ", " + row + ")");

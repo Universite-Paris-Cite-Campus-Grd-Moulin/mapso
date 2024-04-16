@@ -70,16 +70,6 @@ public class PiecePanel extends JPanel {
         g.drawImage(image, 0, 0, null);
     }
 
-    /*
-     * protected void paintComponent(Graphics g) {
-     * super.paintComponent(g);
-     * if (pion != null && images[pion.getType().ordinal()] != null) {
-     * g.drawImage(images[pion.getType().ordinal()], 0, 0, getWidth(), getHeight(),
-     * this);
-     * }
-     * }
-     */
-
     public static void main(String[] args) {
         Pion pion = new Pion(TypeDePion.PHARAON, Direction.EST, Couleur.JAUNE);
         PiecePanel panel = new PiecePanel(pion);

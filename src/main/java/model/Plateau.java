@@ -39,17 +39,6 @@ public class Plateau {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Configuration de base des cellules
-                if (j == 0) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
-                } else if (j == 9) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
-                } else if (j == 1 && i == 0 || j == 1 && i == 7) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
-                } else if (j == 8 && i == 0 || j == 8 && i == 7) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
-                } else {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.GRIS);
-                }
 
                 // Les pieces
                 if (i == 0 && j == 4 || i == 0 && j == 6) {
@@ -103,17 +92,6 @@ public class Plateau {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Set empty spaces and boundary conditions
-                if (j == 0) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
-                } else if (j == 9) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
-                } else if (j == 1 && (i == 0 || i == 7)) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
-                } else if (j == 8 && (i == 0 || i == 7)) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
-                } else {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.GRIS);
-                }
 
                 // Position strategic pieces differently for the Dynastie setup
                 // Double Obelisques and special guards for Pharaohs to emphasize the dynastic
@@ -157,17 +135,6 @@ public class Plateau {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Set empty spaces and boundary conditions
-                if (j == 0) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
-                } else if (j == 9) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
-                } else if (j == 1 && (i == 0 || i == 7)) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.JAUNE);
-                } else if (j == 8 && (i == 0 || i == 7)) {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.ROUGE);
-                } else {
-                    this.grille[i][j] = new Pion(TypeDePion.NONE, Direction.NORD, Couleur.GRIS);
-                }
 
                 // Position strategic pieces differently for the Imhotep setup
                 if ((i == 0 && j == 3) || (i == 0 && j == 7)) {
@@ -208,41 +175,40 @@ public class Plateau {
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
+        // Vérifie si les positions de départ et d'arrivée sont valides
         if (!isValidPosition(startX, startY) || !isValidPosition(endX, endY)) {
-            System.out.println("Start or end position is out of bounds.");
+            System.out.println("La position de départ ou d'arrivée est hors des limites du plateau.");
             return false;
         }
+
+        // Obtient le pion à la position de départ
         Pion movingPiece = grille[startY][startX];
-        Pion destinationPiece = grille[endY][endX];
-
-        if (movingPiece == null) {
-            System.out.println("No piece at the starting position.");
+        if (movingPiece == null || movingPiece.getType() == TypeDePion.NONE) {
+            System.out.println("Aucun pion valide à la position de départ (" + startX + ", " + startY + ").");
             return false;
         }
-        if (destinationPiece != null) {
-            // Si la pièce de destination est un ennemi, permettre la capture
-            if (destinationPiece.getCouleur() != movingPiece.getCouleur()) {
-                System.out.println("Enemy piece captured.");
-                grille[endY][endX] = movingPiece; // Capture the piece
-                grille[startY][startX] = null;
-                movingPiece.setPosition(endX, endY);
-                return true;
-            } else {
-                System.out.println("End position is occupied by a friendly piece.");
-                return false;
-            }
+
+        // Vérifie si la case de destination est adéquate pour le mouvement
+        Pion destinationPiece = grille[endY][endX];
+        if (destinationPiece != null && destinationPiece.getType() != TypeDePion.NONE) {
+            System.out.println("La position de destination (" + endX + ", " + endY
+                    + ") n'est pas vide ou invalide pour le déplacement.");
+            return false;
         }
 
-        // Si la case de destination est vide, simplement déplacer la pièce
-        grille[endY][endX] = movingPiece;
-        grille[startY][startX] = null;
-        movingPiece.setPosition(endX, endY);
-        System.out.println("Piece moved successfully.");
+        // Effectue le mouvement
+        grille[startY][startX] = null; // Vide l'ancienne case
+        grille[endY][endX] = movingPiece; // Déplace le pion
+        movingPiece.setPosition(endX, endY); // Met à jour la position du pion
+        System.out.println("Déplacement réussi du pion " + movingPiece.getType() + " de (" + startX + ", " + startY
+                + ") à (" + endX + ", " + endY + ").");
         return true;
     }
 
     private boolean isValidPosition(int x, int y) {
-        return (x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau);
+        boolean valid = (x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau);
+        System.out.println("Vérification de la validité de la position (" + x + ", " + y + "): " + valid);
+        return valid;
     }
 
     private boolean isCoordonneeValide(int x, int y) {

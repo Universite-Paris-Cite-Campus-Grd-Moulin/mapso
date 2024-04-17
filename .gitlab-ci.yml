@@ -1,0 +1,27 @@
+image: openjdk:11
+
+stages:
+  - build
+  - test
+
+cache:
+  paths:
+    - .m2/repository
+    - lib/
+
+before_script:
+  - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+  - export PATH=$JAVA_HOME/bin:$PATH
+  - echo 'Compiling the project...'
+  - javac -cp "lib/*" src/main/java/**/*.java
+
+build:
+  stage: build
+  script:
+    - echo 'Build completed'
+
+test:
+  stage: test
+  script:
+    - echo 'Running tests...'
+    - java -cp "lib/*:src/main/java:src/test/java" org.junit.platform.console.ConsoleLauncher --scan-classpath

@@ -61,23 +61,23 @@ public class BoardPanel extends JPanel implements MouseListener {
                     + " de couleur " + clickedPiece.getCouleur());
         } else {
             System.out.println("Clique sur une case vide (" + col + ", " + row + ")");
+            System.out.println();
         }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
-        int col = e.getX() / cellSize;
-        int row = e.getY() / cellSize;
-        if (col >= 0 && col < 10 && row >= 0 && row < 8) {
-            Pion clickedPiece = board.getPieceAt(col, row);
-            if (clickedPiece != null && clickedPiece.getType() != TypeDePion.NONE) {
-                selectedPiece = clickedPiece;
-                startX = col; // Save the start position
-                startY = row;
-                System.out.println("Mouse pressed at (" + col + ", " + row + ") with piece " + clickedPiece.getType());
+        startX = e.getX() / cellSize;
+        startY = e.getY() / cellSize;
+
+        if (startX >= 0 && startX < 10 && startY >= 0 && startY < 8) {
+            selectedPiece = board.getPieceAt(startX, startY);
+            if (selectedPiece != null && selectedPiece.getType() != TypeDePion.NONE) {
+                System.out.println(
+                        "Mouse pressed at (" + startX + ", " + startY + ") with piece " + selectedPiece.getType());
             } else {
-                System.out.println("No valid piece at cell (" + col + ", " + row + ")");
+                System.out.println("No valid piece at cell (" + startX + ", " + startY + ")");
             }
         }
     }
@@ -87,7 +87,16 @@ public class BoardPanel extends JPanel implements MouseListener {
         int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
-        if (selectedPiece != null && col >= 0 && col < 10 && row >= 0 && row < 8) {
+
+        if (col == startX && row == startY) { // Check if it's a click in the same cell
+            Pion clickedPiece = board.getPieceAt(col, row);
+            if (clickedPiece != null && clickedPiece.getType() != TypeDePion.NONE) {
+                System.out.println(
+                        "Clicked on the same cell at (" + col + ", " + row + ") with piece " + clickedPiece.getType());
+            } else {
+                System.out.println("Clicked on an empty cell at (" + col + ", " + row + ")");
+            }
+        } else if (selectedPiece != null && col >= 0 && col < 10 && row >= 0 && row < 8) {
             if (board.movePiece(startX, startY, col, row)) {
                 selectedPiece = null;
                 repaint();

@@ -52,23 +52,32 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
+        int col = e.getX() / cellSize;
+        int row = e.getY() / cellSize;
+        Pion clickedPiece = board.getPieceAt(col, row);
+        if (clickedPiece != null) {
+            System.out.println("Clique sur la case (" + col + ", " + row + ") avec " + clickedPiece.getType()
+                    + " de couleur " + clickedPiece.getCouleur());
+        } else {
+            System.out.println("Clique sur une case vide (" + col + ", " + row + ")");
+        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int cellSize = Math.min(getWidth() / 10, getHeight() / 8); // Assure that the cell size adapts to panel size
+        int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
-
         if (col >= 0 && col < 10 && row >= 0 && row < 8) {
-            Pion clickedPiece = board.getPieceAt(row, col);
+            Pion clickedPiece = board.getPieceAt(col, row);
             if (clickedPiece != null && clickedPiece.getType() != TypeDePion.NONE) {
                 selectedPiece = clickedPiece;
                 startX = col; // Save the start position
                 startY = row;
-                System.out.println("Souris appuyée sur la cellule (" + col + ", " + row + ")");
+                System.out.println("Mouse pressed at (" + col + ", " + row + ") with piece " + clickedPiece.getType());
             } else {
-                System.out.println("Aucune pièce valide dans la cellule (" + col + ", " + row + ")");
+                System.out.println("No valid piece at cell (" + col + ", " + row + ")");
             }
         }
     }
@@ -78,17 +87,14 @@ public class BoardPanel extends JPanel implements MouseListener {
         int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
-
         if (selectedPiece != null && col >= 0 && col < 10 && row >= 0 && row < 8) {
             if (board.movePiece(startX, startY, col, row)) {
                 selectedPiece = null;
                 repaint();
-                System.out
-                        .println("Pièce déplacée de (" + startX + ", " + startY + ") vers (" + col + ", " + row + ")");
+                System.out.println("Piece moved from (" + startX + ", " + startY + ") to (" + col + ", " + row + ")");
             } else {
                 System.out.println(
-                        "Échec du déplacement de la pièce de (" + startX + ", " + startY + ") vers (" + col + ", " + row
-                                + ")");
+                        "Failed to move the piece from (" + startX + ", " + startY + ") to (" + col + ", " + row + ")");
             }
         } else {
             System.out.println("Mouse released out of bounds (" + col + ", " + row + ")");

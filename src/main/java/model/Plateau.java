@@ -217,6 +217,7 @@ public class Plateau {
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
         // Vérifie si les positions de départ et d'arrivée sont valides
+        System.out.println();
         if (!isValidPosition(startX, startY) || !isValidPosition(endX, endY)) {
             System.out.println("La position de départ ou d'arrivée est hors des limites du plateau.");
             return false;
@@ -233,7 +234,8 @@ public class Plateau {
         Pion destinationPiece = grille[endY][endX];
         if (destinationPiece != null && destinationPiece.getType() != TypeDePion.NONE) {
             System.out.println("La position de destination (" + endX + ", " + endY
-                    + ") n'est pas vide ou invalide pour le déplacement.");
+                    + ") est déjà occupée par un pion de type " + destinationPiece.getType() + ".");
+
             return false;
         }
 

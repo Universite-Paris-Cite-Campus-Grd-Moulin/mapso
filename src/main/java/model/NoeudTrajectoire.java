@@ -11,6 +11,7 @@ public class NoeudTrajectoire {
     private Direction direction; // La direction du laser à ce point
     private int positionI; // Coordonnée i sur le plateau
     private int positionJ; // Coordonnée j sur le plateau
+    //private Position position; // Remplacer i et j
     private TypeInteraction typeInteraction; // Le type d'interaction à ce point
     private List<NoeudTrajectoire> successeurs; // Les successeurs de ce noeud dans l'arbre
 
@@ -21,7 +22,9 @@ public class NoeudTrajectoire {
         this.positionJ = positionJ;
         this.typeInteraction = typeInteraction;
         this.successeurs = new ArrayList<>();
+       // this.position = pos;
     }
+    
 
     // Ajoute un successeur au noeud
     public void ajouterSuccesseur(NoeudTrajectoire successeur) {
@@ -68,5 +71,15 @@ public class NoeudTrajectoire {
         this.successeurs = successeurs;
     }
 
-    // ...
+
+    /* 
+    public Position getPosition() {
+        return position;
+    }
+
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+   */
 }

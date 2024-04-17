@@ -1,64 +1,62 @@
 package model;
 
 import model.enums.Couleur;
-import model.Plateau;
 
 public class Game {
     private Plateau board;
     private Couleur currentPlayer;
     private boolean isGameOver;
-
+    
+    // Constructeur par défaut
     public Game() {
         this.board = new Plateau();
-        this.currentPlayer = Couleur.ROUGE; // Rouge commence
+        this.currentPlayer = Couleur.JAUNE; // Jaune commence
         this.isGameOver = false;
+        initializeGame();
     }
 
-    public Game(Plateau board) {
-        this.board = board;
-        this.currentPlayer = Couleur.ROUGE; //Déterminer le premier joueur
-        this.isGameOver = false;
+    // Initialise le jeu avec les pièces dans leurs positions de départ
+    private void initializeGame() {
+        
     }
 
+    // Commence le jeu
     public void start() {
         while (!isGameOver) {
-            // Implémentez la logique d'un tour de jeu ici
-            // Passer au joueur suivant
-            currentPlayer = (currentPlayer == Couleur.ROUGE) ? Couleur.JAUNE : Couleur.ROUGE;
-            
-            // À la fin de chaque tour, tirez le laser
-            shootLaser();
-            
-            // Vérifiez si le jeu est terminé
-            checkWinConditions();
+            playTurn();
         }
+        // Annoncez le vainqueur ou le match nul ici
     }
 
-    // Simule le tir du laser et vérifie les interactions avec les pièces
-    public void shootLaser() {
-        // Implémentation simplifiée.
-        boolean hit = board.shootLaser(currentPlayer);
-        if (hit) {
-            // Si le Pharaon est touché, le jeu est terminé.
-            isGameOver = true;
-        }
+    // Joue un tour
+    private void playTurn() {
+        // Implémentation à faire - gérer les actions du joueur actuel et tirer le laser
+        changeTurn();
+    }
+
+    // Change au joueur suivant
+    private void changeTurn() {
+        currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
     }
 
     // Vérifie si le jeu est terminé
+    private void checkWinConditions() {
+        // Implémentation à faire - vérifier les conditions de victoire
+    }
+
+    // Retourne si le jeu est terminé
     public boolean isGameOver() {
         return isGameOver;
     }
 
-    private void checkWinConditions() {
-        // Assumez que shootLaser retourne déjà un booléen indiquant si le Pharaon est touché
-        boolean pharaohHit = board.shootLaser(currentPlayer);
-        if (pharaohHit) {
-            isGameOver = true;
-        }
+    // Retourne le joueur actuel
+    public Couleur getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    // Méthode pour obtenir le joueur actuel
-    public Couleur getCurrentPlayer() {
-        return this.currentPlayer;
+    // Méthode principale pour tester le jeu
+    public static void main(String[] args) {
+        Game game = new Game();
+        game.start();
     }
 }

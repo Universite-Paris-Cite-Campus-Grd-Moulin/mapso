@@ -3,13 +3,23 @@ package model;
 import model.enums.Couleur;
 import model.enums.Direction;
 import model.enums.TypeDePion;
+import model.enums.TypeInteraction;
 
 public class Plateau {
-    private final Pion[][] grille;
+    private  Pion[][] grille;
+
+    public Pion[][] getGrille(){
+        return grille;
+    }
 
     public Plateau() {
-        this.grille = new Pion[10][8];
-        initialiserPlateau();
+        this.grille = new Pion[8][10];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 10; j++) {
+                this.grille[i][j] = new Pion(TypeDePion.NONE,Direction.NORD,Couleur.GRIS);
+            }
+        }
+        //initialiserPlateau();
     }
 
     private void initialiserPlateau() {
@@ -107,4 +117,90 @@ public class Plateau {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'estTourneeDemandee'");
     }
+
+    public NoeudTrajectoire lancerLaser(int i, int j, Direction direction) {
+    // Vérifier si le laser est hors du plateau
+    if (!estDansLePlateau(i, j)) {
+        return null; // Le laser est hors du plateau, fin de la récursivité
+    }
+
+    // Obtenir la pièce à la position actuelle
+    Pion piece = getPieceAt(i, j);
+    
+    // Si la pièce interagit avec le laser
+    if (piece != null) {
+        TypeInteraction interaction = determinerInteraction(piece, direction);
+        
+        // Traitement basé sur le type d'interaction
+        switch (interaction) {
+            case ABSORPTION:
+                // Le laser est absorbé, fin de la trajectoire
+                return new NoeudTrajectoire(direction, i, j, interaction);
+            case REFLEXION:
+                // Calculer la nouvelle direction après réflexion
+                Direction nouvelleDirection = calculerNouvelleDirection(direction, piece);
+                // Continuer la trajectoire dans la nouvelle direction
+                return new NoeudTrajectoire(direction, i, j, interaction, lancerLaser(i, j, nouvelleDirection));
+            case DIVISION:
+            Direction directionContinue = direction; // Le laser continue dans sa direction actuelle
+            Direction directionReflechie = calculerNouvelleDirection(direction, piece); // Réflexion à 90°
+
+            // Créer les noeuds pour chaque direction après division
+            NoeudTrajectoire noeudContinue = lancerLaser(i, j, directionContinue);
+            NoeudTrajectoire noeudReflechi = lancerLaser(i, j, directionReflechie);
+
+            // Créer un noeud parent pour la division qui contient les deux directions comme successeurs
+            NoeudTrajectoire noeudDivision = new NoeudTrajectoire(direction, i, j, interaction, null);
+            noeudDivision.ajouterSuccesseur(noeudContinue);
+            noeudDivision.ajouterSuccesseur(noeudReflechi);
+
+            return noeudDivision;
+        }
+    }
+
+    // Si pas d'interaction ou interaction spécifique permettant de continuer, calculer la prochaine position
+    int[] nouvellePosition = calculerProchainePosition(i, j, direction);
+    return new NoeudTrajectoire(direction, i, j, TypeInteraction.NONE, lancerLaser(nouvellePosition[0], nouvellePosition[1], direction));
+}
+
+    private boolean estDansLePlateau(int i, int j) {
+        return i >= 0 && i < 8 && j >= 0 && j < 10;
+    }
+
+
+    private TypeInteraction determinerInteraction(Pion piece, Direction direction) {
+        switch (piece.getType()) {
+            case PHARAON :
+                return TypeInteraction.ABSORPTION;
+            case PYRAMIDE :
+                return TypeInteraction.REFLEXION;
+            case DJED :
+                return TypeInteraction.REFLEXION;
+            case OBELISQUE :
+                return TypeInteraction.ABSORPTION;
+            case HORUS :
+                return TypeInteraction.DIVISION;
+            default :
+                return TypeInteraction.NONE;
+        }
+    }
+
+    private Direction calculerNouvelleDirection(Direction direction, Pion piece) {
+        // Calculer et retourner la nouvelle direction du laser après réflexion
+        return Direction.NORD;
+    }
+
+    public  int[] calculerProchainePosition(int i, int j, Direction direction) {
+        // Utiliser getDi() et getDj() pour obtenir le delta de déplacement dans la direction actuelle
+        int di = direction.getDi();
+        int dj = direction.getDj();
+
+        // Calculer les nouvelles coordonnées
+        int nouvelleI = i + di;
+        int nouvelleJ = j + dj;
+
+        return new int[]{nouvelleI, nouvelleJ};
+    }
+
+
 }

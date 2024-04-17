@@ -26,8 +26,6 @@ public class PiecePanel extends JPanel {
             khet = ImageIO.read(new File("ressources/sprites_khet.png"));
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle the exception, e.g., initialize khet with a default image or log the
-            // error
         }
     }
 
@@ -37,7 +35,6 @@ public class PiecePanel extends JPanel {
 
     public PiecePanel(Pion p) {
         this.pion = p;
-        // this.image = null ; static
     }
 
     public static BufferedImage draw(java.awt.Graphics g, Pion p) {
@@ -71,7 +68,7 @@ public class PiecePanel extends JPanel {
     }
 
     public static void main(String[] args) {
-        Pion pion = new Pion(TypeDePion.PHARAON, Direction.EST, Couleur.JAUNE);
+        Pion pion = new Pion(TypeDePion.NONE, Direction.EST, Couleur.JAUNE);
         PiecePanel panel = new PiecePanel(pion);
         SwingUtilities.invokeLater(() -> {
             panel.revalidate();

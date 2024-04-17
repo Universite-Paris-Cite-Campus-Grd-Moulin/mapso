@@ -50,11 +50,6 @@ public class BoardPanel extends JPanel implements MouseListener {
         }
     }
 
-    public void put(Pion p) {
-        board.getGrille()[2][2] = p;
-        repaint();
-    }
-
     @Override
     public void mouseClicked(MouseEvent e) {
     }

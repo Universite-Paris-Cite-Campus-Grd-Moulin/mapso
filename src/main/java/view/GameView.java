@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import view.components.BoardPanel;
@@ -84,15 +83,6 @@ public class GameView extends JFrame {
         // Retourne la plus petite dimension pour s'assurer que les cellules restent
         // carrées
         return Math.min(cellWidth, cellHeight);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            GameView view = new GameView();
-            view.setVisible(true);
-            Object[][] dummyBoardData = new Object[8][10];
-            view.displayBoard(dummyBoardData);
-        });
     }
 
     public int getBoardColumns() {

@@ -88,23 +88,16 @@ public class BoardPanel extends JPanel implements MouseListener {
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
 
-        if (col == startX && row == startY) { // Check if it's a click in the same cell
-            Pion clickedPiece = board.getPieceAt(col, row);
-            if (clickedPiece != null && clickedPiece.getType() != TypeDePion.NONE) {
-                System.out.println(
-                        "Clicked on the same cell at (" + col + ", " + row + ") with piece " + clickedPiece.getType());
-            } else {
-                System.out.println("Clicked on an empty cell at (" + col + ", " + row + ")");
-            }
-        } else if (selectedPiece != null && col >= 0 && col < 10 && row >= 0 && row < 8) {
+        if (selectedPiece != null && col >= 0 && col < 10 && row >= 0 && row < 8) {
+            System.out
+                    .println("Attempting to move from (" + startX + ", " + startY + ") to (" + col + ", " + row + ")");
             if (board.movePiece(startX, startY, col, row)) {
-                selectedPiece = null;
-                repaint();
-                System.out.println("Piece moved from (" + startX + ", " + startY + ") to (" + col + ", " + row + ")");
+                System.out.println("Move successful");
+                repaint(); // Force a repaint after the move
             } else {
-                System.out.println(
-                        "Failed to move the piece from (" + startX + ", " + startY + ") to (" + col + ", " + row + ")");
+                System.out.println("Move failed");
             }
+            selectedPiece = null; // Deselect after attempt to move
         } else {
             System.out.println("Mouse released out of bounds (" + col + ", " + row + ")");
         }

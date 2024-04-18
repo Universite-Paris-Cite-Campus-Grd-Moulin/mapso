@@ -1,5 +1,6 @@
 package view.components;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -28,6 +29,8 @@ public class BoardPanel extends JPanel implements MouseListener {
         setLayout(new GridLayout(8, 10));
         initBoard();
         addMouseListener(this);
+        setPreferredSize(new Dimension(750, 600)); // 75 pixels * 10 columns wide and 75 pixels * 8 rows high
+        revalidate();
     }
 
     private void initBoard() {
@@ -113,9 +116,11 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Plateau");
+        BoardPanel panel = new BoardPanel();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new BoardPanel());
-        frame.setSize(1000, 1000);
+        frame.setContentPane(panel);
+        frame.pack(); // Adjust the window size based on the content
+        frame.setLocationRelativeTo(null); // Center the window on the screen
         frame.setVisible(true);
     }
 }

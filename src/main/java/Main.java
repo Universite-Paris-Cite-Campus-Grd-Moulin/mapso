@@ -152,9 +152,10 @@ public class Main {
 
     private void openBoard(String type) {
         JFrame boardFrame = new JFrame(type);
+        BoardPanel boardPanel = new BoardPanel(new Plateau(type));
+        boardFrame.setContentPane(boardPanel);
+        boardFrame.pack(); // Adjust size based on the preferred size of boardPanel
         boardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        boardFrame.add(new BoardPanel(new Plateau(type)));
-        boardFrame.setSize(1000, 800);
         boardFrame.setLocationRelativeTo(null);
         boardFrame.setVisible(true);
     }

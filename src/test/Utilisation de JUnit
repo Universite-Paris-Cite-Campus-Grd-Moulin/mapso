@@ -2,7 +2,7 @@ Compiler sans les tests:
 javac -d bin -cp "lib/*" $(find src/main/java -name "*.java")
 
 Exécuter le projet:
-java -cp bin:"lib/*" Main
+java -cp bin:"lib/*" Main.Main
 
 Copier l'erreur dans un fichier:
 javac -d bin -cp "lib/*" $(find src/main/java -name "*.java") 2> errors.txt

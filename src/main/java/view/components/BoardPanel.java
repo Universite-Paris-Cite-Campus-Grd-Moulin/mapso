@@ -1,12 +1,8 @@
 package view.components;
 
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 import model.Pion;
 import model.Plateau;
@@ -14,56 +10,96 @@ import model.enums.Direction;
 import model.enums.TypeDePion;
 
 public class BoardPanel extends JPanel implements MouseListener {
-
     private Plateau board;
     private Pion selectedPiece;
-    private int startX, startY;
+    private JFrame parentFrame;
+    private GameNavigationListener navigationListener;
 
-    // Constructor for default initial board
-    public BoardPanel() {
-        this(new Plateau("Classic")); // Default to "Classic" if no type is specified
+    public BoardPanel(Plateau board, JFrame parentFrame, GameNavigationListener listener) {
+        this.board = board;
+        this.parentFrame = parentFrame;
+        this.navigationListener = listener;
+
+        setupBoardPanel();
     }
 
-    // Constructor that accepts a Plateau, allows for different types of boards
-    public BoardPanel(Plateau board) {
-        this.board = board;
-        setLayout(new GridLayout(8, 10));
-        initBoard();
+    private void setupBoardPanel() {
+        setLayout(new BorderLayout());
         addMouseListener(this);
+        initBoard();
+        addPauseButton();
     }
 
     private void initBoard() {
-        // Assumes the board is already initialized with the right type
-        removeAll(); // Clears any existing components
+        removeAll();
         revalidate();
-        repaint(); // Repaint after removing components
+        repaint();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Draw the board pieces
+        drawBoard(g);
+    }
+
+    private void drawBoard(Graphics g) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
-                g.drawImage(PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j))),
-                        j * 75, i * 75, this);
-                if (board.getGrille()[i][j] != null) {
-                    g.drawImage(PiecePanel.draw(g, board.getGrille()[i][j]), j * 75, i * 75, this);
-                }
+                Pion pion = board.getGrille()[i][j] != null ? board.getGrille()[i][j] : new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j));
+                g.drawImage(PiecePanel.draw(g, pion), j * 75, i * 75, this);
             }
         }
     }
 
-    public void put(Pion p) {
-        // Place a piece on the board, example for adding a piece dynamically
-        board.getGrille()[2][2] = p;
-        repaint();
+    private void addPauseButton() {
+        JButton pauseButton = new JButton("Pause");
+        pauseButton.setPreferredSize(new Dimension(100, 40));
+        pauseButton.setBackground(Color.BLACK);
+        pauseButton.setForeground(Color.WHITE);  // Assurez-vous que le texte est visible
+
+        pauseButton.addActionListener(e -> showPauseMenu());
+
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topPanel.setOpaque(false);
+        topPanel.add(pauseButton);
+        this.add(topPanel, BorderLayout.NORTH); // Assurez-vous que 'this' utilise BorderLayout comme layout manager
+
+        revalidate(); // Revalide le layout après ajout
+        repaint(); // Repeint le panel après modifications
     }
 
-    // Implementation of MouseListener methods
-    @Override
-    public void mouseClicked(MouseEvent e) {
+    private void showPauseMenu() {
+        JDialog pauseMenu = new JDialog(parentFrame, "Pause", true);
+        pauseMenu.setLayout(new GridLayout(4, 1));
+        pauseMenu.setSize(200, 200);
+        pauseMenu.setLocationRelativeTo(parentFrame);
+        addPauseMenuButtons(pauseMenu);
+        pauseMenu.setVisible(true);
     }
+
+    private void addPauseMenuButtons(JDialog pauseMenu) {
+        JButton continueButton = new JButton("Continue");
+        JButton restartButton = new JButton("Restart");
+        JButton backToMenuButton = new JButton("Back to Menu");
+        JButton exitButton = new JButton("Exit");
+
+        continueButton.addActionListener(e -> pauseMenu.dispose());
+        //restartButton.addActionListener(this::restartGame);
+        backToMenuButton.addActionListener(e -> navigationListener.onBackToMenuRequested());
+        exitButton.addActionListener(e -> System.exit(0));
+
+        pauseMenu.add(continueButton);
+        pauseMenu.add(restartButton);
+        pauseMenu.add(backToMenuButton);
+        pauseMenu.add(exitButton);
+    }
+
+    private void restartGame() {
+        // Code pour redémarrer le jeu
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) { }
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -71,33 +107,48 @@ public class BoardPanel extends JPanel implements MouseListener {
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
         selectedPiece = board.getPieceAt(row, col);
-        System.out.println("Mouse pressed at cell (" + col + ", " + row + ")");
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        int cellSize = 75;
-        int col = e.getX() / cellSize;
-        int row = e.getY() / cellSize;
-        if (selectedPiece != null && board.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
-            selectedPiece = null;
-            repaint(); // Redraw the board to reflect the piece's new position
+        if (selectedPiece != null) {
+            int cellSize = 75;
+            int col = e.getX() / cellSize;
+            int row = e.getY() / cellSize;
+            if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
+                selectedPiece = null;
+                repaint();
+            }
         }
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-    }
+    public void mouseEntered(MouseEvent e) { }
 
     @Override
-    public void mouseExited(MouseEvent e) {
-    }
+    public void mouseExited(MouseEvent e) { }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Plateau");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new BoardPanel());
-        frame.setSize(1000, 1000);
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame testFrame = new JFrame("Test du BoardPanel avec bouton Pause");
+                testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                
+                Plateau board = new Plateau("Classic"); // Assurez-vous que cela crée un plateau initialisé.
+                GameNavigationListener listener = new GameNavigationListener() {
+                    @Override
+                    public void onBackToMenuRequested() {
+                        System.out.println("Retour au menu.");
+                    }
+                };
+
+                BoardPanel boardPanel = new BoardPanel(board, testFrame, listener);
+                testFrame.add(boardPanel);
+                testFrame.setSize(800, 600); // Taille de la fenêtre
+                testFrame.setVisible(true);
+            }
+        });
     }
+
+
 }

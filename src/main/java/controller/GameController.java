@@ -20,7 +20,7 @@ public class GameController implements MouseListener {
     private int startX, startY; // Ajout pour stocker la position initiale lors du glisser
 
     public GameController() {
-        this.board = new Plateau();
+        this.board = new Plateau("Classic");
         this.game = new Game(board);
     }
 
@@ -68,24 +68,24 @@ public class GameController implements MouseListener {
     }
 
     public void restartGame() {
-        this.board = new Plateau();
+        this.board = new Plateau("Classic");
         this.game = new Game(board);
         startGame();
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        int cellSize = gameView.getCellSize();
-        int x = e.getX() / cellSize;
-        int y = e.getY() / cellSize;
-        if (x < BOARD_COLUMNS && y < BOARD_ROWS) {
-            if (selectedPiece == null) {
-                selectPiece(x, y);
-            } else {
-                moveSelectedPiece(x, y);
-            }
-        }
-    }
+//    @Override
+//    public void mouseClicked(MouseEvent e) {
+//        int cellSize = gameView.getCellSize();
+//        int x = e.getX() / cellSize;
+//        int y = e.getY() / cellSize;
+//        if (x < BOARD_COLUMNS && y < BOARD_ROWS) {
+//            if (selectedPiece == null) {
+//                selectPiece(x, y);
+//            } else {
+//                moveSelectedPiece(x, y);
+//            }
+//        }
+//    }
 
     private void selectPiece(int x, int y) {
         Pion piece = board.getPieceAt(x, y);
@@ -104,6 +104,11 @@ public class GameController implements MouseListener {
         } else {
             gameView.displayMessage("Déplacement invalide.");
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
     }
 
     @Override

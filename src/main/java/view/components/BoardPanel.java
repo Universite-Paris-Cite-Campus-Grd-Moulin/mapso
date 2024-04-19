@@ -9,16 +9,22 @@ import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import controller.GameController;
+import model.Game;
 import model.Pion;
 import model.Plateau;
 import model.enums.Direction;
 import model.enums.TypeDePion;
+import view.GameView;
 
 public class BoardPanel extends JPanel implements MouseListener {
 
     private Plateau board;
-    private Pion selectedPiece;
     private int startX, startY;
+    private GameController controller;
+    private Game game;
+    private GameView gameView;
+    private Pion selectedPiece = null;
 
     public BoardPanel() {
         this(new Plateau("Classic"));
@@ -31,6 +37,11 @@ public class BoardPanel extends JPanel implements MouseListener {
         addMouseListener(this);
         setPreferredSize(new Dimension(750, 600)); // 75 pixels * 10 columns wide and 75 pixels * 8 rows high
         revalidate();
+    }
+
+    public BoardPanel(GameController controller) {
+        this.controller = controller;
+        addMouseListener(this);
     }
 
     private void initBoard() {
@@ -59,12 +70,46 @@ public class BoardPanel extends JPanel implements MouseListener {
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
         Pion clickedPiece = board.getPieceAt(col, row);
-        if (clickedPiece != null) {
-            System.out.println("Clique sur la case (" + col + ", " + row + ") avec " + clickedPiece.getType()
-                    + " de couleur " + clickedPiece.getCouleur());
+
+        // Action de déplacement ou de dépilement selon le bouton de la souris
+        if (e.getButton() == MouseEvent.BUTTON1) { // Bouton gauche pour déplacer
+            handleLeftClick(clickedPiece, col, row);
+        } else if (e.getButton() == MouseEvent.BUTTON3) { // Bouton droit pour dépiler
+            handleRightClick(clickedPiece, col, row);
+        }
+    }
+
+    private void handleLeftClick(Pion clickedPiece, int col, int row) {
+        if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
+            if (selectedPiece == null) {
+                selectedPiece = clickedPiece;
+                System.out.println("Pièce sélectionnée en (" + col + ", " + row + ")");
+            } else {
+                if (game.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
+                    System.out.println("Mouvement réussi de (" + selectedPiece.getX() + ", " + selectedPiece.getY()
+                            + ") à (" + col + ", " + row + ")");
+                    selectedPiece = null;
+                    gameView.update();
+                } else {
+                    System.out.println("Mouvement invalide.");
+                }
+            }
         } else {
-            System.out.println("Clique sur une case vide (" + col + ", " + row + ")");
-            System.out.println();
+            System.out.println("Ce n'est pas le tour de ce joueur ou la case est vide.");
+        }
+    }
+
+    private void handleRightClick(Pion clickedPiece, int col, int row) {
+        if (clickedPiece != null && clickedPiece.getType() == TypeDePion.DOUBLE_OBELISQUE) {
+            if (board.depilerDoubleObelisque(clickedPiece, col, row)) {
+                System.out
+                        .println("Double obélisque décomposé en deux obélisques simples à (" + col + ", " + row + ")");
+                repaint();
+            } else {
+                System.out.println("Dépilement impossible à (" + col + ", " + row + ")");
+            }
+        } else {
+            System.out.println("Action invalide pour le clic droit sur une case non-double obélisque ou vide.");
         }
     }
 
@@ -88,22 +133,28 @@ public class BoardPanel extends JPanel implements MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
-        int col = e.getX() / cellSize;
-        int row = e.getY() / cellSize;
+        int endX = e.getX() / cellSize;
+        int endY = e.getY() / cellSize;
 
-        if (selectedPiece != null && col >= 0 && col < 10 && row >= 0 && row < 8) {
-            System.out
-                    .println("Attempting to move from (" + startX + ", " + startY + ") to (" + col + ", " + row + ")");
-            if (board.movePiece(startX, startY, col, row)) {
-                System.out.println("Move successful");
-                repaint(); // Force a repaint after the move
+        if (e.getButton() == MouseEvent.BUTTON3 && selectedPiece != null
+                && selectedPiece.getType() == TypeDePion.DOUBLE_OBELISQUE) {
+            // Attempt to depile the double obelisk
+            if (board.depilerDoubleObelisque(selectedPiece, startX, startY, endX, endY)) {
+                System.out.println(
+                        "Double obelisk separated at (" + startX + ", " + startY + ") to (" + endX + ", " + endY + ")");
             } else {
-                System.out.println("Move failed");
+                System.out.println("Unable to separate double obelisk.");
             }
-            selectedPiece = null; // Deselect after attempt to move
-        } else {
-            System.out.println("Mouse released out of bounds (" + col + ", " + row + ")");
+        } else if (e.getButton() == MouseEvent.BUTTON1 && selectedPiece != null) {
+            // Handle the left click move or stack
+            if (board.movePiece(startX, startY, endX, endY)) {
+                System.out.println(
+                        "Piece moved or stacked from (" + startX + ", " + startY + ") to (" + endX + ", " + endY + ")");
+            } else {
+                System.out.println("Invalid move.");
+            }
         }
+        repaint(); // Redraw the panel after action
     }
 
     @Override

@@ -1,9 +1,10 @@
 package model.enums;
 
 public enum Direction {
-    NORD, EST, SUD, OUEST, NORD_EST, SUD_EST, SUD_OUEST, NORD_OUEST;
+    NONE, NORD, EST, SUD, OUEST, NORD_EST, SUD_EST, SUD_OUEST, NORD_OUEST;
 
     private static final int[][] DELTAS = {
+            { 0, 0 }, // NONE
             { -1, 0 }, // NORD
             { 0, 1 }, // EST
             { 1, 0 }, // SUD
@@ -15,6 +16,7 @@ public enum Direction {
     };
 
     private static final Direction[] PERPENDICULAIRES = {
+            NONE, // perpendiculaire à NONE
             EST, // perpendiculaire à NORD
             SUD, // perpendiculaire à EST
             OUEST, // perpendiculaire à SUD
@@ -43,6 +45,7 @@ public enum Direction {
             case SUD_EST -> SUD_OUEST;
             case SUD_OUEST -> NORD_OUEST;
             case NORD_OUEST -> NORD_EST;
+            case NONE -> NONE;
         };
     }
 
@@ -56,6 +59,7 @@ public enum Direction {
             case NORD_OUEST -> SUD_OUEST;
             case SUD_OUEST -> SUD_EST;
             case SUD_EST -> NORD_EST;
+            case NONE -> NONE;
         };
     }
 

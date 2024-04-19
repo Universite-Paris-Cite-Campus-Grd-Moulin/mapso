@@ -68,7 +68,7 @@ public class PiecePanel extends JPanel {
     }
 
     public static void main(String[] args) {
-        Pion pion = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.JAUNE);
+        Pion pion = new Pion(TypeDePion.DOUBLE_OBELISQUE, Direction.EST, Couleur.JAUNE);
         PiecePanel panel = new PiecePanel(pion);
         SwingUtilities.invokeLater(() -> {
             panel.revalidate();

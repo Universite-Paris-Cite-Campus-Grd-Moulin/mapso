@@ -53,23 +53,11 @@
     "java.import.gradle.home": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\gradle\\latest",
     "java.configuration.runtimes": [
         {
-            "name": "JavaSE-1.8",
-            "path": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\8"
-        },
-        {
-            "name": "JavaSE-11",
-            "path": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\11"
-        },
-        {
-            "name": "JavaSE-17",
-            "path": "C:\\Users\\kirit\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\17"
-        },
-        {
-            "name": "JavaSE-21",
-            "path": "C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.2.13-hotspot",
-            "default": true
+          "name": "JavaSE-21",
+          "path": "/usr/lib/jvm/java-21-openjdk-amd64",
+          "default": true
         }
-    ],
+      ],
     "terminal.integrated.profiles.windows": {
         "PowerShell": {
             "source": "PowerShell",
@@ -149,56 +137,9 @@
             "path": "bash",
             "env": {
                 "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64"
-            },
-            "args": [
-                "--rcfile",
-                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
-            ]
-        },
-        "JavaSE-1.8": {
-            "overrideName": true,
-            "env": {
-                "JAVA_HOME": "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/java/8"
-            },
-            "path": "bash",
-            "args": [
-                "--rcfile",
-                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
-            ]
-        },
-        "JavaSE-11": {
-            "overrideName": true,
-            "env": {
-                "JAVA_HOME": "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/java/11"
-            },
-            "path": "bash",
-            "args": [
-                "--rcfile",
-                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
-            ]
-        },
-        "JavaSE-17": {
-            "overrideName": true,
-            "env": {
-                "JAVA_HOME": "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/java/17"
-            },
-            "path": "bash",
-            "args": [
-                "--rcfile",
-                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
-            ]
-        },
-        "JavaSE-21": {
-            "overrideName": true,
-            "env": {
-                "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64"
-            },
-            "path": "bash",
-            "args": [
-                "--rcfile",
-                "/home/nano/.vscode-server/data/User/globalStorage/pleiades.java-extension-pack-jdk/.bashrc"
-            ]
+            }
         }
+            
     },
     "terminal.integrated.defaultProfile.linux": "JavaSE-21",
     "redhat.telemetry.enabled": true,
@@ -236,6 +177,7 @@
         ]
     },
     "workbench.colorTheme": "Copilot Theme",
+    "sonarlint.pathToNodeExecutable": "/home/nano/.nvm/versions/node/v16.20.2/bin/node",
     "java.completion.favoriteStaticMembers": [
 
         "org.junit.Assert.*",
@@ -248,4 +190,6 @@
         "org.mockito.ArgumentMatchers.*",
         "org.mockito.Answers.*"
     ]
+
+    
 }

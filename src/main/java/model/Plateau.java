@@ -216,60 +216,96 @@ public class Plateau {
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
-        // Vérifie si les positions de départ et d'arrivée sont différentes
         if (startX == endX && startY == endY) {
-            System.out.println("Erreur: La position de départ et la position d'arrivée sont identiques.");
+            System.out.println("Erreur: La position de départ est la même que la position d'arrivée.");
             return false;
         }
-    
-        // Vérifie si les positions de départ et d'arrivée sont valides
-        if (!isCoordonneeValide(startX, startY) || !isCoordonneeValide(endX, endY)) {
-            System.out.println("Erreur: La position de départ ou d'arrivée est hors des limites du plateau.");
-            return false;
-        }
-    
-        // Obtient le pion à la position de départ
-        Pion movingPiece = grille[startY][startX];
-        if (movingPiece == null || movingPiece.getType() == TypeDePion.NONE) {
-            System.out.println("Erreur: Aucun pion valide à la position de départ (" + startX + ", " + startY + ").");
-            return false;
-        }
-    
-        // Vérifie si la couleur de la pièce est compatible avec la couleur de la case de destination
-        Couleur couleurCaseDestination = initCouleur(endY, endX);
-        if (movingPiece.getCouleur() != couleurCaseDestination && couleurCaseDestination != Couleur.GRIS) {
-            System.out.println("Erreur: Impossible de placer une pièce " + movingPiece.getCouleur() +
-                               " sur une case " + couleurCaseDestination + ".");
-            return false;
-        }
-    
-        // Vérifie si la case de destination est vide ou si un mouvement spécial est possible (comme empiler des obélisques)
-        Pion destinationPiece = grille[endY][endX];
-        if (destinationPiece != null && destinationPiece.getType() != TypeDePion.NONE) {
-            System.out.println("Erreur: Mouvement invalide, la case de destination est occupée.");
-            return false;
-        }
-    
-        // Effectuer le déplacement
-        grille[startY][startX] = null;
-        grille[endY][endX] = movingPiece;
-        movingPiece.setPosition(endX, endY); // Met à jour la position du pion
-    
-        System.out.println("Déplacement du pion de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
-        return true;
-    }
-    
-    
 
-    private boolean isValidPosition(int x, int y) {
-        boolean valid = (x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau);
-        System.out.println("Vérification de la validité de la position (" + x + ", " + y + "): " + valid);
-        return valid;
+        if (!isCoordonneeValide(startX, startY) || !isCoordonneeValide(endX, endY)) {
+            System.out.println("Erreur: Coordonnée hors limite.");
+            return false;
+        }
+
+        Pion movingPiece = grille[startY][startX];
+        Pion destinationPiece = grille[endY][endX];
+
+        if (movingPiece == null || movingPiece.getType() == TypeDePion.NONE) {
+            System.out.println("Erreur: Aucun pion valide à la position de départ.");
+            return false;
+        }
+
+        if (Math.abs(startX - endX) > 1 || Math.abs(startY - endY) > 1) {
+            System.out.println("Erreur: La case de destination n'est pas adjacente.");
+            return false;
+        }
+
+        Couleur couleurCaseDestination = initCouleur(endY, endX);
+        boolean isDestinationValid = (movingPiece.getCouleur() == couleurCaseDestination
+                || couleurCaseDestination == Couleur.GRIS);
+
+        // Vérifier si l'échange entre Djed/Horus et Pyramide/Obélisque est possible
+        // dans les deux sens
+        if ((movingPiece.getType() == TypeDePion.DJED || movingPiece.getType() == TypeDePion.HORUS) &&
+                destinationPiece != null &&
+                (destinationPiece.getType() == TypeDePion.PYRAMIDE
+                        || destinationPiece.getType() == TypeDePion.OBELISQUE)) {
+            grille[startY][startX] = destinationPiece;
+            grille[endY][endX] = movingPiece;
+            movingPiece.setPosition(endX, endY);
+            destinationPiece.setPosition(startX, startY);
+            System.out.println("Échange réussi entre le Djed/Horus et la Pyramide/Obélisque.");
+            return true;
+        } else if ((destinationPiece != null) &&
+                (destinationPiece.getType() == TypeDePion.DJED || destinationPiece.getType() == TypeDePion.HORUS) &&
+                (movingPiece.getType() == TypeDePion.PYRAMIDE || movingPiece.getType() == TypeDePion.OBELISQUE)) {
+            grille[startY][startX] = destinationPiece;
+            grille[endY][endX] = movingPiece;
+            movingPiece.setPosition(endX, endY);
+            destinationPiece.setPosition(startX, startY);
+            System.out.println("Échange réussi entre la Pyramide/Obélisque et le Djed/Horus.");
+            return true;
+        }
+
+        // Empiler deux obélisques pour former un double obélisque
+        if (movingPiece.getType() == TypeDePion.OBELISQUE && destinationPiece != null &&
+                destinationPiece.getType() == TypeDePion.OBELISQUE
+                && movingPiece.getCouleur() == destinationPiece.getCouleur()) {
+            grille[endY][endX] = new Pion(TypeDePion.DOUBLE_OBELISQUE, Direction.NONE, movingPiece.getCouleur());
+            grille[startY][startX] = null;
+            System.out.println(
+                    "Deux obélisques empilés pour former un double obélisque en (" + endX + ", " + endY + ").");
+            return true;
+        }
+
+        if (!isDestinationValid) {
+            System.out.println("Erreur: Mouvement non autorisé à cause de la règle de couleur des cases.");
+            return false;
+        }
+
+        if (destinationPiece == null || destinationPiece.getType() == TypeDePion.NONE) {
+            grille[startY][startX] = null;
+            grille[endY][endX] = movingPiece;
+            movingPiece.setPosition(endX, endY);
+            System.out
+                    .println("Déplacement réussi de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
+            return true;
+        } else {
+            System.out.println("Erreur: La case de destination n'est pas vide.");
+            return false;
+        }
     }
 
     private boolean isCoordonneeValide(int x, int y) {
         return x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau;
     }
+
+    // private boolean isValidPosition(int x, int y) {
+    // boolean valid = (x >= 0 && x < largeurDuPlateau && y >= 0 && y <
+    // hauteurDuPlateau);
+    // System.out.println("Vérification de la validité de la position (" + x + ", "
+    // + y + "): " + valid);
+    // return valid;
+    // }
 
     private boolean isDeplacementValide(Pion pion, int startX, int startY, int endX, int endY) {
         if (!estDansLimites(startX, startY) || !estDansLimites(endX, endY))

@@ -216,49 +216,50 @@ public class Plateau {
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
-        // Vérifie si les positions de départ et d'arrivée sont valides
-        if (!isValidPosition(startX, startY) || !isValidPosition(endX, endY)) {
-            System.out.println("La position de départ ou d'arrivée est hors des limites du plateau.");
+        // Vérifie si les positions de départ et d'arrivée sont différentes
+        if (startX == endX && startY == endY) {
+            System.out.println("Erreur: La position de départ et la position d'arrivée sont identiques.");
             return false;
         }
-
+    
+        // Vérifie si les positions de départ et d'arrivée sont valides
+        if (!isCoordonneeValide(startX, startY) || !isCoordonneeValide(endX, endY)) {
+            System.out.println("Erreur: La position de départ ou d'arrivée est hors des limites du plateau.");
+            return false;
+        }
+    
         // Obtient le pion à la position de départ
         Pion movingPiece = grille[startY][startX];
         if (movingPiece == null || movingPiece.getType() == TypeDePion.NONE) {
-            System.out.println("Aucun pion valide à la position de départ (" + startX + ", " + startY + ").");
+            System.out.println("Erreur: Aucun pion valide à la position de départ (" + startX + ", " + startY + ").");
             return false;
         }
-
-        // Vérifie si la case de destination est adéquate pour le mouvement
-        Pion destinationPiece = grille[endY][endX];
-        if (destinationPiece != null) {
-            if (movingPiece.getType() == TypeDePion.OBELISQUE && destinationPiece.getType() == TypeDePion.OBELISQUE
-                    && movingPiece.getCouleur() == destinationPiece.getCouleur()) {
-                // Empile deux obélisques pour former un double obélisque
-                grille[endY][endX] = new Pion(TypeDePion.DOUBLE_OBELISQUE, Direction.NONE, movingPiece.getCouleur()); // Assuming
-                                                                                                                      // Direction.NONE
-                                                                                                                      // represents
-                                                                                                                      // no
-                                                                                                                      // specific
-                                                                                                                      // direction.
-                grille[startY][startX] = null;
-                System.out.println(
-                        "Deux obélisques empilés pour former un double obélisque en (" + endX + ", " + endY + ").");
-                return true;
-            } else {
-                System.out.println("Mouvement invalide : collision avec un pion en (" + endX + ", " + endY + ").");
-                return false;
-            }
-        } else {
-            // Mouvement régulier sans collision
-            grille[endY][endX] = movingPiece;
-            grille[startY][startX] = null;
-            movingPiece.setPosition(endX, endY); // Met à jour la position du pion
-            System.out.println("Déplacement réussi du pion " + movingPiece.getType() + " de (" + startX + ", " + startY
-                    + ") à (" + endX + ", " + endY + ").");
-            return true;
+    
+        // Vérifie si la couleur de la pièce est compatible avec la couleur de la case de destination
+        Couleur couleurCaseDestination = initCouleur(endY, endX);
+        if (movingPiece.getCouleur() != couleurCaseDestination && couleurCaseDestination != Couleur.GRIS) {
+            System.out.println("Erreur: Impossible de placer une pièce " + movingPiece.getCouleur() +
+                               " sur une case " + couleurCaseDestination + ".");
+            return false;
         }
+    
+        // Vérifie si la case de destination est vide ou si un mouvement spécial est possible (comme empiler des obélisques)
+        Pion destinationPiece = grille[endY][endX];
+        if (destinationPiece != null && destinationPiece.getType() != TypeDePion.NONE) {
+            System.out.println("Erreur: Mouvement invalide, la case de destination est occupée.");
+            return false;
+        }
+    
+        // Effectuer le déplacement
+        grille[startY][startX] = null;
+        grille[endY][endX] = movingPiece;
+        movingPiece.setPosition(endX, endY); // Met à jour la position du pion
+    
+        System.out.println("Déplacement du pion de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
+        return true;
     }
+    
+    
 
     private boolean isValidPosition(int x, int y) {
         boolean valid = (x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau);

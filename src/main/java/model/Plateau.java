@@ -9,6 +9,8 @@ public class Plateau {
     private int largeurDuPlateau = 10;
     private int hauteurDuPlateau = 8;
 
+    private Couleur[][] couleursCases;
+
     public boolean Classic = false;
     public boolean Dynastie = false;
     public boolean Imhotep = false;
@@ -31,6 +33,28 @@ public class Plateau {
                 break;
             default:
                 initializeClassic();
+        }
+    }
+
+    public Plateau() {
+        this.grille = new Pion[hauteurDuPlateau][largeurDuPlateau];
+        this.couleursCases = new Couleur[hauteurDuPlateau][largeurDuPlateau];
+        initCouleursCases();
+    }
+
+    private void initCouleursCases() {
+        for (int i = 0; i < hauteurDuPlateau; i++) {
+            for (int j = 0; j < largeurDuPlateau; j++) {
+                couleursCases[i][j] = initCouleur(i, j);
+            }
+        }
+    }
+
+    public Couleur getCouleurCase(int i, int j) {
+        if (i >= 0 && i < hauteurDuPlateau && j >= 0 && j < largeurDuPlateau) {
+            return couleursCases[i][j];
+        } else {
+            return null; // ou Couleur.GRIS si tu préfères
         }
     }
 
@@ -199,6 +223,24 @@ public class Plateau {
         }
     }
 
+    public void placePion(int x, int y, Pion pion) {
+        if (x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau) {
+            if (regleDeCouleurValide(pion, couleursCases[y][x])) {
+                grille[y][x] = pion;
+            } else {
+                System.out.println("Erreur: Le pion ne peut pas être placé sur une case de couleur " + couleursCases[y][x]);
+            }
+        } else {
+            System.out.println("Erreur: Tentative de placement d'un pion hors des limites.");
+        }
+    }
+    
+    private boolean regleDeCouleurValide(Pion pion, Couleur couleurCase) {
+        // Implémenter les règles spécifiques liées à la couleur du pion et de la case
+        return true; // Retourner vrai ou faux selon les règles
+    }
+       
+
     public boolean deplacerPion(int iDepart, int jDepart, int iArrivee, int jArrivee) {
         Pion movingPiece = grille[iDepart][jDepart];
         if (iDepart < 0 || iDepart >= grille.length || jDepart < 0 || jDepart >= grille[0].length ||
@@ -243,8 +285,7 @@ public class Plateau {
         boolean isDestinationValid = (movingPiece.getCouleur() == couleurCaseDestination
                 || couleurCaseDestination == Couleur.GRIS);
 
-        // Vérifier si l'échange entre Djed/Horus et Pyramide/Obélisque est possible
-        // dans les deux sens
+        // Vérifier si l'échange entre Djed/Horus et Pyramide/Obélisque est possible dans les deux sens
         if ((movingPiece.getType() == TypeDePion.DJED || movingPiece.getType() == TypeDePion.HORUS) &&
                 destinationPiece != null &&
                 (destinationPiece.getType() == TypeDePion.PYRAMIDE
@@ -468,14 +509,30 @@ public class Plateau {
         }
     }
 
+    // public void afficherPlateau() {
+    //     for (int i = 0; i < hauteurDuPlateau; i++) {
+    //         for (int j = 0; j < largeurDuPlateau; j++) {
+    //             System.out.print(grille[i][j].getCouleur().toString().charAt(0) + " ");
+    //         }
+    //         System.out.println();
+    //     }
+    // }
+
     public void afficherPlateau() {
         for (int i = 0; i < hauteurDuPlateau; i++) {
             for (int j = 0; j < largeurDuPlateau; j++) {
-                System.out.print(grille[i][j].getCouleur().toString().charAt(0) + " ");
+                if (grille[i][j] != null) {
+                    // Si le pion n'est pas null, afficher la première lettre de la couleur du pion
+                    System.out.print(grille[i][j].getCouleur().toString().charAt(0) + " ");
+                } else {
+                    // Si le pion est null, peut-être afficher un espace ou un caractère pour indiquer une case vide
+                    System.out.print("_ ");
+                }
             }
             System.out.println();
         }
     }
+    
 
     public boolean shootLaser(Couleur currentPlayer) {
         return false; // Simplement un placeholder

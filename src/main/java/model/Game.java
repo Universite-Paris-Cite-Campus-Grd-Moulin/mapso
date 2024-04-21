@@ -7,33 +7,46 @@ public class Game {
     private Couleur currentPlayer;
     private boolean isGameOver;
 
+    public Game(Plateau board) {
+        this.board = board;
+        this.currentPlayer = Couleur.JAUNE; // Le jeu commence toujours par le joueur Jaune
+    }
+
+    public Couleur getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void movePiece(int startX, int startY, int endX, int endY) {
+        if (board.movePiece(startX, startY, endX, endY)) {
+            switchPlayer(); // Change de joueur après un mouvement réussi
+        }
+    }
+
+    public void rotatePiece(Pion pion) {
+        board.tournerPion(pion, pion.getDirection().nextClockwise()); // Rotation à droite par exemple
+        switchPlayer(); // Change de joueur après une rotation
+    }
+
+    public void stackOrUnstackObelisk(Pion pion, int targetX, int targetY) {
+        // Ici, ajoutez la logique pour empiler ou dépiler
+        switchPlayer(); // Change de joueur après l'empilement/dépilement
+    }
+
+    private void switchPlayer() {
+        currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
+    }
+
+    public boolean isPlayerTurn(Couleur playerColor) {
+        return currentPlayer == playerColor;
+    }
+
     // Modification du constructeur pour accepter un type de plateau
     public Game(String type) {
         this(new Plateau(type)); // Crée un plateau du type spécifié
     }
 
-    public Game(Plateau board) {
-        this.board = board;
-        this.currentPlayer = Couleur.JAUNE;
-        this.isGameOver = false;
-    }
-
-    public boolean movePiece(int startX, int startY, int endX, int endY) {
-        if (currentPlayer == board.getPieceAt(startX, startY).getCouleur()) {
-            if (board.movePiece(startX, startY, endX, endY)) {
-                togglePlayer(); // Changer de joueur seulement après un mouvement valide
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void togglePlayer() {
         currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
-    }
-
-    public Couleur getCurrentPlayer() {
-        return currentPlayer;
     }
 
     public Plateau getBoard() {

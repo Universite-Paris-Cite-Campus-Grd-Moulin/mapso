@@ -83,41 +83,21 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     private void handleLeftClick(Pion clickedPiece, int col, int row) {
-        System.out.println("Handling left click");
-        if (clickedPiece != null) {
-            System.out.println("Clicked piece is not null, type: " + clickedPiece.getType());
-            if (clickedPiece.getCouleur() == game.getCurrentPlayer()) {
-                System.out.println("It's the current player's turn");
-                if (clickedPiece.getType() == TypeDePion.OBELISQUE) {
-                    System.out.println("Clicked piece is an Obelisk");
-                    if (selectedPiece != null && selectedPiece == clickedPiece) {
-                        System.out.println("Obelisk already selected. No movement performed.");
-                    } else {
-                        selectedPiece = clickedPiece;
-                        System.out.println("Obelisk selected for potential stacking or action.");
-                    }
-                } else {
-                    if (selectedPiece == null) {
-                        selectedPiece = clickedPiece;
-                        System.out.println("Piece selected at (" + col + ", " + row + ")");
-                    } else {
-                        if (game.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
-                            System.out.println("Successful movement from (" + selectedPiece.getX() + ", "
-                                    + selectedPiece.getY() + ") to (" + col + ", " + row + ")");
-                            selectedPiece = null;
-                            gameView.update();
-                        } else {
-                            System.out.println("Invalid movement.");
-                            selectedPiece = null;
-                        }
-                    }
-                }
+        if (clickedPiece != null && game.isPlayerTurn(clickedPiece.getCouleur())) {
+            System.out.println("Handling action for " + clickedPiece.getCouleur());
+            // Ajoutez ici la logique pour déplacer, empiler ou dépiler selon le type de
+            // pion
+            if (clickedPiece.getType() == TypeDePion.OBELISQUE) {
+                game.stackOrUnstackObelisk(clickedPiece, col, row);
             } else {
-                System.out.println("Not the current player's turn.");
-                selectedPiece = null;
+                if (selectedPiece != null && selectedPiece == clickedPiece) {
+                    game.rotatePiece(clickedPiece); // Supposons que le clic répété sur le même pion cause une rotation
+                } else {
+                    selectedPiece = clickedPiece;
+                }
             }
         } else {
-            System.out.println("No piece at clicked position.");
+            System.out.println("It's not " + clickedPiece.getCouleur() + "'s turn or piece cannot be moved.");
         }
     }
 

@@ -5,6 +5,11 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,9 +18,14 @@ import controller.GameController;
 import model.Game;
 import model.Pion;
 import model.Plateau;
+import model.enums.Couleur;
 import model.enums.Direction;
 import model.enums.TypeDePion;
 import view.GameView;
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.Point;
+import javax.swing.SwingUtilities;
 
 public class BoardPanel extends JPanel implements MouseListener {
 
@@ -25,18 +35,26 @@ public class BoardPanel extends JPanel implements MouseListener {
     private Game game;
     private GameView gameView;
     private Pion selectedPiece = null;
+    private List<Point> laserPathRed = new ArrayList<>();
+    private List<Point> laserPathYellow = new ArrayList<>();
+    private JFrame parentFrame;
+    private GameNavigationListener navigationListener;
 
-    public BoardPanel() {
-        this(new Plateau("Classic"));
+    public BoardPanel(Plateau board, JFrame parentFrame, GameNavigationListener listener) {
+        this.board = board;
+        addMouseListener(this);
+        this.board = board;
+        this.parentFrame = parentFrame;
+        this.navigationListener = listener;
+        setupBoardPanel();
+        revalidate();
     }
 
-    public BoardPanel(Plateau board) {
-        this.board = board;
-        setLayout(new GridLayout(8, 10));
-        initBoard();
+    private void setupBoardPanel() {
+        setLayout(new BorderLayout());
         addMouseListener(this);
-        setPreferredSize(new Dimension(750, 600)); // 75 pixels * 10 columns wide and 75 pixels * 8 rows high
-        revalidate();
+        initBoard();
+        addPauseButton();
     }
 
     public BoardPanel(GameController controller) {
@@ -51,7 +69,15 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        drawBoard(g);
+        drawLaserPath(g, laserPathRed, Color.RED);
+        drawLaserPath(g, laserPathYellow, Color.YELLOW);
+    }
+
+
+    private void drawBoard(Graphics g) {
         super.paintComponent(g);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
@@ -62,6 +88,89 @@ public class BoardPanel extends JPanel implements MouseListener {
                 }
             }
         }
+    }
+
+    private void drawLaserPath(Graphics g, List<Point> cheminLaser, Color couleurLaser) {
+        if (cheminLaser == null || cheminLaser.isEmpty()) {
+            return;
+        }
+        
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(couleurLaser);
+        g2d.setStroke(new BasicStroke(2)); // Épaisseur du trait du laser
+    
+        Point prev = null;
+        for (Point point : cheminLaser) {
+            if (prev != null) {
+                int x1 = prev.x * getCellSize() + getCellSize() / 2; // Centre de la cellule
+                int y1 = prev.y * getCellSize() + getCellSize() / 2;
+                int x2 = point.x * getCellSize() + getCellSize() / 2;
+                int y2 = point.y * getCellSize() + getCellSize() / 2;
+                g2d.drawLine(x1, y1, x2, y2);
+            }
+            prev = point;
+        }
+    }
+
+    public void updateLaserPath(List<Point> cheminLaser, Couleur couleurLaser) {
+        System.out.println("Mise à jour du chemin du laser : " + cheminLaser.size() + " points.");
+        if (couleurLaser == Couleur.ROUGE) {
+            this.laserPathRed = cheminLaser;
+        } else {
+            this.laserPathYellow = cheminLaser;
+        }
+        repaint();  // Force le redessinage du panel
+    }
+    
+    
+    
+
+    private void showPauseMenu() {
+        JDialog pauseMenu = new JDialog(parentFrame, "Pause", true);
+        pauseMenu.setLayout(new GridLayout(4, 1));
+        pauseMenu.setSize(200, 200);
+        pauseMenu.setLocationRelativeTo(parentFrame);
+        addPauseMenuButtons(pauseMenu);
+        pauseMenu.setVisible(true);
+    }
+
+    private void addPauseButton() {
+        JButton pauseButton = new JButton("Pause");
+        pauseButton.setPreferredSize(new Dimension(100, 40));
+        pauseButton.setBackground(Color.BLACK);
+        pauseButton.setForeground(Color.WHITE);  // Assurez-vous que le texte est visible
+
+        pauseButton.addActionListener(e -> showPauseMenu());
+
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topPanel.setOpaque(false);
+        topPanel.add(pauseButton);
+        this.add(topPanel, BorderLayout.NORTH); // Assurez-vous que 'this' utilise BorderLayout comme layout manager
+
+        revalidate(); // Revalide le layout après ajout
+        repaint(); // Repeint le panel après modifications
+    }
+
+    private void addPauseMenuButtons(JDialog pauseMenu) {
+        System.out.println();
+        JButton continueButton = new JButton("Continue");
+        JButton restartButton = new JButton("Restart");
+        JButton backToMenuButton = new JButton("Back to Menu");
+        JButton exitButton = new JButton("Exit");
+
+        continueButton.addActionListener(e -> pauseMenu.dispose());
+        //restartButton.addActionListener(this::restartGame);
+        backToMenuButton.addActionListener(e -> navigationListener.onBackToMenuRequested());
+        exitButton.addActionListener(e -> System.exit(0));
+
+        pauseMenu.add(continueButton);
+        pauseMenu.add(restartButton);
+        pauseMenu.add(backToMenuButton);
+        pauseMenu.add(exitButton);
+    }
+
+    public int getCellSize() {
+        return 75;
     }
 
     @Override
@@ -178,12 +287,33 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Plateau");
-        BoardPanel panel = new BoardPanel();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(panel);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Test BoardPanel");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+            Plateau board = new Plateau("Classic"); // Assurez-vous que cela initialise correctement le plateau.
+    
+            BoardPanel boardPanel = new BoardPanel(board, frame, new GameNavigationListener() {
+                public void onBackToMenuRequested() {
+                    System.out.println("Back to menu requested.");
+                }
+            });
+    
+            // Simuler un chemin de laser pour le test
+            List<Point> testLaserPath = new ArrayList<>();
+            testLaserPath.add(new Point(0, 0));
+            testLaserPath.add(new Point(1, 1));
+            testLaserPath.add(new Point(2, 2));
+            testLaserPath.add(new Point(3, 3));
+            testLaserPath.add(new Point(4, 4));
+    
+            boardPanel.updateLaserPath(testLaserPath, Couleur.ROUGE);
+    
+            frame.setContentPane(boardPanel);
+            frame.setSize(800, 640); // Taille adaptée à votre grille
+            frame.setLocationRelativeTo(null); // Centrer la fenêtre
+            frame.setVisible(true);
+        });
     }
+    
 }

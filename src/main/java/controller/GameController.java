@@ -3,8 +3,11 @@ package controller;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
+import java.awt.Point;
 
 import model.Game;
+import model.Laser;
 import model.Pion;
 import model.Plateau;
 import model.enums.Couleur;
@@ -40,6 +43,19 @@ public class GameController implements MouseListener {
         if (gameView != null) {
             gameView.update();
         }
+    }
+
+    public void propagerLaser() {
+        // Obtenir la couleur actuelle du joueur (ou du laser si différent)
+        Couleur couleurLaser = game.getCurrentPlayer();  // Supposons que `getCouleurCourante()` existe dans ton jeu.
+    
+        // Créer une instance de Laser et propager
+        Laser laser = new Laser(couleurLaser);
+        laser.propagerLaser(board);
+    
+        // Obtenir le chemin du laser et le passer à la vue
+        List<Point> cheminLaser = laser.obtenirCheminLaser();
+        gameView.updateLaserPath(cheminLaser, couleurLaser);
     }
 
     @Override

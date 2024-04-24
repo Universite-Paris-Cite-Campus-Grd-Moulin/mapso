@@ -16,10 +16,13 @@ public class Game {
         return currentPlayer;
     }
 
-    public void movePiece(int startX, int startY, int endX, int endY) {
+    public boolean movePiece(int startX, int startY, int endX, int endY) {
         if (board.movePiece(startX, startY, endX, endY)) {
             switchPlayer(); // Change de joueur après un mouvement réussi
+            return true;
         }
+        return false;
+
     }
 
     public void rotatePiece(Pion pion) {

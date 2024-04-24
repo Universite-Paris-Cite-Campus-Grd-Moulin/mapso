@@ -323,7 +323,7 @@ public class Plateau {
         return estCaseValidePourCouleur(pion.getCouleur(), endX, endY);
     }
 
-    private boolean estDansLimites(int x, int y) {
+    boolean estDansLimites(int x, int y) {
         return x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau;
     }
 
@@ -511,6 +511,10 @@ public class Plateau {
             return true;
         }
         return false;
+    }
+
+    public void setPharaonTouche(Couleur couleur) {
+       
     }
 
 }

@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import controller.GameController;
 import model.Game;
+import model.Laser;
 import model.Pion;
 import model.Plateau;
 import model.enums.Couleur;
@@ -35,10 +36,11 @@ public class BoardPanel extends JPanel implements MouseListener {
     private Game game;
     private GameView gameView;
     private Pion selectedPiece = null;
-    private List<Point> laserPathRed = new ArrayList<>();
-    private List<Point> laserPathYellow = new ArrayList<>();
     private JFrame parentFrame;
     private GameNavigationListener navigationListener;
+    private List<Point> cheminLaserRouge;
+    private List<Point> cheminLaserJaune;
+    
 
     public BoardPanel(Plateau board, JFrame parentFrame, GameNavigationListener listener) {
         this.board = board;
@@ -47,9 +49,24 @@ public class BoardPanel extends JPanel implements MouseListener {
         this.parentFrame = parentFrame;
         this.navigationListener = listener;
         setupBoardPanel();
+        initLasersAndDrawPaths();
         revalidate();
     }
 
+    public void initLasersAndDrawPaths() {
+        // Propage les lasers pour construire l'arbre de trajectoire
+        board.getRed().propagerLaser(board);
+        board.getYellow().propagerLaser(board);
+    
+        // Récupère les chemins du laser à partir des arbres de trajectoire
+        List<Point> cheminLaserRouge = board.getRed().obtenirCheminLaser();
+        List<Point> cheminLaserJaune = board.getYellow().obtenirCheminLaser();
+    
+        // Mise à jour des chemins dans le panel
+        updateLaserPath(cheminLaserRouge, Couleur.ROUGE);
+        updateLaserPath(cheminLaserJaune, Couleur.JAUNE);
+    }
+    
     private void setupBoardPanel() {
         setLayout(new BorderLayout());
         addMouseListener(this);
@@ -72,8 +89,10 @@ public class BoardPanel extends JPanel implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBoard(g);
-        drawLaserPath(g, laserPathRed, Color.RED);
-        drawLaserPath(g, laserPathYellow, Color.YELLOW);
+        if (cheminLaserRouge != null && cheminLaserJaune != null) {
+            drawLaserPath(g, cheminLaserRouge, Color.RED);
+            drawLaserPath(g, cheminLaserJaune, Color.YELLOW);
+        }
     }
 
 
@@ -91,7 +110,9 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     private void drawLaserPath(Graphics g, List<Point> cheminLaser, Color couleurLaser) {
+        System.out.println("dzgezgezgd");
         if (cheminLaser == null || cheminLaser.isEmpty()) {
+            System.out.println("je retourne ici");
             return;
         }
         
@@ -100,26 +121,31 @@ public class BoardPanel extends JPanel implements MouseListener {
         g2d.setStroke(new BasicStroke(2)); // Épaisseur du trait du laser
     
         Point prev = null;
+        int i = 0;
         for (Point point : cheminLaser) {
+            i++;
+            System.out.println(i);
             if (prev != null) {
                 int x1 = prev.x * getCellSize() + getCellSize() / 2; // Centre de la cellule
                 int y1 = prev.y * getCellSize() + getCellSize() / 2;
                 int x2 = point.x * getCellSize() + getCellSize() / 2;
                 int y2 = point.y * getCellSize() + getCellSize() / 2;
                 g2d.drawLine(x1, y1, x2, y2);
+                System.out.println("test dzf");
+                
             }
             prev = point;
         }
     }
 
     public void updateLaserPath(List<Point> cheminLaser, Couleur couleurLaser) {
-        System.out.println("Mise à jour du chemin du laser : " + cheminLaser.size() + " points.");
+        // Mise à jour des variables d'instance en fonction de la couleur du laser
         if (couleurLaser == Couleur.ROUGE) {
-            this.laserPathRed = cheminLaser;
-        } else {
-            this.laserPathYellow = cheminLaser;
+            this.cheminLaserRouge = cheminLaser;
+        } else if (couleurLaser == Couleur.JAUNE) {
+            this.cheminLaserJaune = cheminLaser;
         }
-        repaint();  // Force le redessinage du panel
+        repaint();  // Force le rafraîchissement du panneau pour afficher les chemins du laser
     }
     
     
@@ -285,35 +311,4 @@ public class BoardPanel extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
         System.out.println("Mouse exited the component area.");
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Test BoardPanel");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    
-            Plateau board = new Plateau("Classic"); // Assurez-vous que cela initialise correctement le plateau.
-    
-            BoardPanel boardPanel = new BoardPanel(board, frame, new GameNavigationListener() {
-                public void onBackToMenuRequested() {
-                    System.out.println("Back to menu requested.");
-                }
-            });
-    
-            // Simuler un chemin de laser pour le test
-            List<Point> testLaserPath = new ArrayList<>();
-            testLaserPath.add(new Point(0, 0));
-            testLaserPath.add(new Point(1, 1));
-            testLaserPath.add(new Point(2, 2));
-            testLaserPath.add(new Point(3, 3));
-            testLaserPath.add(new Point(4, 4));
-    
-            boardPanel.updateLaserPath(testLaserPath, Couleur.ROUGE);
-    
-            frame.setContentPane(boardPanel);
-            frame.setSize(800, 640); // Taille adaptée à votre grille
-            frame.setLocationRelativeTo(null); // Centrer la fenêtre
-            frame.setVisible(true);
-        });
-    }
-    
 }

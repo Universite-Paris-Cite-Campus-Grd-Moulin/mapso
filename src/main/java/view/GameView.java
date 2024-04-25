@@ -33,14 +33,18 @@ public class GameView extends JFrame implements GameNavigationListener {
     private static final int SPRITE_HEIGHT = 100;
     private static final int BOARD_COLUMNS = 10;
     private static final int BOARD_ROWS = 8;
-    private final ImageIcon backgroundImage = new ImageIcon("src/main/resources/images/Fond_Khet.jpeg");
+    private final ImageIcon backgroundImage = new ImageIcon("src/main/resources/images/Fond_Khet.png");
     private JButton startButton, settingsButton, exitButton;
+    
     public GameView() {
         setTitle("Khet Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLayout(new BorderLayout());
         setContentPane(new BackgroundPanel());
+        // Utilisation de BackgroundPanel comme content pane
+        BackgroundPanel backgroundPanel = new BackgroundPanel();
+        setContentPane(backgroundPanel);
         initMainMenu(); // Assurez-vous que cette méthode est appelée
         setLocationRelativeTo(null);
         setVisible(true);
@@ -48,7 +52,7 @@ public class GameView extends JFrame implements GameNavigationListener {
 
     private void loadSpriteSheet() {
         try {
-            spriteSheet = ImageIO.read(new File("ressources/Background.png"));
+            spriteSheet = ImageIO.read(new File("src/main/resources/images/Fond_Khet.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,14 +91,18 @@ public class GameView extends JFrame implements GameNavigationListener {
         mainMenuPanel.add(settingsButton, gbc);
         mainMenuPanel.add(exitButton, gbc);
 
-        setContentPane(mainMenuPanel); // Ajoute le mainMenuPanel au JFrame
+        getContentPane().add(mainMenuPanel, BorderLayout.SOUTH);
         revalidate();
         repaint();
     }
 
     private JButton createButton(String imagePath) {
-        ImageIcon buttonIcon = new ImageIcon(imagePath);
+        ImageIcon originalIcon = new ImageIcon(imagePath);
+        Image image = originalIcon.getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH);
+        ImageIcon buttonIcon = new ImageIcon(image);
+
         JButton button = new JButton(buttonIcon);
+        button.setPreferredSize(new Dimension(100, 50));
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);

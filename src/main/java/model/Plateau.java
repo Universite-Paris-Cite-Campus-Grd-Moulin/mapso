@@ -12,6 +12,8 @@ public class Plateau {
     public boolean Classic = false;
     public boolean Dynastie = false;
     public boolean Imhotep = false;
+    private Laser red;
+    private Laser yellow;
 
     public Pion[][] getGrille() {
         return grille;
@@ -87,6 +89,9 @@ public class Plateau {
                 }
             }
         }
+
+        red = new Laser(Couleur.JAUNE);
+        yellow = new Laser(Couleur.ROUGE);
     }
 
     private void initializeImhotep() {
@@ -142,6 +147,8 @@ public class Plateau {
                 }
             }
         }
+        red = new Laser(Couleur.ROUGE);
+        yellow = new Laser(Couleur.JAUNE);
     }
 
     private void initializeDynastie() {
@@ -197,6 +204,8 @@ public class Plateau {
                 }
             }
         }
+        red = new Laser(Couleur.ROUGE);
+        yellow = new Laser(Couleur.JAUNE);
     }
 
     public boolean deplacerPion(int iDepart, int jDepart, int iArrivee, int jArrivee) {
@@ -516,5 +525,22 @@ public class Plateau {
     public void setPharaonTouche(Couleur couleur) {
        
     }
+
+    public Laser getRed() {
+        return red;
+    }
+
+    public void setRed(Laser red) {
+        this.red = red;
+    }
+
+    public Laser getYellow() {
+        return yellow;
+    }
+
+    public void setYellow(Laser yellow) {
+        this.yellow = yellow;
+    }
+
 
 }

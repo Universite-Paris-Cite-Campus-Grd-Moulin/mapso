@@ -9,41 +9,87 @@ import model.Pion;
 import model.Plateau;
 import model.enums.Couleur;
 import view.GameView;
-import view.components.BoardPanel;
 
 public class GameController implements MouseListener {
     private Game game;
     private Plateau board;
     private GameView gameView;
-    private BoardPanel boardPanel;
     private Pion selectedPiece = null;
+    private static final int BOARD_COLUMNS = 10; // Nombre de colonnes du plateau
+    private static final int BOARD_ROWS = 8; // Nombre de lignes du plateau
+    private int startX, startY; // Ajout pour stocker la position initiale lors du glisser
 
     public GameController(GameView gameView) {
         this.gameView = gameView;
-        this.board = new Plateau("Classic");
+        this.gameView.addMouseListener(this);
+    }
+
+    public void initializeGame(String boardType) {
+        this.board = new Plateau(boardType);
         this.game = new Game(board);
-        this.boardPanel = gameView.getBoardPanel();
-        gameView.addMouseListener(this);
+        gameView.displayNewBoard(board); // Affiche le nouveau plateau
         startGame();
     }
 
-    private void startGame() {
-        game.start();
-        gameView.update();
+    public void startGame() {
+        if (game != null) {
+            game.start();
+            gameView.update();
+        }
+    }
+
+    public void restartGame(String boardType) {
+        initializeGame(boardType); // Redémarre le jeu avec un nouveau type de plateau ou le même
+    }
+
+    public void handleUserAction(int startX, int startY, int endX, int endY) {
+        if (board.movePiece(startX, startY, endX, endY)) {
+            shootLaser();
+            gameView.update();
+        } else {
+            System.out.println("Mouvement invalide");
+            gameView.displayMessage("Mouvement invalide. Veuillez essayer à nouveau.");
+        }
+    }
+
+    public void rotatePiece(int x, int y, boolean clockwise) {
+        Pion piece = board.getPieceAt(x, y);
+        if (piece != null) {
+            piece.rotate(clockwise);
+            shootLaser();
+            gameView.update();
+        }
+    }
+
+    private void shootLaser() {
+        game.shootLaser();
+        checkWinConditions();
+    }
+
+    private void checkWinConditions() {
+        if (game.isGameOver()) {
+            String winner = game.getCurrentPlayer() == Couleur.ROUGE ? "Jaune" : "Rouge";
+            System.out.println("Le jeu est terminé. Le joueur " + winner + " gagne !");
+            restartGame();
+        }
+    }
+
+    public void restartGame() {
+        this.board = new Plateau("Classic"); // or any other default or selected type
+        this.game = new Game(board);
+        startGame();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int cellSize = boardPanel.getCellSize();
+        int cellSize = gameView.getCellSize();
         int x = e.getX() / cellSize;
         int y = e.getY() / cellSize;
-
-        if (board.isCoordonneeValide(x, y)) {
+        if (x < BOARD_COLUMNS && y < BOARD_ROWS) {
             if (selectedPiece == null) {
                 selectPiece(x, y);
             } else {
                 moveSelectedPiece(x, y);
-                selectedPiece = null;
             }
         }
     }
@@ -52,32 +98,20 @@ public class GameController implements MouseListener {
         Pion piece = board.getPieceAt(x, y);
         if (piece != null && piece.getCouleur() == game.getCurrentPlayer()) {
             selectedPiece = piece;
-            gameView.displayMessage("Pièce sélectionnée en " + x + ", " + y);
+            System.out.println("Pièce sélectionnée en " + x + ", " + y);
         } else {
-            gameView.displayMessage("Sélection invalide. Sélectionnez une de vos pièces.");
+            selectedPiece = null; // Désélectionnez si non valide
+            System.out.println("Sélection invalide ou ce n'est pas le tour du joueur.");
         }
     }
 
-    private void moveSelectedPiece(int x, int y) {
-        if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), x, y)) {
-            board.propagerLasers();
+    private void moveSelectedPiece(int newX, int newY) {
+        if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), newX, newY)) {
+            selectedPiece = null; // Désélectionner la pièce après le mouvement
             gameView.update();
-            checkEndGame();
         } else {
             gameView.displayMessage("Déplacement invalide.");
         }
-    }
-
-    private void checkEndGame() {
-        if (game.isGameOver()) {
-            gameView.showWinner(game.getCurrentPlayer());
-        }
-    }
-
-    public void restartGame() {
-        this.board = new Plateau("Classic");
-        this.game = new Game(board);
-        startGame();
     }
 
     @Override
@@ -98,5 +132,47 @@ public class GameController implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         gameView.setCursor(Cursor.getDefaultCursor());
+    }
+
+    private void handleMouseClick(int x, int y) {
+        int cellSize = gameView.getCellSize();
+        int col = x / cellSize;
+        int row = y / cellSize;
+
+        if (selectedPiece == null) {
+            // Select piece
+            selectedPiece = board.getPieceAt(row, col);
+            if (selectedPiece != null && selectedPiece.getCouleur() != game.getCurrentPlayer()) {
+                selectedPiece = null; // Ensure that player can only move their own pieces
+                gameView.displayMessage("Invalid selection. Please select your own piece.");
+            }
+        } else {
+            // Move piece
+            if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
+                gameView.update(); // Update the view to reflect the new board state
+                selectedPiece = null; // Deselect piece after move
+            } else {
+                gameView.displayMessage("Invalid move. Try again.");
+            }
+        }
+    }
+
+    public void openBoard(String type) {
+        if (gameView != null) {
+            gameView.displayNewBoard(new Plateau(type));
+        }
+    }
+
+    public void changeGameMode(String type) {
+        // Cette méthode peut maintenant gérer la logique précédemment dans `openBoard`
+        Plateau newPlateau = new Plateau(type); // Crée un nouveau plateau
+        game = new Game(newPlateau); // Recrée le jeu avec le nouveau plateau
+        gameView.displayNewBoard(newPlateau); // Demande à la vue d'afficher le nouveau plateau
+        game.start(); // Démarrer ou redémarrer le jeu
+    }
+
+    public void setView(GameView gameView2) {
+        this.gameView = gameView2;
+        this.gameView.addMouseListener(this);
     }
 }

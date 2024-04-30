@@ -26,14 +26,26 @@ public class Game {
 
     public void nextTurn() {
         if (!isGameOver) {
+            shootLaser();
+            checkWinConditions();
             togglePlayer();
         }
     }
 
     public void shootLaser() {
-        
+        boolean hit = board.shootLaser(currentPlayer);
+        if (hit) {
+            isGameOver = true;
+        }
     }
-   
+
+    private void checkWinConditions() {
+        boolean pharaohHit = board.shootLaser(currentPlayer);
+        if (pharaohHit) {
+            isGameOver = true;
+        }
+    }
+
     private void togglePlayer() {
         currentPlayer = (currentPlayer == Couleur.ROUGE) ? Couleur.JAUNE : Couleur.ROUGE;
     }

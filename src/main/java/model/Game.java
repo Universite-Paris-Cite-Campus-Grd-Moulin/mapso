@@ -14,18 +14,37 @@ public class Game {
 
     public Game(Plateau board) {
         this.board = board;
-        this.currentPlayer = Couleur.JAUNE;
+        this.currentPlayer = Couleur.JAUNE; // Commence le jeu avec le joueur Jaune
         this.isGameOver = false;
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
-        if (currentPlayer == board.getPieceAt(startX, startY).getCouleur()) {
+        if (isGameOver) return false; // Empêche les mouvements si le jeu est terminé
+        if (currentPlayer == getPieceAt(startX, startY).getCouleur()) {
             if (board.movePiece(startX, startY, endX, endY)) {
-                togglePlayer(); // Changer de joueur seulement après un mouvement valide
+                togglePlayer(); // Change de joueur après un mouvement valide
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean rotatePiece(int x, int y, boolean clockwise) {
+        if (isGameOver) return false; // Empêche la rotation si le jeu est terminé
+        if (currentPlayer == getPieceAt(x, y).getCouleur()) {
+            board.rotatePiece(x, y, clockwise);
+            togglePlayer(); // Change de joueur après une rotation valide
+            return true;
+        }
+        return false;
+    }
+
+    public Pion getPieceAt(int x, int y) {
+        return board.getPieceAt(x, y);
+    }
+
+    public Plateau getPlateau() {
+        return board;
     }
 
     private void togglePlayer() {
@@ -40,45 +59,25 @@ public class Game {
         return board;
     }
 
-    private void nextTurn() {
-        currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
-    }
-
-    public boolean selectPiece(int x, int y) {
-        Pion piece = board.getPieceAt(x, y);
-        if (piece != null && piece.getCouleur() == currentPlayer) {
-            // Logique pour gérer la sélection, peut-être stocker la pièce sélectionnée ici
-            return true;
-        }
-        return false;
-    }
-
-    public Pion getPieceAt(int x, int y) {
-        return board.getPieceAt(x, y);
-    }
-
     public void start() {
         isGameOver = false;
-        currentPlayer = Couleur.JAUNE;
-        nextTurn();
+        currentPlayer = Couleur.JAUNE; // Commence toujours par le joueur Jaune
+        // Initialisation ou réinitialisation du plateau ici si nécessaire
     }
 
     public void shootLaser() {
-        boolean hit = board.shootLaser(currentPlayer);
-        if (hit) {
-            isGameOver = true;
+        if (board.shootLaser(currentPlayer)) {
+            isGameOver = true; // Met fin au jeu si le pharaon est touché
         }
     }
 
     private void checkWinConditions() {
-        boolean pharaohHit = board.shootLaser(currentPlayer);
-        if (pharaohHit) {
-            isGameOver = true;
+        if (board.checkForPharaohHit(currentPlayer)) {
+            isGameOver = true; // Vérifie si un pharaon a été touché
         }
     }
 
     public boolean isGameOver() {
         return isGameOver;
     }
-
 }

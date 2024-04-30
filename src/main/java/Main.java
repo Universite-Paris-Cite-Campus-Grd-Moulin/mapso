@@ -12,16 +12,26 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import controller.GameController;
+import model.Game;
 import model.Plateau;
+import view.GameView;
 import view.components.BoardPanel;
 
 public class Main {
     private JFrame mainFrame;
 
     public static void main(String[] args) {
-        // Debut de l'execution
-        SwingUtilities.invokeLater(new Main()::createAndShowGUI);
-    }
+    SwingUtilities.invokeLater(() -> {
+        Plateau plateau = new Plateau("Classic");  // Crée un plateau avec une configuration initiale
+        Game game = new Game(plateau);             // Crée le jeu avec le plateau
+        GameView gameView = new GameView();       // Crée la vue
+        GameController gameController = new GameController(game, gameView); // Crée le contrôleur avec le jeu et la vue
+
+        gameView.setController(gameController);   // Assigne le contrôleur à la vue
+        gameView.setVisible(true);                // Affiche la vue
+    });
+}
 
     private void createAndShowGUI() {
         mainFrame = new JFrame("Game Menu");

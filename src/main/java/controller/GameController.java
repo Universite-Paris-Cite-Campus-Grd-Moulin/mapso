@@ -17,7 +17,11 @@ public class GameController implements MouseListener {
     private Pion selectedPiece = null;
     private static final int BOARD_COLUMNS = 10; // Nombre de colonnes du plateau
     private static final int BOARD_ROWS = 8; // Nombre de lignes du plateau
-    private int startX, startY; // Ajout pour stocker la position initiale lors du glisser
+
+    private String userAction = ""; // move, rotate
+    private int startX = 0;
+    private int startY = 0;
+    private boolean clockwise = true;
 
     public GameController(String boardType) {
         this.board = new Plateau(boardType); // Create board with a specific type
@@ -42,28 +46,49 @@ public class GameController implements MouseListener {
         }
     }
 
-    @Override
+    public void restartGame(String mode) {
+        this.board = new Plateau(mode);
+        this.game = new Game(board);
+        startGame();
+    }
+    
+
+    // @Override
+    // public void mouseClicked(MouseEvent e) {
+    //     int x = e.getX() / gameView.getCellSize();
+    //     int y = e.getY() / gameView.getCellSize();
+    //     Pion piece = game.getPieceAt(x, y);
+
+    //     if (piece != null && piece.getCouleur() == game.getCurrentPlayer()) {
+    //         if (selectedPiece == null) {
+    //             selectedPiece = piece; // Sélection de la pièce
+    //             System.out.println("Pièce sélectionnée");
+    //         } else {
+    //             if (game.movePiece(selectedPiece.getX(), selectedPiece.getY(), x, y)) {
+    //                 gameView.update();
+    //                 selectedPiece = null; // Désélectionner après un mouvement
+    //             } else {
+    //                 System.out.println("Mouvement invalide");
+    //             }
+    //         }
+    //     } else {
+    //         System.out.println("Ce n'est pas le tour de ce joueur ou aucune pièce à sélectionner.");
+    //     }
+    // }
+
     public void mouseClicked(MouseEvent e) {
         int x = e.getX() / gameView.getCellSize();
         int y = e.getY() / gameView.getCellSize();
-        Pion piece = game.getPieceAt(x, y);
-
-        if (piece != null && piece.getCouleur() == game.getCurrentPlayer()) {
-            if (selectedPiece == null) {
-                selectedPiece = piece; // Sélection de la pièce
-                System.out.println("Pièce sélectionnée");
-            } else {
-                if (game.movePiece(selectedPiece.getX(), selectedPiece.getY(), x, y)) {
-                    gameView.update();
-                    selectedPiece = null; // Désélectionner après un mouvement
-                } else {
-                    System.out.println("Mouvement invalide");
-                }
+        if (game.getCurrentPlayer() == game.getPieceAt(x, y).getCouleur()) {
+            if (userAction.equals("move")) {
+                game.movePiece(startX, startY, x, y);
+            } else if (userAction.equals("rotate")) {
+                game.rotatePiece(x, y, clockwise);
             }
-        } else {
-            System.out.println("Ce n'est pas le tour de ce joueur ou aucune pièce à sélectionner.");
+            gameView.update(); // Mettre à jour la vue après chaque action
         }
     }
+    
 
     private void selectPiece(int x, int y) {
         if (game.getPieceAt(x, y) != null && game.getPieceAt(x, y).getCouleur() == game.getCurrentPlayer()) {

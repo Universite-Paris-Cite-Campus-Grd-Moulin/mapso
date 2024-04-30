@@ -8,6 +8,7 @@ public class Plateau {
     private Pion[][] grille;
     private int largeurDuPlateau = 10;
     private int hauteurDuPlateau = 8;
+    private Couleur currentPlayer = Couleur.JAUNE;
 
     public boolean Classic = false;
     public boolean Dynastie = false;
@@ -243,6 +244,7 @@ public class Plateau {
         boolean isDestinationValid = (movingPiece.getCouleur() == couleurCaseDestination
                 || couleurCaseDestination == Couleur.GRIS);
 
+                
         // Vérifier si l'échange entre Djed/Horus et Pyramide/Obélisque est possible
         // dans les deux sens
         if ((movingPiece.getType() == TypeDePion.DJED || movingPiece.getType() == TypeDePion.HORUS) &&
@@ -281,18 +283,25 @@ public class Plateau {
             System.out.println("Erreur: Mouvement non autorisé à cause de la règle de couleur des cases.");
             return false;
         }
-
+    
         if (destinationPiece == null || destinationPiece.getType() == TypeDePion.NONE) {
             grille[startY][startX] = null;
             grille[endY][endX] = movingPiece;
             movingPiece.setPosition(endX, endY);
-            System.out
-                    .println("Déplacement réussi de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
+            System.out.println("Déplacement réussi de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
             return true;
         } else {
             System.out.println("Erreur: La case de destination n'est pas vide.");
             return false;
         }
+    }
+    private void togglePlayer() {
+        currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
+        System.out.println("C'est maintenant le tour de " + (currentPlayer == Couleur.JAUNE ? "Jaune" : "Rouge"));
+    }
+
+    public Couleur getCurrentPlayer() {
+        return currentPlayer;
     }
 
     private boolean isCoordonneeValide(int x, int y) {
@@ -306,6 +315,19 @@ public class Plateau {
     // + y + "): " + valid);
     // return valid;
     // }
+
+    public void rotatePiece(int x, int y, boolean clockwise) {
+        Pion piece = getPieceAt(x, y);
+        if (piece != null) {
+            Direction currentDirection = piece.getDirection();
+            int newOrdinal = (currentDirection.ordinal() + (clockwise ? 1 : -1)) % Direction.values().length;
+            if (newOrdinal < 0) {
+                newOrdinal += Direction.values().length; // Assure une rotation correcte même en arrière
+            }
+            Direction newDirection = Direction.values()[newOrdinal];
+            piece.setDirection(newDirection);
+        }
+    }
 
     private boolean isDeplacementValide(Pion pion, int startX, int startY, int endX, int endY) {
         if (!estDansLimites(startX, startY) || !estDansLimites(endX, endY))
@@ -511,6 +533,11 @@ public class Plateau {
             return true;
         }
         return false;
+    }
+
+    public boolean checkForPharaohHit(Couleur currentPlayer) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'checkForPharaohHit'");
     }
 
 }

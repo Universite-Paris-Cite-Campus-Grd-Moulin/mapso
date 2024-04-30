@@ -39,9 +39,23 @@ public class BoardPanel extends JPanel implements MouseListener {
         revalidate();
     }
 
+    // public BoardPanel(GameController controller) {
+    //     this.controller = controller;
+    //     addMouseListener(this);
+    // }
+
     public BoardPanel(GameController controller) {
         this.controller = controller;
-        addMouseListener(this);
+        setPreferredSize(new Dimension(750, 600));  // Taille préférée, ajustez selon vos besoins
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+        repaint();
+    }
+
+    public void setController(GameController controller) {
+        this.controller = controller;
     }
 
     private void initBoard() {

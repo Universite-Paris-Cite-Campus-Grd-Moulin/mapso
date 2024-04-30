@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
+import controller.GameController;
+import model.Game;
 import view.components.BoardPanel;
 
 public class GameView extends JFrame {
@@ -57,6 +59,15 @@ public class GameView extends JFrame {
         add(boardPanel);
     }
 
+     public void setGame(Game game) {
+        boardPanel.setGame(game);  // Méthode à ajouter dans BoardPanel pour relier le jeu au panneau
+        update();  // Mise à jour immédiate de l'affichage
+    }
+
+    public void setController(GameController controller) {
+        boardPanel.setController(controller); // Set controller in BoardPanel
+    }
+
     public void displayBoard(Object[][] boardData) {
         boardPanel.removeAll();
         for (int i = 0; i < boardData.length; i++) {
@@ -73,6 +84,10 @@ public class GameView extends JFrame {
     public void update() {
         boardPanel.revalidate();
         boardPanel.repaint();
+    }
+
+    private void createAndShowGUI() {
+        setVisible(true);
     }
 
     // Cette méthode calcule et renvoie la taille d'une cellule du plateau

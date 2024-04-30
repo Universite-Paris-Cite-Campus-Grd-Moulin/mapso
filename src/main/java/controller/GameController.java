@@ -1,114 +1,102 @@
 package controller;
 
-import model.enums.Couleur;
-import model.enums.Direction;
-
+import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import model.Game;
 import model.Pion;
 import model.Plateau;
+import model.enums.Couleur;
+import view.GameView;
+import view.components.BoardPanel;
 
-public class GameController implements MouseListener{
-    private static final int Direction = 0;
+public class GameController implements MouseListener {
     private Game game;
     private Plateau board;
+    private GameView gameView;
+    private BoardPanel boardPanel;
+    private Pion selectedPiece = null;
 
-    public GameController() {
-        this.board = new Plateau();
+    public GameController(GameView gameView) {
+        this.gameView = gameView;
+        this.board = new Plateau("Classic");
         this.game = new Game(board);
-    }
-
-    public void startGame() {
-        game.start();
-    }
-
-    public void handleUserAction(int startX, int startY, int endX, int endY) {
-        boolean success = board.movePiece(startX, startY, endX, endY);
-        if (success) {
-            // Après un mouvement réussi, tirez le laser.
-            shootLaser();
-            // Mettre à jour la vue graphique §§§§§§§§§§
-        } else {
-            // Gérez l'échec de l'action (par exemple, mouvement invalide).§§§§§§§§§
-        }
-    }
-
-    public void rotatePiece(int x, int y, boolean clockwise) {
-        Pion piece = board.getPieceAt(Direction, y);
-        if (piece != null) {
-            piece.rotate(clockwise);
-            // Après une rotation réussie, tirer le laser.
-            shootLaser();
-            // Mettez à jour la vue §§§§§§§§
-        }
-    }
-
-    private void shootLaser() {
-        // Assumons que la logique de tir du laser est implémentée dans Game ou Board.
-        // Cette méthode simule le tir du laser à travers le plateau et gère les interactions.
-        game.shootLaser();
-        // Vérifiez les conditions de victoire après chaque tir de laser.
-        checkWinConditions();
-    }
-
-    private void checkWinConditions() {
-        if (game.isGameOver()) {
-            // Déterminez le joueur gagnant
-            // Note : Cette implémentation suppose que vous avez une manière de déterminer le joueur actuel et le joueur adverse.
-            String winningPlayer = (game.getCurrentPlayer() == Couleur.ROUGE) ? "Jaune" : "Rouge";
-
-            // Affichez le résultat du jeu
-            //ui.displayGameOver(winningPlayer);                                               Grapiquement
-            System.out.println("Le jeu est terminé. Le joueur " + winningPlayer + " gagne !"); //Termmianl
-
-            // Option pour recommencer ou quitter le jeu
-            // int response = ui.promptForRestart();
-            // if (response == RESTART) {
-            //     restartGame();
-            // } else {
-            //     System.exit(0);
-            // }
-        }
-    }
-
-    public void restartGame() {
-        // Réinitialisez le plateau et commencez un nouveau jeu
-        this.board = new Plateau();
-        this.game = new Game(board);
+        this.boardPanel = gameView.getBoardPanel();
+        gameView.addMouseListener(this);
         startGame();
-        // Assurez-vous également de réinitialiser l'affichage de l'interface utilisateur ici.
+    }
+
+    private void startGame() {
+        game.start();
+        gameView.update();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
+        int cellSize = boardPanel.getCellSize();
+        int x = e.getX() / cellSize;
+        int y = e.getY() / cellSize;
+
+        if (board.isCoordonneeValide(x, y)) {
+            if (selectedPiece == null) {
+                selectPiece(x, y);
+            } else {
+                moveSelectedPiece(x, y);
+                selectedPiece = null;
+            }
+        }
+    }
+
+    private void selectPiece(int x, int y) {
+        Pion piece = board.getPieceAt(x, y);
+        if (piece != null && piece.getCouleur() == game.getCurrentPlayer()) {
+            selectedPiece = piece;
+            gameView.displayMessage("Pièce sélectionnée en " + x + ", " + y);
+        } else {
+            gameView.displayMessage("Sélection invalide. Sélectionnez une de vos pièces.");
+        }
+    }
+
+    private void moveSelectedPiece(int x, int y) {
+        if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), x, y)) {
+            board.propagerLasers();
+            gameView.update();
+            checkEndGame();
+        } else {
+            gameView.displayMessage("Déplacement invalide.");
+        }
+    }
+
+    private void checkEndGame() {
+        if (game.isGameOver()) {
+            gameView.showWinner(game.getCurrentPlayer());
+        }
+    }
+
+    public void restartGame() {
+        this.board = new Plateau("Classic");
+        this.game = new Game(board);
+        startGame();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+        System.out.println("Mouse pressed at (" + e.getX() + ", " + e.getY() + ")");
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+        System.out.println("Mouse released at (" + e.getX() + ", " + e.getY() + ")");
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+        gameView.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+        gameView.setCursor(Cursor.getDefaultCursor());
     }
-
 }

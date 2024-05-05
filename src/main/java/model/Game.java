@@ -34,6 +34,7 @@ public class Game {
 
     private void togglePlayer() {
         currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
+        System.out.println("Current player is now: " + currentPlayer);
     }
 
     public Couleur getCurrentPlayer() {
@@ -85,23 +86,35 @@ public class Game {
         return isGameOver;
     }
 
-    // Supposons que vous ajoutiez cette méthode
-    public Set<Point> calculateValidMoves(Pion pion, int x, int y) {
+    public Set<Point> calculateValidMoves(Pion pion, int col, int row) {
         Set<Point> validMoves = new HashSet<>();
-        // Votre logique pour calculer les déplacements valides, exemple simplifié
-        int[] dx = { -1, 0, 1, 0 }; // Mouvements horizontaux et verticaux
-        int[] dy = { 0, -1, 0, 1 }; // Mouvements verticaux
+        int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
-        for (int dir = 0; dir < dx.length; dir++) {
-            int newX = x + dx[dir];
-            int newY = y + dy[dir];
-            // Assurez-vous que le nouveau point est dans les limites du plateau
+        for (int direction = 0; direction < dx.length; direction++) {
+            int newX = col + dx[direction];
+            int newY = row + dy[direction];
             if (newX >= 0 && newX < 10 && newY >= 0 && newY < 8) {
-                // Vérifier d'autres conditions comme l'absence de pièces ou la possibilité de
-                // capturer une pièce adverse
-                validMoves.add(new Point(newX, newY));
+                Pion targetPion = board.getPieceAt(newX, newY);
+                // Vérifiez que la nouvelle position n'est pas occupée par un pion de la même
+                // couleur
+                if (targetPion == null || targetPion.getCouleur() != pion.getCouleur()) {
+                    // Ajoutez également une vérification pour s'assurer que le mouvement est valide
+                    // en termes de couleur de la case
+                    if (isMoveAllowedByColor(pion.getCouleur(), newX, newY)) {
+                        validMoves.add(new Point(newX, newY));
+                    }
+                }
             }
         }
         return validMoves;
     }
+
+    private boolean isMoveAllowedByColor(Couleur couleurPion, int x, int y) {
+        // Implémentez la logique qui vérifie si le pion peut se déplacer sur la case
+        // basée sur la couleur
+        Couleur couleurCase = board.initCouleur(x, y);
+        return couleurPion != couleurCase; // Les pions rouges ne peuvent pas aller sur les cases jaunes et vice versa
+    }
+
 }

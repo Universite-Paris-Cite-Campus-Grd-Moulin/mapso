@@ -20,6 +20,7 @@ import controller.GameController;
 import model.Game;
 import model.Pion;
 import model.Plateau;
+import model.enums.Couleur;
 import model.enums.Direction;
 import model.enums.TypeDePion;
 import view.GameView;
@@ -98,18 +99,14 @@ public class BoardPanel extends JPanel implements MouseListener {
         super.paintComponent(g);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
-                Pion currentPion = board.getGrille()[i][j];
-                boolean isSelected = (currentPion != null && validMoves.contains(new Point(j, i)));
-
-                // Dessinez d'abord une case vide ou colorée pour le fond selon le statut du
-                // pion
-                g.drawImage(
-                        PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j)), false),
-                        j * 75, i * 75, this);
-
-                // Ensuite, dessinez le pion si présent, avec ou sans couleur sélectionnée
+                Pion currentPion = board.getPieceAt(j, i);
+                boolean isSelected = validMoves.contains(new Point(j, i));
+                BufferedImage backgroundImage = PiecePanel.draw(g,
+                        new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j)), isSelected);
+                g.drawImage(backgroundImage, j * 75, i * 75, this);
                 if (currentPion != null) {
-                    g.drawImage(PiecePanel.draw(g, currentPion, isSelected), j * 75, i * 75, this);
+                    BufferedImage pionImage = PiecePanel.draw(g, currentPion, isSelected);
+                    g.drawImage(pionImage, j * 75, i * 75, this);
                 }
             }
         }
@@ -124,36 +121,42 @@ public class BoardPanel extends JPanel implements MouseListener {
 
         if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
             selectedPiece = clickedPiece;
-            validMoves = game.calculateValidMoves(selectedPiece, col, row); // Calcule les mouvements valides
-            repaint(); // Redessine le panneau avec les nouvelles informations
-        } else {
-            selectedPiece = null;
-            validMoves.clear();
+            validMoves = game.calculateValidMoves(selectedPiece, col, row);
             repaint();
+        } else {
+            System.out.println("Clicked on non-current player's piece or no piece selected.");
         }
     }
 
     public Set<Point> calculateValidMoves(Pion pion, int col, int row) {
         Set<Point> validMoves = new HashSet<>();
-        // Assumer que chaque pion peut se déplacer à une case adjacente pour simplifier
-        int[] dx = { -1, 0, 1, 0 }; // Déplacements horizontaux et verticaux
-        int[] dy = { 0, -1, 0, 1 }; // Déplacements verticaux et horizontaux
+        int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
         for (int direction = 0; direction < dx.length; direction++) {
             int newX = col + dx[direction];
             int newY = row + dy[direction];
-            // Vérifiez que la nouvelle position est dans les limites du plateau
             if (newX >= 0 && newX < 10 && newY >= 0 && newY < 8) {
                 Pion targetPion = board.getPieceAt(newX, newY);
-                // Vérifier si la case est vide ou contient une pièce que l'on peut capturer
+                // Vérifiez que la nouvelle position n'est pas occupée par un pion de la même
+                // couleur
                 if (targetPion == null || targetPion.getCouleur() != pion.getCouleur()) {
-                    validMoves.add(new Point(newX, newY));
+                    // Ajoutez également une vérification pour s'assurer que le mouvement est valide
+                    // en termes de couleur de la case
+                    if (isMoveAllowedByColor(pion.getCouleur(), newX, newY)) {
+                        validMoves.add(new Point(newX, newY));
+                    }
                 }
             }
         }
-
-        System.out.println("Calculating valid moves for piece at (" + col + ", " + row + ")");
         return validMoves;
+    }
+
+    private boolean isMoveAllowedByColor(Couleur couleurPion, int x, int y) {
+        // Implémentez la logique qui vérifie si le pion peut se déplacer sur la case
+        // basée sur la couleur
+        Couleur couleurCase = board.initCouleur(x, y);
+        return couleurPion != couleurCase; // Les pions rouges ne peuvent pas aller sur les cases jaunes et vice versa
     }
 
     private void handleLeftClick(Pion clickedPiece, int col, int row) {

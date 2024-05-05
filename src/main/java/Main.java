@@ -12,7 +12,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import model.Plateau;
+import controller.GameController;
+import model.Game;
+import view.GameView;
 import view.components.BoardPanel;
 
 public class Main {
@@ -123,7 +125,7 @@ public class Main {
     private void showGameOptions() {
         JDialog gameOptionsDialog = new JDialog(mainFrame, "Choose Game Mode", true);
         gameOptionsDialog.setLayout(new GridLayout(1, 0));
-        gameOptionsDialog.setSize(300, 200);
+        gameOptionsDialog.setSize(400, 200);
         gameOptionsDialog.setLocationRelativeTo(mainFrame);
 
         JButton classicButton = new JButton("Classic");
@@ -152,9 +154,11 @@ public class Main {
 
     private void openBoard(String type) {
         JFrame boardFrame = new JFrame(type);
-        BoardPanel boardPanel = new BoardPanel(new Plateau(type));
+        Game game = new Game(type); // Création de l'instance de Game avec le type spécifié
+        BoardPanel boardPanel = new BoardPanel(new GameController(game), game, new GameView()); // Passez l'instance de
+                                                                                                // Game au BoardPanel
         boardFrame.setContentPane(boardPanel);
-        boardFrame.pack(); // Adjust size based on the preferred size of boardPanel
+        boardFrame.pack(); // Ajuste la taille en fonction de la taille préférée de boardPanel
         boardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         boardFrame.setLocationRelativeTo(null);
         boardFrame.setVisible(true);
@@ -172,5 +176,6 @@ public class Main {
             super.paintComponent(g);
             g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
         }
+
     }
 }

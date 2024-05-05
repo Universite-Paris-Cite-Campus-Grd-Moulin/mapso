@@ -1,5 +1,9 @@
 package model;
 
+import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
+
 import model.enums.Couleur;
 
 public class Game {
@@ -81,4 +85,23 @@ public class Game {
         return isGameOver;
     }
 
+    // Supposons que vous ajoutiez cette méthode
+    public Set<Point> calculateValidMoves(Pion pion, int x, int y) {
+        Set<Point> validMoves = new HashSet<>();
+        // Votre logique pour calculer les déplacements valides, exemple simplifié
+        int[] dx = { -1, 0, 1, 0 }; // Mouvements horizontaux et verticaux
+        int[] dy = { 0, -1, 0, 1 }; // Mouvements verticaux
+
+        for (int dir = 0; dir < dx.length; dir++) {
+            int newX = x + dx[dir];
+            int newY = y + dy[dir];
+            // Assurez-vous que le nouveau point est dans les limites du plateau
+            if (newX >= 0 && newX < 10 && newY >= 0 && newY < 8) {
+                // Vérifier d'autres conditions comme l'absence de pièces ou la possibilité de
+                // capturer une pièce adverse
+                validMoves.add(new Point(newX, newY));
+            }
+        }
+        return validMoves;
+    }
 }

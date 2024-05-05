@@ -70,7 +70,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     private BufferedImage chooseImageForCell(Pion pion, int x, int y) {
         if (pion != null && validMoves.contains(new Point(x, y))) {
-            return spriteGreen; // Assurez-vous que spriteGreen est l'image teintée en vert.
+            return spriteGreen;
         } else if (pion != null) {
             return spriteSheet; // L'image normale du pion.
         } else {
@@ -98,10 +98,18 @@ public class BoardPanel extends JPanel implements MouseListener {
         super.paintComponent(g);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
-                g.drawImage(PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j))),
+                Pion currentPion = board.getGrille()[i][j];
+                boolean isSelected = (currentPion != null && validMoves.contains(new Point(j, i)));
+
+                // Dessinez d'abord une case vide ou colorée pour le fond selon le statut du
+                // pion
+                g.drawImage(
+                        PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j)), false),
                         j * 75, i * 75, this);
-                if (board.getGrille()[i][j] != null) {
-                    g.drawImage(PiecePanel.draw(g, board.getGrille()[i][j]), j * 75, i * 75, this);
+
+                // Ensuite, dessinez le pion si présent, avec ou sans couleur sélectionnée
+                if (currentPion != null) {
+                    g.drawImage(PiecePanel.draw(g, currentPion, isSelected), j * 75, i * 75, this);
                 }
             }
         }
@@ -109,35 +117,19 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("Mouse Clicked Event Triggered");
         int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
-        Pion clickedPiece = board.getPieceAt(col, row);
-
-        System.out.println("Clicked position: (" + col + ", " + row + ")");
-
-        if (game == null) {
-            System.err.println("Game instance is not initialized.");
-            return; // Arrêter le traitement si game est null
-        }
+        Pion clickedPiece = game.getPieceAt(col, row);
 
         if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
             selectedPiece = clickedPiece;
-            validMoves = calculateValidMoves(selectedPiece, col, row); // Mettre à jour validMoves
+            validMoves = game.calculateValidMoves(selectedPiece, col, row); // Calcule les mouvements valides
+            repaint(); // Redessine le panneau avec les nouvelles informations
+        } else {
+            selectedPiece = null;
+            validMoves.clear();
             repaint();
-        }
-        if (e.getButton() == MouseEvent.BUTTON1) { // Bouton gauche pour déplacer ou sélectionner
-            if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
-                selectedPiece = clickedPiece;
-                calculateValidMoves(selectedPiece, col, row);
-                repaint();
-            }
-            System.out.println("Left click detected");
-            handleLeftClick(clickedPiece, col, row);
-        } else if (e.getButton() == MouseEvent.BUTTON3) { // Bouton droit pour la rotation ou d'autres actions spéciales
-            System.out.println("Right click detected");
-            handleRightClick(clickedPiece, col, row);
         }
     }
 
@@ -160,6 +152,7 @@ public class BoardPanel extends JPanel implements MouseListener {
             }
         }
 
+        System.out.println("Calculating valid moves for piece at (" + col + ", " + row + ")");
         return validMoves;
     }
 

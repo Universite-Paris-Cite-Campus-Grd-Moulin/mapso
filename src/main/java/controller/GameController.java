@@ -22,6 +22,10 @@ public class GameController implements MouseListener {
     private static final int BOARD_ROWS = 8; // Nombre de lignes du plateau
     private int startX, startY; // Ajout pour stocker la position initiale lors du glisser
 
+    public GameController(Game game) {
+        this.game = game;
+    }
+
     public GameController(String boardType) {
         this.board = new Plateau(boardType); // Create board with a specific type
         this.game = new Game(board);

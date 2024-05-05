@@ -3,9 +3,16 @@ package view.components;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -25,14 +32,19 @@ public class BoardPanel extends JPanel implements MouseListener {
     private Game game;
     private GameView gameView;
     private Pion selectedPiece = null;
+    private Set<Point> validMoves = new HashSet<>(); // To store valid move positions
+    private BufferedImage spriteSheet;
+    private BufferedImage spriteGreen;
 
     public BoardPanel() {
         this(new Plateau("Classic"));
+        loadImages();
     }
 
     public BoardPanel(Plateau board) {
         this.board = board;
         setLayout(new GridLayout(8, 10));
+        loadImages();
         initBoard();
         addMouseListener(this);
         setPreferredSize(new Dimension(750, 600)); // 75 pixels * 10 columns wide and 75 pixels * 8 rows high
@@ -44,9 +56,40 @@ public class BoardPanel extends JPanel implements MouseListener {
         addMouseListener(this);
     }
 
+    public BoardPanel(GameController controller, Game game, GameView gameView) {
+        this.controller = controller;
+        this.game = game;
+        this.gameView = gameView;
+        this.board = game.getBoard();
+        setLayout(new GridLayout(8, 10));
+        setPreferredSize(new Dimension(750, 600));
+        loadImages();
+        addMouseListener(this);
+        initBoard();
+    }
+
+    private BufferedImage chooseImageForCell(Pion pion, int x, int y) {
+        if (pion != null && validMoves.contains(new Point(x, y))) {
+            return spriteGreen; // Assurez-vous que spriteGreen est l'image teintée en vert.
+        } else if (pion != null) {
+            return spriteSheet; // L'image normale du pion.
+        } else {
+            return null; // Pas d'image si la case est vide.
+        }
+    }
+
+    private void loadImages() {
+        try {
+            spriteSheet = ImageIO.read(new File("ressources/sprites_khet.png"));
+            spriteGreen = ImageIO.read(new File("ressources/sprites_khet_vert.png"));
+        } catch (IOException e) {
+            System.err.println("Error loading images: " + e.getMessage());
+        }
+    }
+
     private void initBoard() {
         removeAll();
-        revalidate();
+        validate();
         repaint();
     }
 
@@ -71,15 +114,53 @@ public class BoardPanel extends JPanel implements MouseListener {
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
         Pion clickedPiece = board.getPieceAt(col, row);
+
         System.out.println("Clicked position: (" + col + ", " + row + ")");
 
+        if (game == null) {
+            System.err.println("Game instance is not initialized.");
+            return; // Arrêter le traitement si game est null
+        }
+
+        if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
+            selectedPiece = clickedPiece;
+            validMoves = calculateValidMoves(selectedPiece, col, row); // Mettre à jour validMoves
+            repaint();
+        }
         if (e.getButton() == MouseEvent.BUTTON1) { // Bouton gauche pour déplacer ou sélectionner
+            if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
+                selectedPiece = clickedPiece;
+                calculateValidMoves(selectedPiece, col, row);
+                repaint();
+            }
             System.out.println("Left click detected");
             handleLeftClick(clickedPiece, col, row);
         } else if (e.getButton() == MouseEvent.BUTTON3) { // Bouton droit pour la rotation ou d'autres actions spéciales
             System.out.println("Right click detected");
             handleRightClick(clickedPiece, col, row);
         }
+    }
+
+    public Set<Point> calculateValidMoves(Pion pion, int col, int row) {
+        Set<Point> validMoves = new HashSet<>();
+        // Assumer que chaque pion peut se déplacer à une case adjacente pour simplifier
+        int[] dx = { -1, 0, 1, 0 }; // Déplacements horizontaux et verticaux
+        int[] dy = { 0, -1, 0, 1 }; // Déplacements verticaux et horizontaux
+
+        for (int direction = 0; direction < dx.length; direction++) {
+            int newX = col + dx[direction];
+            int newY = row + dy[direction];
+            // Vérifiez que la nouvelle position est dans les limites du plateau
+            if (newX >= 0 && newX < 10 && newY >= 0 && newY < 8) {
+                Pion targetPion = board.getPieceAt(newX, newY);
+                // Vérifier si la case est vide ou contient une pièce que l'on peut capturer
+                if (targetPion == null || targetPion.getCouleur() != pion.getCouleur()) {
+                    validMoves.add(new Point(newX, newY));
+                }
+            }
+        }
+
+        return validMoves;
     }
 
     private void handleLeftClick(Pion clickedPiece, int col, int row) {
@@ -189,12 +270,10 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println("Mouse entered the component area.");
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        System.out.println("Mouse exited the component area.");
     }
 
     public static void main(String[] args) {
@@ -206,4 +285,5 @@ public class BoardPanel extends JPanel implements MouseListener {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
 }

@@ -3,10 +3,7 @@ package view;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,7 +24,6 @@ public class GameView extends JFrame {
         setTitle("Khet Game");
         setSize(800, 600); // Ajustez selon vos besoins
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        loadSpriteSheet();
         initUI();
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -35,14 +31,6 @@ public class GameView extends JFrame {
                 update(); // Mettre à jour l'affichage chaque fois que la fenêtre est redimensionnée
             }
         });
-    }
-
-    private void loadSpriteSheet() {
-        try {
-            spriteSheet = ImageIO.read(new File("path/to/your/sprites_khet.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private BufferedImage getSprite(int x, int y) {

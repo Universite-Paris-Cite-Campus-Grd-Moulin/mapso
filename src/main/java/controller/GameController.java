@@ -1,8 +1,11 @@
 package controller;
 
 import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.HashSet;
+import java.util.Set;
 
 import model.Game;
 import model.Pion;
@@ -162,4 +165,27 @@ public class GameController implements MouseListener {
             }
         }
     }
+
+    public Set<Point> calculateValidMoves(Pion pion, int col, int row) {
+        Set<Point> validMoves = new HashSet<>();
+        // Assumer que chaque pion peut se déplacer à une case adjacente pour simplifier
+        int[] dx = { -1, 0, 1, 0 }; // Déplacements horizontaux et verticaux
+        int[] dy = { 0, -1, 0, 1 }; // Déplacements verticaux et horizontaux
+
+        for (int direction = 0; direction < dx.length; direction++) {
+            int newX = col + dx[direction];
+            int newY = row + dy[direction];
+            // Vérifiez que la nouvelle position est dans les limites du plateau
+            if (newX >= 0 && newX < 10 && newY >= 0 && newY < 8) {
+                Pion targetPion = board.getPieceAt(newX, newY);
+                // Vérifier si la case est vide ou contient une pièce que l'on peut capturer
+                if (targetPion == null || targetPion.getCouleur() != pion.getCouleur()) {
+                    validMoves.add(new Point(newX, newY));
+                }
+            }
+        }
+
+        return validMoves;
+    }
+
 }

@@ -8,6 +8,7 @@ public class Plateau {
     private Pion[][] grille;
     private int largeurDuPlateau = 10;
     private int hauteurDuPlateau = 8;
+    private Couleur joueurActuel = Couleur.JAUNE; // Le joueur jaune commence
 
     public boolean Classic = false;
     public boolean Dynastie = false;
@@ -257,6 +258,11 @@ public class Plateau {
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
+        if (joueurActuel != grille[startY][startX].getCouleur()) {
+            System.out.println("Ce n'est pas le tour du joueur " + grille[startY][startX].getCouleur());
+            return false;
+        }
+
         if (startX == endX && startY == endY) {
             System.out.println("Erreur: La position de départ est la même que la position d'arrivée.");
             return false;
@@ -295,6 +301,7 @@ public class Plateau {
             movingPiece.setPosition(endX, endY);
             destinationPiece.setPosition(startX, startY);
             System.out.println("Échange réussi entre le Djed/Horus et la Pyramide/Obélisque.");
+            togglePlayer();
             return true;
         } else if ((destinationPiece != null) &&
                 (destinationPiece.getType() == TypeDePion.DJED || destinationPiece.getType() == TypeDePion.HORUS) &&
@@ -304,6 +311,7 @@ public class Plateau {
             movingPiece.setPosition(endX, endY);
             destinationPiece.setPosition(startX, startY);
             System.out.println("Échange réussi entre la Pyramide/Obélisque et le Djed/Horus.");
+            togglePlayer();
             return true;
         }
 
@@ -315,6 +323,7 @@ public class Plateau {
             grille[startY][startX] = null;
             System.out.println(
                     "Deux obélisques empilés pour former un double obélisque en (" + endX + ", " + endY + ").");
+                    togglePlayer();
             return true;
         }
 
@@ -328,16 +337,17 @@ public class Plateau {
             grille[endY][endX] = movingPiece;
             movingPiece.setPosition(endX, endY);
             System.out.println("Déplacement réussi de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
+            togglePlayer();
             return true;
         } else {
             System.out.println("Erreur: La case de destination n'est pas vide.");
             return false;
         }
     }
-    // private void togglePlayer() {
-    //     Object currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
-    //     System.out.println("C'est maintenant le tour de " + (currentPlayer == Couleur.JAUNE ? "Jaune" : "Rouge"));
-    // }
+    private void togglePlayer() {
+        joueurActuel = (joueurActuel == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
+        System.out.println("C'est maintenant le tour de " + (joueurActuel == Couleur.JAUNE ? "Jaune" : "Rouge"));
+    }
 
     // public Couleur getCurrentPlayer() {
     //     return currentPlayer;

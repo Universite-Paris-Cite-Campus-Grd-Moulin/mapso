@@ -1,15 +1,30 @@
 package view;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
+import controller.GameController;
 import model.Plateau;
 import model.enums.Couleur;
 import view.components.BoardPanel;
@@ -18,6 +33,7 @@ import view.components.GameNavigationListener;
 public class GameView extends JFrame implements GameNavigationListener {
     private JPanel mainMenuPanel;
     private BoardPanel boardPanel;
+
     public BoardPanel getBoardPanel() {
         return boardPanel;
     }
@@ -25,7 +41,6 @@ public class GameView extends JFrame implements GameNavigationListener {
     public void setBoardPanel(BoardPanel boardPanel) {
         this.boardPanel = boardPanel;
     }
-
 
     private JFrame mainFrame;
     private BufferedImage spriteSheet;
@@ -35,8 +50,9 @@ public class GameView extends JFrame implements GameNavigationListener {
     private static final int BOARD_ROWS = 8;
     private final ImageIcon backgroundImage = new ImageIcon("src/main/resources/images/Fond_Khet.png");
     private JButton startButton, settingsButton, exitButton;
-    
+
     public GameView() {
+        System.out.println("Initialisation de la vue du jeu.");
         setTitle("Khet Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -52,13 +68,17 @@ public class GameView extends JFrame implements GameNavigationListener {
 
     private void loadSpriteSheet() {
         try {
+            System.out.println("Chargement du sprite sheet.");
             spriteSheet = ImageIO.read(new File("src/main/resources/images/Fond_Khet.png"));
+            System.out.println("Sprite sheet chargé avec succès.");
         } catch (IOException e) {
+            System.err.println("Erreur lors du chargement du sprite sheet: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void initMainMenu() {
+        System.out.println("Initialisation du menu principal.");
         mainMenuPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -97,6 +117,7 @@ public class GameView extends JFrame implements GameNavigationListener {
     }
 
     private JButton createButton(String imagePath) {
+        System.out.println("Création d'un bouton avec l'image: " + imagePath);
         ImageIcon originalIcon = new ImageIcon(imagePath);
         Image image = originalIcon.getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH);
         ImageIcon buttonIcon = new ImageIcon(image);
@@ -112,6 +133,7 @@ public class GameView extends JFrame implements GameNavigationListener {
 
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
+        System.out.println("Action command: " + command);
         if (command.contains("start")) {
             // Logique pour démarrer le jeu
         } else if (command.contains("setting")) {
@@ -122,6 +144,7 @@ public class GameView extends JFrame implements GameNavigationListener {
     }
 
     private void placeComponents(BackgroundPanel panel, JButton start, JButton settings, JButton exit) {
+        System.out.println("Placement des composants du menu principal.");
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = 1; // set gridwidth to 1 for each button
         gbc.gridx = 0; // start with first column
@@ -147,6 +170,7 @@ public class GameView extends JFrame implements GameNavigationListener {
     }
 
     private void layoutComponents() {
+        System.out.println("Disposition des composants du menu principal.");
         BackgroundPanel backgroundPanel = new BackgroundPanel();
         backgroundPanel.setLayout(new GridBagLayout());
 
@@ -196,7 +220,9 @@ public class GameView extends JFrame implements GameNavigationListener {
         mainFrame.revalidate();
         mainFrame.repaint();
     }
+
     private void showGameOptions() {
+        System.out.println("Affichage des options de jeu.");
         JDialog gameOptionsDialog = new JDialog(mainFrame, "Choose Game Mode", true);
         gameOptionsDialog.setLayout(new GridLayout(1, 0));
         gameOptionsDialog.setSize(300, 200);
@@ -228,18 +254,24 @@ public class GameView extends JFrame implements GameNavigationListener {
     }
 
     private void openSettings() {
+        System.out.println("Ouverture des paramètres.");
+        // Ajoutez la logique pour ouvrir les paramètres ici
     }
 
     private void openBoard(String type) {
+        System.out.println("Ouverture du plateau de jeu de type: " + type);
         getContentPane().removeAll();
         // Création et ajout du plateau de jeu
-        BoardPanel boardPanel = new BoardPanel(new Plateau(type), this,this);
+        Plateau plateau = new Plateau(type);
+        GameController controller = new GameController(plateau);
+        boardPanel = new BoardPanel(plateau, controller, this);
         setContentPane(boardPanel);
         revalidate();
         repaint();
     }
 
     public void closeBoard() {
+        System.out.println("Fermeture du plateau de jeu et retour au menu principal.");
         // Cette méthode ferme le plateau de jeu et revient au menu principal
         setContentPane(mainMenuPanel);
         revalidate();
@@ -247,27 +279,34 @@ public class GameView extends JFrame implements GameNavigationListener {
     }
 
     public void update() {
-        // ... code pour mettre à jour l'UI
+        System.out.println("Mise à jour de l'interface utilisateur.");
+        // Ajoutez ici le code pour mettre à jour l'interface utilisateur si nécessaire
     }
 
-    // Méthode pour afficher un plateau de jeu, potentiellement pour initialiser BoardPanel avec des données
     public void displayBoard(Object[][] boardData) {
-
+        System.out.println("Affichage du plateau de jeu.");
+        // Ajoutez ici le code pour afficher le plateau de jeu
     }
 
-    // Méthodes pour gérer les actions comme l'affichage des messages
     public void displayMessage(String message) {
+        System.out.println("Affichage d'un message: " + message);
         JOptionPane.showMessageDialog(this, message);
     }
 
     @Override
     public void onBackToMenuRequested() {
-        //TO-DO
+        System.out.println("Retour au menu principal demandé.");
+        // Ajoutez ici la logique pour retourner au menu principal
     }
 
     public void updateLaserPath(List<Point> cheminLaser, Couleur couleurLaser) {
-        boardPanel.updateLaserPath(cheminLaser, couleurLaser);  // Assure-toi que `boardPanel` a une méthode pour cela.
-        repaint();  // Pour redessiner l'interface si nécessaire
+        System.out.println("Mise à jour du chemin du laser de couleur: " + couleurLaser);
+        if (boardPanel != null) {
+            // boardPanel.updateLaserPath(cheminLaser, couleurLaser);
+            repaint(); // Pour redessiner l'interface si nécessaire
+        } else {
+            System.err.println("Erreur: boardPanel est null.");
+        }
     }
 
     class BackgroundPanel extends JPanel {
@@ -275,18 +314,20 @@ public class GameView extends JFrame implements GameNavigationListener {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             if (backgroundImage != null) {
+                System.out.println("Peinture du panneau de fond.");
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         }
     }
 
-
     public void showWinner(Couleur currentPlayer) {
+        System.out.println("Affichage du gagnant: " + currentPlayer);
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'showWinner'");
     }
 
     public int getCellSize() {
+        System.out.println("Obtention de la taille des cellules.");
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getCellSize'");
     }

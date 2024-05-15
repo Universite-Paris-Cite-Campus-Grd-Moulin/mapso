@@ -1,4 +1,5 @@
 import javax.swing.SwingUtilities;
+
 import view.GameView;
 
 public class Main {

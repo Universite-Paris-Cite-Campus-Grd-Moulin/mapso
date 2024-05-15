@@ -30,12 +30,14 @@ public class Laser {
             this.startPosition = new Point(START_I_YELLOW, START_J_YELLOW);
             this.direction = Direction.NORD;
         }
-    
         this.racine = new NoeudTrajectoire(this.direction, startPosition.x, startPosition.y, TypeInteraction.NONE);
+        System.out.println(
+                "Laser initialized for " + couleur + " at position " + startPosition + " with direction " + direction);
     }
 
     // Propage le laser à partir du noeud racine
     public void propagerLaser(Plateau plateau) {
+        System.out.println("Propagating laser for " + couleur);
         racine.avancerLaser(plateau);
     }
 
@@ -43,6 +45,7 @@ public class Laser {
     public List<Point> obtenirCheminLaser() {
         List<Point> chemin = new ArrayList<>();
         NoeudTrajectoire courant = racine;
+        System.out.println("Calculating laser path");
         while (courant != null) {
             chemin.add(new Point(courant.getPositionJ(), courant.getPositionI()));
             if (!courant.getSuccesseurs().isEmpty()) {
@@ -51,6 +54,7 @@ public class Laser {
                 courant = null;
             }
         }
+        System.out.println("Laser path: " + chemin);
         return chemin;
     }
 

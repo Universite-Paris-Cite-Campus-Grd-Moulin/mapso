@@ -25,6 +25,25 @@ public class Pion {
         setPosition(x, y);
     }
 
+    public void rotate(boolean clockwise) {
+        if (clockwise) {
+            switch (this.direction) {
+                case NORD -> this.direction = Direction.EST;
+                case EST -> this.direction = Direction.SUD;
+                case SUD -> this.direction = Direction.OUEST;
+                case OUEST -> this.direction = Direction.NORD;
+            }
+        } else {
+            switch (this.direction) {
+                case NORD -> this.direction = Direction.OUEST;
+                case OUEST -> this.direction = Direction.SUD;
+                case SUD -> this.direction = Direction.EST;
+                case EST -> this.direction = Direction.NORD;
+            }
+        }
+        System.out.println("Piece rotated to " + this.direction);
+    }
+
     // Getters et Setters
     public TypeDePion getType() {
         return type;
@@ -85,11 +104,6 @@ public class Pion {
 
     public void setEmpiled(boolean empile) {
         this.estEmpile = empile;
-    }
-
-    // Rotation du pion
-    public void rotate(boolean clockwise) {
-        this.direction = clockwise ? this.direction.nextClockwise() : this.direction.nextCounterClockwise();
     }
 
     public boolean peutPivoter() {

@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import model.Game;
@@ -60,10 +61,30 @@ public class GameController extends JPanel implements MouseListener {
     }
 
     public void startGame() {
+        String boardType = chooseBoardType();
+        this.board = new Plateau(boardType);
+        this.game = new Game(board);
         game.start();
         if (gameView != null) {
             gameView.update();
             System.out.println("Game started and game view updated.");
+        }
+    }
+
+    private String chooseBoardType() {
+        String[] options = { "Classic", "Dynastie", "Imhotep" };
+        int choice = JOptionPane.showOptionDialog(this,
+                "Choisissez le type de labyrinthe:",
+                "Sélection du plateau",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if (choice >= 0 && choice < options.length) {
+            return options[choice];
+        } else {
+            return "Classic"; // Valeur par défaut
         }
     }
 

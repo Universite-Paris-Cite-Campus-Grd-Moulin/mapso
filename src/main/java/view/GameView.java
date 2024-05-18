@@ -9,14 +9,12 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -33,6 +31,7 @@ import view.components.GameNavigationListener;
 public class GameView extends JFrame implements GameNavigationListener {
     private JPanel mainMenuPanel;
     private BoardPanel boardPanel;
+    private GameController controller;
 
     public BoardPanel getBoardPanel() {
         return boardPanel;
@@ -101,7 +100,7 @@ public class GameView extends JFrame implements GameNavigationListener {
         settingsButton = createButton("src/main/resources/images/button_setting.png");
         exitButton = createButton("src/main/resources/images/button_exit.png");
 
-        startButton.addActionListener(e -> openBoard("Classic"));
+        startButton.addActionListener(e -> showGameOptions());
         settingsButton.addActionListener(e -> openSettings());
         exitButton.addActionListener(e -> System.exit(0));
 
@@ -131,102 +130,12 @@ public class GameView extends JFrame implements GameNavigationListener {
         return button;
     }
 
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        System.out.println("Action command: " + command);
-        if (command.contains("start")) {
-            // Logique pour démarrer le jeu
-        } else if (command.contains("setting")) {
-            // Logique pour ouvrir les paramètres
-        } else if (command.contains("exit")) {
-            System.exit(0);
-        }
-    }
-
-    private void placeComponents(BackgroundPanel panel, JButton start, JButton settings, JButton exit) {
-        System.out.println("Placement des composants du menu principal.");
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = 1; // set gridwidth to 1 for each button
-        gbc.gridx = 0; // start with first column
-        gbc.gridy = 0; // all in the first row
-        gbc.weightx = 1; // distribute space
-        gbc.fill = GridBagConstraints.NONE; // do not resize the button
-        gbc.insets = new Insets(20, 20, 20, 20);
-        gbc.anchor = GridBagConstraints.PAGE_END; // anchor buttons to the bottom of the screen
-
-        panel.add(Box.createHorizontalGlue(), gbc);
-
-        gbc.gridx++;
-        panel.add(start, gbc);
-
-        gbc.gridx++;
-        panel.add(settings, gbc);
-
-        gbc.gridx++;
-        panel.add(exit, gbc);
-
-        gbc.gridx++;
-        panel.add(Box.createHorizontalGlue(), gbc);
-    }
-
-    private void layoutComponents() {
-        System.out.println("Disposition des composants du menu principal.");
-        BackgroundPanel backgroundPanel = new BackgroundPanel();
-        backgroundPanel.setLayout(new GridBagLayout());
-
-        JButton startButton = createButton("src/main/resources/images/button_start.png");
-        JButton settingsButton = createButton("src/main/resources/images/button_setting.png");
-        JButton exitButton = createButton("src/main/resources/images/button_exit.png");
-
-        startButton.addActionListener(e -> showGameOptions());
-        settingsButton.addActionListener(e -> openSettings());
-        exitButton.addActionListener(e -> System.exit(0));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0, 0, 0, 0);
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.VERTICAL;
-        backgroundPanel.add(Box.createVerticalGlue(), gbc);
-
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridwidth = 1;
-
-        gbc.gridy++;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.weightx = 1;
-        backgroundPanel.add(Box.createHorizontalGlue(), gbc);
-
-        gbc.gridx++;
-        backgroundPanel.add(startButton, gbc);
-
-        gbc.gridx++;
-        backgroundPanel.add(settingsButton, gbc);
-
-        gbc.gridx++;
-        backgroundPanel.add(exitButton, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weighty = 0.333;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        backgroundPanel.add(Box.createVerticalGlue(), gbc);
-
-        mainFrame.setContentPane(backgroundPanel);
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
-
     private void showGameOptions() {
         System.out.println("Affichage des options de jeu.");
-        JDialog gameOptionsDialog = new JDialog(mainFrame, "Choose Game Mode", true);
+        JDialog gameOptionsDialog = new JDialog(this, "Choose Game Mode", true);
         gameOptionsDialog.setLayout(new GridLayout(1, 0));
         gameOptionsDialog.setSize(300, 200);
-        gameOptionsDialog.setLocationRelativeTo(mainFrame);
+        gameOptionsDialog.setLocationRelativeTo(this);
 
         JButton classicButton = new JButton("Classic");
         JButton imhotepButton = new JButton("Imhotep");
@@ -250,7 +159,6 @@ public class GameView extends JFrame implements GameNavigationListener {
         });
 
         gameOptionsDialog.setVisible(true);
-
     }
 
     private void openSettings() {
@@ -263,7 +171,7 @@ public class GameView extends JFrame implements GameNavigationListener {
         getContentPane().removeAll();
         // Création et ajout du plateau de jeu
         Plateau plateau = new Plateau(type);
-        GameController controller = new GameController(plateau);
+        controller = new GameController(plateau);
         boardPanel = new BoardPanel(plateau, controller, this);
         setContentPane(boardPanel);
         revalidate();
@@ -330,5 +238,10 @@ public class GameView extends JFrame implements GameNavigationListener {
         System.out.println("Obtention de la taille des cellules.");
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getCellSize'");
+    }
+
+    public static void main(String[] args) {
+        GameView view = new GameView();
+        view.setVisible(true);
     }
 }

@@ -50,8 +50,10 @@ public class BoardPanel extends JPanel implements MouseListener {
 
     private void loadImages() {
         try {
+            System.out.println("Loading images...");
             spriteSheet = ImageIO.read(new File("ressources/sprites_khet.png"));
             spriteGreen = ImageIO.read(new File("ressources/sprites_khet_vert.png"));
+            System.out.println("Images loaded successfully.");
         } catch (IOException e) {
             System.err.println("Error loading images: " + e.getMessage());
         }
@@ -61,12 +63,14 @@ public class BoardPanel extends JPanel implements MouseListener {
         removeAll();
         validate();
         repaint();
+        System.out.println("Board initialized.");
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int cellSize = calculateCellSize(); // Utiliser la taille des cellules calculée
+        System.out.println("Painting component...");
+        int cellSize = calculateCellSize();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 Pion currentPion = board.getPieceAt(j, i);
@@ -83,23 +87,21 @@ public class BoardPanel extends JPanel implements MouseListener {
     }
 
     private int calculateCellSize() {
-        return Math.min(getWidth() / 10, getHeight() / 8);
+        int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
+        System.out.println("Calculated cell size: " + cellSize);
+        return cellSize;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if (game == null) {
+            System.err.println("Game instance is not initialized.");
+            return;
+        }
         int cellSize = calculateCellSize();
         int col = e.getX() / cellSize;
         int row = e.getY() / cellSize;
         Pion clickedPiece = game.getPieceAt(col, row);
-
-        if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
-            selectedPiece = clickedPiece;
-            validMoves = controller.calculateValidMoves(selectedPiece, col, row);
-            repaint();
-        } else {
-            System.out.println("Clicked on non-current player's piece or no piece selected.");
-        }
 
         if (clickedPiece != null) {
             System.out.println("Clicked Piece Info:");
@@ -108,6 +110,15 @@ public class BoardPanel extends JPanel implements MouseListener {
             System.out.println("Direction: " + clickedPiece.getDirection());
         } else {
             System.out.println("Clicked on empty cell.");
+        }
+
+        if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
+            selectedPiece = clickedPiece;
+            validMoves = controller.calculateValidMoves(selectedPiece, col, row);
+            System.out.println("Valid moves calculated: " + validMoves);
+            repaint();
+        } else {
+            System.out.println("Click not on current player's piece or no piece selected.");
         }
     }
 
@@ -145,18 +156,21 @@ public class BoardPanel extends JPanel implements MouseListener {
                 endPiece.rotate(true); // Rotate the piece 90 degrees clockwise
                 System.out.println("Piece rotated at (" + endX + ", " + endY + ")");
                 gameView.update(); // Update the game view
+                game.switchPlayer();
             }
         } else if (e.getButton() == MouseEvent.BUTTON1 && selectedPiece != null) {
             if (endPiece == null || !endPiece.equals(selectedPiece)) {
-                if (board.movePiece(startX, startY, endX, endY)) {
-                    System.out.println(
-                            "Piece moved or stacked from (" + startX + ", " + startY + ") to (" + endX + ", " + endY
-                                    + ")");
-                    selectedPiece = null; // Clear the selected piece after the move
-                    validMoves.clear(); // Clear valid moves after moving the piece
+                boolean moveSuccess = game.movePieceAndSwitchPlayer(startX, startY, endX, endY);
+                if (moveSuccess) {
+                    System.out.println("Move successful. Switching player.");
+                    game.switchPlayer();
                 } else {
                     System.out.println("Invalid move.");
                 }
+                selectedPiece = null; // Clear the selected piece after the move
+                validMoves.clear(); // Clear valid moves after moving the piece
+            } else {
+                System.out.println("Invalid move.");
             }
         }
         repaint(); // Redraw the board with the original images

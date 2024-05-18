@@ -42,9 +42,22 @@ public class Game {
         switchPlayer(); // Change de joueur après l'empilement/dépilement
     }
 
-    private void switchPlayer() {
+    public void switchPlayer() {
         currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
         System.out.println("Switched player to: " + currentPlayer);
+    }
+
+    public boolean movePieceAndSwitchPlayer(int startX, int startY, int endX, int endY) {
+        if (movePiece(startX, startY, endX, endY)) {
+            switchPlayer();
+            return true;
+        }
+        return false;
+    }
+
+    private void togglePlayer() {
+        currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
+        System.out.println("Toggled player to: " + currentPlayer);
     }
 
     public boolean isPlayerTurn(Couleur playerColor) {
@@ -56,11 +69,6 @@ public class Game {
     public Game(String type) {
         this(new Plateau(type)); // Crée un plateau du type spécifié
         System.out.println("Game initialized with board type: " + type);
-    }
-
-    private void togglePlayer() {
-        currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
-        System.out.println("Toggled player to: " + currentPlayer);
     }
 
     public Plateau getBoard() {

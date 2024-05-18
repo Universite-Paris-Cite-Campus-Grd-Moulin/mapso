@@ -25,9 +25,12 @@ public class PiecePanel extends JPanel {
 
     static {
         try {
+            System.out.println("Loading piece images...");
             khet = ImageIO.read(new File("ressources/sprites_khet.png"));
             khetVert = ImageIO.read(new File("ressources/sprites_khet_vert.png"));
+            System.out.println("Piece images loaded successfully.");
         } catch (IOException e) {
+            System.err.println("Error loading piece images: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -47,6 +50,8 @@ public class PiecePanel extends JPanel {
     }
 
     public static BufferedImage draw(Graphics g, Pion p, boolean isSelected) {
+        // System.out.println("Drawing piece: " + p.getType() + " at position (" +
+        // p.getX() + ", " + p.getY() + ")");
         BufferedImage sourceImage = isSelected ? khetVert : khet;
         int colonne = p.getType().ordinal();
         int ligne = p.getCouleur().ordinal();
@@ -64,6 +69,7 @@ public class PiecePanel extends JPanel {
         gg.drawImage(pieceImage, 0, 0, desiredWidth, desiredHeight, null);
         gg.dispose();
 
+        // System.out.println("Piece drawn successfully.");
         return resizedImage;
     }
 

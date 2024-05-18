@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,6 +12,7 @@ import model.Game;
 import model.Pion;
 import model.Plateau;
 import model.enums.Couleur;
+import model.enums.TypeDePion;
 import view.GameView;
 
 public class GameController extends JPanel implements MouseListener {
@@ -31,33 +31,39 @@ public class GameController extends JPanel implements MouseListener {
 
     public GameController(Game game) {
         this.game = game;
+        System.out.println("GameController initialized with game.");
     }
 
     public GameController(Plateau board) {
         this.board = board;
         this.game = new Game(board);
+        System.out.println("GameController initialized with board.");
     }
 
     public GameController(String boardType) {
         this.board = new Plateau(boardType); // Create board with a specific type
         this.game = new Game(board);
+        System.out.println("GameController initialized with board type: " + boardType);
     }
 
     public GameController(GameView gameView, String boardType) {
         this.board = new Plateau(boardType); // Create board with a specific type
         this.game = new Game(board);
         this.gameView = gameView;
+        System.out.println("GameController initialized with game view and board type: " + boardType);
     }
 
     public GameController(Game game, GameView gameView) {
         this.game = game;
         this.gameView = gameView;
+        System.out.println("GameController initialized with game and game view.");
     }
 
     public void startGame() {
         game.start();
         if (gameView != null) {
             gameView.update();
+            System.out.println("Game started and game view updated.");
         }
     }
 
@@ -72,21 +78,29 @@ public class GameController extends JPanel implements MouseListener {
         int row = e.getY() / cellSize;
         Pion clickedPiece = game.getPieceAt(col, row);
 
+        if (clickedPiece != null) {
+            System.out.println("Clicked Piece Info:");
+            System.out.println("Type: " + clickedPiece.getType());
+            System.out.println("Color: " + clickedPiece.getCouleur());
+            System.out.println("Direction: " + clickedPiece.getDirection());
+        } else {
+            System.out.println("Clicked on empty cell.");
+        }
+
         if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
             selectedPiece = clickedPiece;
-            validMoves = calculateValidMoves(selectedPiece, col, row); // Use controller's calculateValidMoves method
+            validMoves = calculateValidMoves(selectedPiece, col, row);
+            System.out.println("Valid moves calculated: " + validMoves);
             gameView.repaint();
         } else {
             System.out.println("Click not on current player's piece or no piece selected.");
         }
     }
 
-    private void selectPiece(int x, int y) {
-        if (game.getPieceAt(x, y) != null && game.getPieceAt(x, y).getCouleur() == game.getCurrentPlayer()) {
-            System.out.println("Pièce sélectionnée : " + game.getPieceAt(x, y));
-        } else {
-            System.out.println("Sélection invalide ou ce n'est pas le tour du joueur.");
-        }
+    private int calculateCellSize() {
+        int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
+        System.out.println("Calculated cell size: " + cellSize);
+        return cellSize;
     }
 
     public void handleUserAction(int startX, int startY, int endX, int endY) {
@@ -138,22 +152,58 @@ public class GameController extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("Mouse pressed at (" + e.getX() + ", " + e.getY() + ")");
+        System.out.println("Mouse pressed");
+        int cellSize = calculateCellSize();
+        startX = e.getX() / cellSize;
+        startY = e.getY() / cellSize;
+        System.out.println("Start position set to (" + startX + ", " + startY + ")");
+
+        if (startX >= 0 && startX < 10 && startY >= 0 && startY < 8) {
+            selectedPiece = board.getPieceAt(startX, startY);
+            if (selectedPiece != null && selectedPiece.getType() != TypeDePion.NONE) {
+                System.out.println(
+                        "Mouse pressed at (" + startX + ", " + startY + ") with piece " + selectedPiece.getType());
+            } else {
+                System.out.println("No valid piece at cell (" + startX + ", " + startY + ")");
+            }
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        System.out.println("Mouse released at (" + e.getX() + ", " + e.getY() + ")");
+        System.out.println("Mouse released");
+        int cellSize = calculateCellSize();
+        int endX = e.getX() / cellSize;
+        int endY = e.getY() / cellSize;
+        System.out.println("End position set to (" + endX + ", " + endY + ")");
+
+        Pion endPiece = board.getPieceAt(endX, endY); // Get piece at the end position
+
+        if (e.getButton() == MouseEvent.BUTTON3 && selectedPiece != null) {
+            if (endPiece != null && endPiece.getType() != TypeDePion.NONE) {
+                endPiece.rotate(true); // Rotate the piece 90 degrees clockwise
+                System.out.println("Piece rotated at (" + endX + ", " + endY + ")");
+                gameView.update(); // Update the game view
+                game.switchPlayer();
+            }
+        } else if (e.getButton() == MouseEvent.BUTTON1 && selectedPiece != null) {
+            if (endPiece == null || !endPiece.equals(selectedPiece)) {
+                game.movePieceAndSwitchPlayer(startX, startY, endX, endY);
+                selectedPiece = null; // Clear the selected piece after the move
+                validMoves.clear(); // Clear valid moves after moving the piece
+            } else {
+                System.out.println("Invalid move.");
+            }
+        }
+        repaint(); // Redraw the board with the original images
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        gameView.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        gameView.setCursor(Cursor.getDefaultCursor());
     }
 
     private void handleMouseClick(int x, int y) {
@@ -189,14 +239,8 @@ public class GameController extends JPanel implements MouseListener {
             int newY = row + dy[direction];
             if (newX >= 0 && newX < 10 && newY >= 0 && newY < 8) {
                 Pion targetPion = board.getPieceAt(newX, newY);
-                // Vérifiez que la nouvelle position n'est pas occupée par un pion de la même
-                // couleur
-                if (targetPion == null || targetPion.getCouleur() != pion.getCouleur()) {
-                    // Ajoutez également une vérification pour s'assurer que le mouvement est valide
-                    // en termes de couleur de la case
-                    if (isMoveAllowedByColor(pion.getCouleur(), newX, newY)) {
-                        validMoves.add(new Point(newX, newY));
-                    }
+                if (targetPion == null) {
+                    validMoves.add(new Point(newX, newY));
                 }
             }
         }

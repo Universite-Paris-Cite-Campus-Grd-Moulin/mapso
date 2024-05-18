@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,11 +18,20 @@ import model.Game;
 import model.Plateau;
 import view.GameView;
 import view.components.BoardPanel;
+=======
+import javax.swing.*;
+
+import view.GameView;
+import view.Menu;
+
+import java.awt.*;
+>>>>>>> Stashed changes
 
 public class Main {
     private JFrame mainFrame;
 
     public static void main(String[] args) {
+<<<<<<< Updated upstream
     SwingUtilities.invokeLater(() -> {
         Plateau plateau = new Plateau("Classic");  // Crée un plateau avec une configuration initiale
         Game game = new Game(plateau);             // Crée le jeu avec le plateau
@@ -183,4 +193,20 @@ public class Main {
             g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
         }
     }
+=======
+        SwingUtilities.invokeLater(() -> {
+            // Le JFRAME
+            JFrame mainFrame = new JFrame();
+            mainFrame.setTitle("Khet Game");
+            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            mainFrame.setSize(1100, 650);
+            mainFrame.setResizable(false);
+            mainFrame.setLayout(new BorderLayout());
+
+            // le Menu
+            Menu game = new Menu(mainFrame); // Le menu
+            mainFrame.setVisible(true);
+        });
+    }
+>>>>>>> Stashed changes
 }

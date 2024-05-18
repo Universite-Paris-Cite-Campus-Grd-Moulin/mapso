@@ -1,19 +1,35 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.enums.Couleur;
 import model.enums.Direction;
 import model.enums.TypeDePion;
+import model.Laser;
 
-public class Plateau {
+public class Plateau implements Observable {
+
+    private List<Observer> observers = new ArrayList<>();
     private Pion[][] grille;
     private int largeurDuPlateau = 10;
+<<<<<<< Updated upstream
     private int hauteurDuPlateau = 8;
+=======
+    private int hauteurDuPlateau = 10;
+>>>>>>> Stashed changes
     private Couleur joueurActuel = Couleur.JAUNE; // Le joueur jaune commence
 
     public boolean Classic = false;
     public boolean Dynastie = false;
     public boolean Imhotep = false;
+<<<<<<< Updated upstream
     private Couleur[][] couleursCases;
+=======
+    private List<Laser> lasers;
+
+    private boolean actionEffectuee = false;
+>>>>>>> Stashed changes
 
     public Pion[][] getGrille() {
         return grille;
@@ -21,6 +37,7 @@ public class Plateau {
 
     public Plateau(String type) {
         this.grille = new Pion[hauteurDuPlateau][largeurDuPlateau];
+        lasers = new ArrayList<>();
         switch (type) {
             case "Classic":
                 initializeClassic();
@@ -36,6 +53,7 @@ public class Plateau {
         }
     }
 
+<<<<<<< Updated upstream
     public Plateau() {
         this.grille = new Pion[hauteurDuPlateau][largeurDuPlateau];
         this.couleursCases = new Couleur[hauteurDuPlateau][largeurDuPlateau];
@@ -60,6 +78,9 @@ public class Plateau {
 
     private void initializeClassic() {
         this.grille = new Pion[8][10];
+=======
+    public void initializeClassic() {
+>>>>>>> Stashed changes
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Obelisque
@@ -111,10 +132,15 @@ public class Plateau {
                 }
             }
         }
+<<<<<<< Updated upstream
+=======
+
+        lasers.add(new Laser(Couleur.JAUNE));
+        lasers.add(new Laser(Couleur.ROUGE));
+>>>>>>> Stashed changes
     }
 
     private void initializeImhotep() {
-        this.grille = new Pion[8][10];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Obelisque
@@ -166,10 +192,14 @@ public class Plateau {
                 }
             }
         }
+<<<<<<< Updated upstream
+=======
+        lasers.add(new Laser(Couleur.ROUGE));
+        lasers.add(new Laser(Couleur.JAUNE));
+>>>>>>> Stashed changes
     }
 
     private void initializeDynastie() {
-        this.grille = new Pion[8][10];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Obelisque
@@ -181,10 +211,10 @@ public class Plateau {
                 }
                 // Pharaon
                 if (i == 0 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.ROUGE);
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.ROUGE);
                 }
                 if (i == 7 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.JAUNE);
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.JAUNE);
                 }
                 // Horus
                 if (i == 3 && j == 4) {
@@ -221,6 +251,28 @@ public class Plateau {
                 }
             }
         }
+<<<<<<< Updated upstream
+=======
+    
+        // Ajout des lasers pour les deux joueurs
+        lasers.add(new Laser(Couleur.ROUGE));
+        lasers.add(new Laser(Couleur.JAUNE));
+    }
+    
+    // Méthode pour vérifier si l'action du joueur est permise
+    public boolean peutEffectuerAction() {
+        return !actionEffectuee;
+    }
+
+    // Méthode pour marquer l'action du joueur comme effectuée
+    public void actionEffectuee() {
+        actionEffectuee = true;
+    }
+
+    // Méthode pour réinitialiser l'action du joueur
+    public void resetAction() {
+        actionEffectuee = false;
+>>>>>>> Stashed changes
     }
 
     public void placePion(int x, int y, Pion pion) {
@@ -242,34 +294,56 @@ public class Plateau {
        
 
     public boolean deplacerPion(int iDepart, int jDepart, int iArrivee, int jArrivee) {
+        if (!peutEffectuerAction()) {
+            System.out.println("Vous avez déjà effectué une action ce tour.");
+            return false;
+        }
+        
         Pion movingPiece = grille[iDepart][jDepart];
         if (iDepart < 0 || iDepart >= grille.length || jDepart < 0 || jDepart >= grille[0].length ||
                 iArrivee < 0 || iArrivee >= grille.length || jArrivee < 0 || jArrivee >= grille[0].length) {
+            mettreAJourLesCheminsDesLasers();
             return false;
         }
         if (grille[iArrivee][jArrivee] != null) {
+            mettreAJourLesCheminsDesLasers();
             return false;
         }
         grille[iArrivee][jArrivee] = grille[iDepart][jDepart];
         grille[iDepart][jDepart] = null;
-        movingPiece.setPosition(iArrivee, jArrivee); // Met à jour la position du pion
+        movingPiece.setPosition(iArrivee, jArrivee);
 
+        mettreAJourLesCheminsDesLasers();
+        togglePlayer();
         return true;
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
+<<<<<<< Updated upstream
         if (joueurActuel != grille[startY][startX].getCouleur()) {
             System.out.println("Ce n'est pas le tour du joueur " + grille[startY][startX].getCouleur());
+=======
+        if (!peutEffectuerAction()) {
+            System.out.println("Vous avez déjà effectué une action ce tour.");
+            return false;
+        }
+        
+        if (joueurActuel != grille[startY][startX].getCouleur()) {
+            System.out.println("Ce n'est pas le tour du joueur " + grille[startY][startX].getCouleur());
+            mettreAJourLesCheminsDesLasers();
+>>>>>>> Stashed changes
             return false;
         }
 
         if (startX == endX && startY == endY) {
             System.out.println("Erreur: La position de départ est la même que la position d'arrivée.");
+            mettreAJourLesCheminsDesLasers();
             return false;
         }
 
         if (!isCoordonneeValide(startX, startY) || !isCoordonneeValide(endX, endY)) {
             System.out.println("Erreur: Coordonnée hors limite.");
+            mettreAJourLesCheminsDesLasers();
             return false;
         }
 
@@ -278,11 +352,13 @@ public class Plateau {
 
         if (movingPiece == null || movingPiece.getType() == TypeDePion.NONE) {
             System.out.println("Erreur: Aucun pion valide à la position de départ.");
+            mettreAJourLesCheminsDesLasers();
             return false;
         }
 
         if (Math.abs(startX - endX) > 1 || Math.abs(startY - endY) > 1) {
             System.out.println("Erreur: La case de destination n'est pas adjacente.");
+            mettreAJourLesCheminsDesLasers();
             return false;
         }
 
@@ -300,7 +376,11 @@ public class Plateau {
             grille[endY][endX] = movingPiece;
             movingPiece.setPosition(endX, endY);
             destinationPiece.setPosition(startX, startY);
+<<<<<<< Updated upstream
             System.out.println("Échange réussi entre le Djed/Horus et la Pyramide/Obélisque.");
+=======
+            mettreAJourLesCheminsDesLasers();
+>>>>>>> Stashed changes
             togglePlayer();
             return true;
         } else if ((destinationPiece != null) &&
@@ -310,7 +390,11 @@ public class Plateau {
             grille[endY][endX] = movingPiece;
             movingPiece.setPosition(endX, endY);
             destinationPiece.setPosition(startX, startY);
+<<<<<<< Updated upstream
             System.out.println("Échange réussi entre la Pyramide/Obélisque et le Djed/Horus.");
+=======
+            mettreAJourLesCheminsDesLasers();
+>>>>>>> Stashed changes
             togglePlayer();
             return true;
         }
@@ -321,14 +405,21 @@ public class Plateau {
                 && movingPiece.getCouleur() == destinationPiece.getCouleur()) {
             grille[endY][endX] = new Pion(TypeDePion.DOUBLE_OBELISQUE, Direction.NONE, movingPiece.getCouleur());
             grille[startY][startX] = null;
+<<<<<<< Updated upstream
             System.out.println(
                     "Deux obélisques empilés pour former un double obélisque en (" + endX + ", " + endY + ").");
                     togglePlayer();
+=======
+            System.out.println("Deux obélisques empilés pour former un double obélisque en (" + endX + ", " + endY + ").");
+            mettreAJourLesCheminsDesLasers();
+            togglePlayer();
+>>>>>>> Stashed changes
             return true;
         }
 
         if (!isDestinationValid) {
             System.out.println("Erreur: Mouvement non autorisé à cause de la règle de couleur des cases.");
+            mettreAJourLesCheminsDesLasers();
             return false;
         }
     
@@ -337,10 +428,15 @@ public class Plateau {
             grille[endY][endX] = movingPiece;
             movingPiece.setPosition(endX, endY);
             System.out.println("Déplacement réussi de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
+<<<<<<< Updated upstream
+=======
+            mettreAJourLesCheminsDesLasers();
+>>>>>>> Stashed changes
             togglePlayer();
             return true;
         } else {
             System.out.println("Erreur: La case de destination n'est pas vide.");
+            mettreAJourLesCheminsDesLasers();
             return false;
         }
     }
@@ -353,10 +449,22 @@ public class Plateau {
     //     return currentPlayer;
     // }
 
+    public void togglePlayer() {
+        joueurActuel = (joueurActuel == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
+        System.out.println("C'est maintenant le tour de " + (joueurActuel == Couleur.JAUNE ? "Jaune" : "Rouge"));
+        resetAction();
+        notifyObservers(); // Notifie les observateurs du changement de joueur
+    }
+
+    public Couleur getCurrentPlayer() {
+        return joueurActuel;
+    }
+
     private boolean isCoordonneeValide(int x, int y) {
         return x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau;
     }
 
+<<<<<<< Updated upstream
     // private boolean isValidPosition(int x, int y) {
     // boolean valid = (x >= 0 && x < largeurDuPlateau && y >= 0 && y <
     // hauteurDuPlateau);
@@ -378,6 +486,8 @@ public class Plateau {
         }
     }
 
+=======
+>>>>>>> Stashed changes
     private boolean isDeplacementValide(Pion pion, int startX, int startY, int endX, int endY) {
         if (!estDansLimites(startX, startY) || !estDansLimites(endX, endY))
             return false;
@@ -394,12 +504,16 @@ public class Plateau {
         return estCaseValidePourCouleur(pion.getCouleur(), endX, endY);
     }
 
+<<<<<<< Updated upstream
     private boolean estDansLimites(int x, int y) {
+=======
+    public boolean estDansLimites(int x, int y) {
+>>>>>>> Stashed changes
         return x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau;
     }
 
     private boolean estMouvementDuneCase(int startX, int startY, int endX, int endY) {
-        return Math.abs(endX - startX) <= 1 && Math.abs(endY - startY) <= 1;
+        return Math.abs(endX - startX) <= 1 && Math.abs(endY - endY) <= 1;
     }
 
     private boolean peutEchangerAvecDjed(Pion pion, int startX, int startY, int endX, int endY) {
@@ -412,7 +526,6 @@ public class Plateau {
             return pion.getCouleur() == pieceDestination.getCouleur()
                     || pion.getCouleur() != pieceDestination.getCouleur();
         }
-
         return false;
     }
 
@@ -466,11 +579,23 @@ public class Plateau {
             grille[y][x] = null;
             grille[newY][newX] = pion;
             pion.setPosition(newX, newY);
+            togglePlayer();
         }
+        mettreAJourLesCheminsDesLasers();
     }
 
     public void tournerPion(Pion pion, Direction nouvelleDirection) {
-        pion.setDirection(nouvelleDirection);
+        if (!peutEffectuerAction()) {
+            System.out.println("Vous avez déjà effectué une action ce tour.");
+            return;
+        }
+        
+        if (pion.peutPivoter()) {
+            pion.setDirection(nouvelleDirection);
+            notifyObservers(); // Notifie les observateurs après la rotation
+            actionEffectuee();
+            togglePlayer();
+        }
     }
 
     public void empilerPion(Pion pion) {
@@ -481,13 +606,16 @@ public class Plateau {
                 Pion voisin = grille[newY][newX];
                 if (voisin != null && voisin.getType() == TypeDePion.OBELISQUE
                         && voisin.getCouleur() == pion.getCouleur()) {
-                    // Transformer les deux Obélisques en un Obélisque double
-                    grille[pion.getY()][pion.getX()] = null; // Retirer l'Obélisque de la position actuelle
-                    voisin.setType(TypeDePion.DOUBLE_OBELISQUE); // Transformer le voisin en Obélisque double
+                    grille[pion.getY()][pion.getX()] = null; 
+                    voisin.setType(TypeDePion.DOUBLE_OBELISQUE); 
+                    notifyObservers(); 
+                    mettreAJourLesCheminsDesLasers();
+                    togglePlayer();
                     break;
                 }
             }
         }
+        mettreAJourLesCheminsDesLasers();
     }
 
     public void separerDoubleObelisque(Pion pion) {
@@ -501,9 +629,11 @@ public class Plateau {
                     && grille[newY][newX] == null) {
                 grille[newY][newX] = new Pion(TypeDePion.OBELISQUE, pion.getDirection(), pion.getCouleur(), newX, newY);
                 pion.setType(TypeDePion.OBELISQUE);
+                togglePlayer();
                 break;
             }
         }
+        mettreAJourLesCheminsDesLasers();
     }
 
     public boolean estEmpile(Pion pion) {
@@ -514,9 +644,16 @@ public class Plateau {
         return pion.isMarkedForSplitting();
     }
 
-    public Pion getPieceAt(int x, int y) {
-        if (x >= 0 && x < largeurDuPlateau && y >= 0 && y < hauteurDuPlateau) {
-            return grille[y][x];
+    public Pion getPieceAt(int i, int j) {
+        if (i >= 0 && i < largeurDuPlateau && j >= 0 && j < hauteurDuPlateau) {
+            return grille[j][i];
+        }
+        return null;
+    }
+
+    public Pion getPieceAt2(int i, int j) {
+        if (i >= 0 && i < largeurDuPlateau && j >= 0 && j < hauteurDuPlateau) {
+            return grille[i][j];
         }
         return null;
     }
@@ -570,39 +707,94 @@ public class Plateau {
 
     public boolean depilerDoubleObelisque(Pion doubleObelisque, int x, int y) {
         if (doubleObelisque.getType() == TypeDePion.DOUBLE_OBELISQUE) {
-            grille[y][x] = new Pion(TypeDePion.OBELISQUE, Direction.NONE, doubleObelisque.getCouleur()); // Place le
-                                                                                                         // premier
-                                                                                                         // obélisque
+            grille[y][x] = new Pion(TypeDePion.OBELISQUE, Direction.NONE, doubleObelisque.getCouleur());
 
-            // Recherche d'un emplacement pour le second obélisque
             for (Direction dir : Direction.values()) {
                 int newX = x + dir.getDi();
                 int newY = y + dir.getDj();
                 if (newX >= 0 && newX < largeurDuPlateau && newY >= 0 && newY < hauteurDuPlateau
                         && grille[newY][newX] == null) {
                     grille[newY][newX] = new Pion(TypeDePion.OBELISQUE, Direction.NONE, doubleObelisque.getCouleur());
+                    mettreAJourLesCheminsDesLasers();
                     return true;
                 }
             }
+            mettreAJourLesCheminsDesLasers();
         }
+        mettreAJourLesCheminsDesLasers();
         return false; // Échec si aucun emplacement adjacent n'est disponible
     }
 
     public boolean depilerDoubleObelisque(Pion doubleObelisque, int startX, int startY, int endX, int endY) {
-        // Ensure the piece is a double obelisk and the end position is valid and empty
         if (doubleObelisque.getType() == TypeDePion.DOUBLE_OBELISQUE && grille[endY][endX] == null) {
-            // Place a new single obelisk at the destination
             grille[endY][endX] = new Pion(TypeDePion.OBELISQUE, Direction.NONE, doubleObelisque.getCouleur());
-            // Change the original double obelisk to a single obelisk
             grille[startY][startX] = new Pion(TypeDePion.OBELISQUE, Direction.NONE, doubleObelisque.getCouleur());
+            togglePlayer();
             return true;
         }
+        mettreAJourLesCheminsDesLasers();
         return false;
     }
 
+<<<<<<< Updated upstream
     public boolean checkForPharaohHit(Couleur currentPlayer) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'checkForPharaohHit'");
     }
 
+=======
+    public void mettreAJourLesCheminsDesLasers() {
+        System.out.println("Mise à jour des chemins des lasers...");
+        for (Laser laser : lasers) {
+            laser.reinitialiserChemin();
+            laser.propagerLaser(this);
+        }
+        System.out.println("Mise à jour terminée.");
+        notifyObservers();
+    }
+
+    public void setPharaonTouche(Couleur couleur) {
+
+    }
+
+    public Laser getRed() {
+        return lasers.get(0);
+    }
+
+    public void setRed(Laser red) {
+
+    }
+
+    public Laser getYellow() {
+        return lasers.get(1);
+    }
+
+    public void setYellow(Laser yellow) {
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update();
+        }
+    }
+
+    public int getHauteurDuPlateau() {
+        return this.hauteurDuPlateau;
+    }
+
+    public int getLargeurDuPlateau() {
+        return this.largeurDuPlateau;
+    }
+>>>>>>> Stashed changes
 }

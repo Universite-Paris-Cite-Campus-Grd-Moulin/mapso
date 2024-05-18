@@ -90,6 +90,7 @@ public class Pion {
     // Rotation du pion
     public void rotate(boolean clockwise) {
         this.direction = clockwise ? this.direction.nextClockwise() : this.direction.nextCounterClockwise();
+
     }
 
     public boolean peutPivoter() {

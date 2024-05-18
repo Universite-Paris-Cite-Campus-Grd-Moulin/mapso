@@ -1,38 +1,59 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
-import controller.GameController;
+import model.NoeudTrajectoire;
 import model.Plateau;
 import model.enums.Couleur;
 import view.components.BoardPanel;
 import view.components.GameNavigationListener;
 
-public class GameView extends JFrame implements GameNavigationListener {
-    private JPanel mainMenuPanel;
-    private BoardPanel boardPanel;
+public class GameView extends JPanel implements GameNavigationListener {
+    private BoardPanel boardPanel; // le plateau
+    private JFrame mainFrame;
+    private JLabel tour ; // label pour le tour du joueur X
+    private String type ; // type du jeu ( Classic , dynastie ... )
+    private static final int SPRITE_WIDTH = 100;
+    private static final int SPRITE_HEIGHT = 100;
+    private static final int BOARD_COLUMNS = 10;
+    private static final int BOARD_ROWS = 8;
+
+    public GameView( JFrame frame,String type) {
+        this.mainFrame = frame ;
+        this.type = type;
+        setPreferredSize(new Dimension(1000, 650));
+
+        setLayout(new BorderLayout());
+
+            boardPanel = new BoardPanel(type,mainFrame,this); // Plateau
+
+
+            JPanel otherPanel = new JPanel(); // boutons pause et tour du joueur X
+            otherPanel.setPreferredSize(new Dimension(250,650));
+            // Création et personnalisation du JLabel
+            tour = new JLabel("Tour du Joueur " + boardPanel.getCurrentColor());
+            tour.setFont(new Font("Arial", Font.BOLD, 20));
+            // Ajouter une marge supérieure de 200 pixels au JLabel
+            tour.setBorder(BorderFactory.createEmptyBorder(200, 30, 0, 20));
+            otherPanel.add(tour);
+
+            // Ajouter un espace de 300 pixels entre le JLabel et le bouton
+            otherPanel.add(Box.createRigidArea(new Dimension(0, 300)));
+
+            // Ajout du bouton de pause
+            addPauseButton(otherPanel);
+
+        add(boardPanel,BorderLayout.CENTER);
+        add(otherPanel,BorderLayout.EAST);
+    }
 
     public BoardPanel getBoardPanel() {
         return boardPanel;
@@ -42,293 +63,124 @@ public class GameView extends JFrame implements GameNavigationListener {
         this.boardPanel = boardPanel;
     }
 
-    private JFrame mainFrame;
-    private BufferedImage spriteSheet;
-    private static final int SPRITE_WIDTH = 100;
-    private static final int SPRITE_HEIGHT = 100;
-    private static final int BOARD_COLUMNS = 10;
-    private static final int BOARD_ROWS = 8;
-    private final ImageIcon backgroundImage = new ImageIcon("src/main/resources/images/Fond_Khet.png");
-    private JButton startButton, settingsButton, exitButton;
 
-    public GameView() {
-        System.out.println("Initialisation de la vue du jeu.");
-        setTitle("Khet Game");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
-        setLayout(new BorderLayout());
-        setContentPane(new BackgroundPanel());
-        // Utilisation de BackgroundPanel comme content pane
-        BackgroundPanel backgroundPanel = new BackgroundPanel();
-        setContentPane(backgroundPanel);
-        initMainMenu(); // Assurez-vous que cette méthode est appelée
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        // Background gradient
+        Graphics2D g2d = (Graphics2D) g;
 
-    private void loadSpriteSheet() {
-        try {
-            System.out.println("Chargement du sprite sheet.");
-            spriteSheet = ImageIO.read(new File("src/main/resources/images/Fond_Khet.png"));
-            System.out.println("Sprite sheet chargé avec succès.");
-        } catch (IOException e) {
-            System.err.println("Erreur lors du chargement du sprite sheet: " + e.getMessage());
-            e.printStackTrace();
+        Color startColor = new Color(80, 198, 236); // Light Blue
+        Color endColor = new Color(255, 160, 122);   // Shrimp
+        GradientPaint gradient = new GradientPaint(0, 0, startColor, getWidth(), getHeight(), endColor);
+        g2d.setPaint(gradient);
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+
+        if ( boardPanel != null ) {
+            if ( boardPanel.getCurrentColor() == Couleur.JAUNE){
+                tour.setForeground(new Color(255, 160, 122)); // Jaune
+            } else if ( boardPanel.getCurrentColor() == Couleur.ROUGE ) {
+                tour.setForeground(new Color(80, 198, 236)); // le RED
+            }
         }
     }
 
-    private void initMainMenu() {
-        System.out.println("Initialisation du menu principal.");
-        mainMenuPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+    private void showPauseMenu() {
+        JDialog pauseMenu = new JDialog(mainFrame, "Pause", true);
+        pauseMenu.setLayout(new GridLayout(4, 1));
+        pauseMenu.setSize(200, 200);
+        pauseMenu.setLocationRelativeTo(mainFrame);
+        addPauseMenuButtons(pauseMenu);
+        pauseMenu.setVisible(true);
+    }
 
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridx = 0;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.PAGE_END;
+    private void addPauseButton(JPanel panel) {
+        JButton pauseButton = Menu.createCustomButton("Pause", new Color(255, 172, 250), new Color(255, 255, 255), new Font("Arial", Font.BOLD, 16));
+        pauseButton.setPreferredSize(new Dimension(100, 40));
 
-        // Ajoute un espace pour pousser les composants vers le bas
-        JPanel spacer = new JPanel();
-        spacer.setOpaque(false);
-        gbc.weighty = 1;
-        mainMenuPanel.add(spacer, gbc); // Le spacer est ajouté en premier
+        pauseButton.addActionListener(e -> showPauseMenu());
 
-        // Réinitialise le poids y pour les boutons
-        gbc.weighty = 0;
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setOpaque(false);
+        buttonPanel.add(pauseButton);
 
-        startButton = createButton("src/main/resources/images/button_start.png");
-        settingsButton = createButton("src/main/resources/images/button_setting.png");
-        exitButton = createButton("src/main/resources/images/button_exit.png");
+        panel.add(buttonPanel);
 
-        startButton.addActionListener(e -> openBoard("Classic"));
-        settingsButton.addActionListener(e -> openSettings());
+    }
+
+
+    private void addPauseMenuButtons(JDialog pauseMenu) {
+        JButton continueButton = Menu.createCustomButton("Back To Game", new Color(70, 130, 180), Color.WHITE, new Font("Arial", Font.BOLD, 16));
+        JButton restartButton = Menu.createCustomButton("Restart", new Color(50, 142, 224), Color.WHITE, new Font("Arial", Font.BOLD, 16));
+        JButton backToMenuButton = Menu.createCustomButton("Back To Menu", new Color(16, 76, 126), Color.WHITE, new Font("Arial", Font.BOLD, 16));
+        JButton exitButton = Menu.createCustomButton("Exit", new Color(11, 43, 66), Color.WHITE, new Font("Arial", Font.BOLD, 16));
+
+        continueButton.addActionListener(e -> pauseMenu.dispose());
+
+        restartButton.addActionListener( e -> {
+            boardPanel.initBoard();
+            pauseMenu.dispose();
+            repaint();
+        });
+
+        backToMenuButton.addActionListener(e -> {
+            pauseMenu.dispose();
+            mainFrame.getContentPane().removeAll();
+            Menu menu = new Menu(mainFrame);
+            mainFrame.setContentPane(menu);
+            mainFrame.revalidate();
+            mainFrame.repaint();
+        });
+
         exitButton.addActionListener(e -> System.exit(0));
 
-        // Maintenant, ajoutez les boutons
-        gbc.gridy = GridBagConstraints.RELATIVE; // Utilise RELATIVE pour une meilleure gestion des positions
-        mainMenuPanel.add(startButton, gbc);
-        mainMenuPanel.add(settingsButton, gbc);
-        mainMenuPanel.add(exitButton, gbc);
-
-        getContentPane().add(mainMenuPanel, BorderLayout.SOUTH);
-        revalidate();
-        repaint();
+        pauseMenu.add(continueButton);
+        pauseMenu.add(restartButton);
+        pauseMenu.add(backToMenuButton);
+        pauseMenu.add(exitButton);
     }
 
-    private JButton createButton(String imagePath) {
-        System.out.println("Création d'un bouton avec l'image: " + imagePath);
-        ImageIcon originalIcon = new ImageIcon(imagePath);
-        Image image = originalIcon.getImage().getScaledInstance(100, 50, Image.SCALE_SMOOTH);
-        ImageIcon buttonIcon = new ImageIcon(image);
-
-        JButton button = new JButton(buttonIcon);
-        button.setPreferredSize(new Dimension(100, 50));
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false);
-        button.setFocusPainted(false);
-        button.setOpaque(false);
-        return button;
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        System.out.println("Action command: " + command);
-        if (command.contains("start")) {
-            // Logique pour démarrer le jeu
-        } else if (command.contains("setting")) {
-            // Logique pour ouvrir les paramètres
-        } else if (command.contains("exit")) {
-            System.exit(0);
-        }
-    }
-
-    private void placeComponents(BackgroundPanel panel, JButton start, JButton settings, JButton exit) {
-        System.out.println("Placement des composants du menu principal.");
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = 1; // set gridwidth to 1 for each button
-        gbc.gridx = 0; // start with first column
-        gbc.gridy = 0; // all in the first row
-        gbc.weightx = 1; // distribute space
-        gbc.fill = GridBagConstraints.NONE; // do not resize the button
-        gbc.insets = new Insets(20, 20, 20, 20);
-        gbc.anchor = GridBagConstraints.PAGE_END; // anchor buttons to the bottom of the screen
-
-        panel.add(Box.createHorizontalGlue(), gbc);
-
-        gbc.gridx++;
-        panel.add(start, gbc);
-
-        gbc.gridx++;
-        panel.add(settings, gbc);
-
-        gbc.gridx++;
-        panel.add(exit, gbc);
-
-        gbc.gridx++;
-        panel.add(Box.createHorizontalGlue(), gbc);
-    }
-
-    private void layoutComponents() {
-        System.out.println("Disposition des composants du menu principal.");
-        BackgroundPanel backgroundPanel = new BackgroundPanel();
-        backgroundPanel.setLayout(new GridBagLayout());
-
-        JButton startButton = createButton("src/main/resources/images/button_start.png");
-        JButton settingsButton = createButton("src/main/resources/images/button_setting.png");
-        JButton exitButton = createButton("src/main/resources/images/button_exit.png");
-
-        startButton.addActionListener(e -> showGameOptions());
-        settingsButton.addActionListener(e -> openSettings());
-        exitButton.addActionListener(e -> System.exit(0));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0, 0, 0, 0);
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.VERTICAL;
-        backgroundPanel.add(Box.createVerticalGlue(), gbc);
-
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridwidth = 1;
-
-        gbc.gridy++;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.weightx = 1;
-        backgroundPanel.add(Box.createHorizontalGlue(), gbc);
-
-        gbc.gridx++;
-        backgroundPanel.add(startButton, gbc);
-
-        gbc.gridx++;
-        backgroundPanel.add(settingsButton, gbc);
-
-        gbc.gridx++;
-        backgroundPanel.add(exitButton, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weighty = 0.333;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        backgroundPanel.add(Box.createVerticalGlue(), gbc);
-
-        mainFrame.setContentPane(backgroundPanel);
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
-
-    private void showGameOptions() {
-        System.out.println("Affichage des options de jeu.");
-        JDialog gameOptionsDialog = new JDialog(mainFrame, "Choose Game Mode", true);
-        gameOptionsDialog.setLayout(new GridLayout(1, 0));
-        gameOptionsDialog.setSize(300, 200);
-        gameOptionsDialog.setLocationRelativeTo(mainFrame);
-
-        JButton classicButton = new JButton("Classic");
-        JButton imhotepButton = new JButton("Imhotep");
-        JButton dynastyButton = new JButton("Dynastie");
-
-        gameOptionsDialog.add(classicButton);
-        gameOptionsDialog.add(imhotepButton);
-        gameOptionsDialog.add(dynastyButton);
-
-        classicButton.addActionListener(e -> {
-            openBoard("Classic");
-            gameOptionsDialog.dispose();
-        });
-        imhotepButton.addActionListener(e -> {
-            openBoard("Imhotep");
-            gameOptionsDialog.dispose();
-        });
-        dynastyButton.addActionListener(e -> {
-            openBoard("Dynastie");
-            gameOptionsDialog.dispose();
-        });
-
-        gameOptionsDialog.setVisible(true);
-
-    }
-
-    private void openSettings() {
-        System.out.println("Ouverture des paramètres.");
-        // Ajoutez la logique pour ouvrir les paramètres ici
-    }
-
-    private void openBoard(String type) {
-        System.out.println("Ouverture du plateau de jeu de type: " + type);
-        getContentPane().removeAll();
-        // Création et ajout du plateau de jeu
-        Plateau plateau = new Plateau(type);
-        GameController controller = new GameController(plateau);
-        boardPanel = new BoardPanel(plateau, controller, this);
-        setContentPane(boardPanel);
-        revalidate();
-        repaint();
-    }
 
     public void closeBoard() {
-        System.out.println("Fermeture du plateau de jeu et retour au menu principal.");
         // Cette méthode ferme le plateau de jeu et revient au menu principal
-        setContentPane(mainMenuPanel);
+        //setContentPane(mainMenuPanel);
         revalidate();
         repaint();
     }
 
     public void update() {
-        System.out.println("Mise à jour de l'interface utilisateur.");
-        // Ajoutez ici le code pour mettre à jour l'interface utilisateur si nécessaire
+        if (boardPanel != null) {
+            boardPanel.repaint();
+        }
+        repaint();
     }
 
+    // Méthode pour afficher un plateau de jeu, potentiellement pour initialiser BoardPanel avec des données
     public void displayBoard(Object[][] boardData) {
-        System.out.println("Affichage du plateau de jeu.");
-        // Ajoutez ici le code pour afficher le plateau de jeu
+
     }
 
+    // Méthodes pour gérer les actions comme l'affichage des messages
     public void displayMessage(String message) {
-        System.out.println("Affichage d'un message: " + message);
         JOptionPane.showMessageDialog(this, message);
     }
 
     @Override
     public void onBackToMenuRequested() {
-        System.out.println("Retour au menu principal demandé.");
-        // Ajoutez ici la logique pour retourner au menu principal
+        //TO-DO
     }
 
-    public void updateLaserPath(List<Point> cheminLaser, Couleur couleurLaser) {
-        System.out.println("Mise à jour du chemin du laser de couleur: " + couleurLaser);
-        if (boardPanel != null) {
-            // boardPanel.updateLaserPath(cheminLaser, couleurLaser);
-            repaint(); // Pour redessiner l'interface si nécessaire
-        } else {
-            System.err.println("Erreur: boardPanel est null.");
-        }
+    public void updateLaserPath(List<NoeudTrajectoire> cheminLaser, Couleur couleurLaser) {
+        repaint();  // Pour redessiner l'interface si nécessaire
     }
 
-    class BackgroundPanel extends JPanel {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (backgroundImage != null) {
-                System.out.println("Peinture du panneau de fond.");
-                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
-            }
-        }
-    }
 
     public void showWinner(Couleur currentPlayer) {
-        System.out.println("Affichage du gagnant: " + currentPlayer);
-        // TODO Auto-generated method stub
+        // IF ( GAME OVER BOOLEAN , bah tu affiche le seul jueur restant avec JpOptionmessage
         throw new UnsupportedOperationException("Unimplemented method 'showWinner'");
     }
 
     public int getCellSize() {
-        System.out.println("Obtention de la taille des cellules.");
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getCellSize'");
     }
 }

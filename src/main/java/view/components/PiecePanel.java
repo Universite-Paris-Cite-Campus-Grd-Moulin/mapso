@@ -1,8 +1,6 @@
 package view.components;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,25 +16,19 @@ import model.enums.Couleur;
 import model.enums.Direction;
 import model.enums.TypeDePion;
 
+// PieceComponent pourrait ressembler à ceci
 public class PiecePanel extends JPanel {
 
     private static BufferedImage khet;
-    private static BufferedImage khetVert;
-
     static {
         try {
-            System.out.println("Loading piece images...");
             khet = ImageIO.read(new File("ressources/sprites_khet.png"));
-            khetVert = ImageIO.read(new File("ressources/sprites_khet_vert.png"));
-            System.out.println("Piece images loaded successfully.");
         } catch (IOException e) {
-            System.err.println("Error loading piece images: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private Pion pion;
-    private boolean isSelected;
+    private Pion pion; // MVC et pas en attribut
     private BufferedImage image; // image du pion extrait
     private static final BufferedImage[] images = new BufferedImage[TypeDePion.values().length];
 
@@ -44,39 +36,35 @@ public class PiecePanel extends JPanel {
         this.pion = p;
     }
 
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
-        repaint();
-    }
-
-    public static BufferedImage draw(Graphics g, Pion p, boolean isSelected) {
-        // System.out.println("Drawing piece: " + p.getType() + " at position (" +
-        // p.getX() + ", " + p.getY() + ")");
-        BufferedImage sourceImage = isSelected ? khetVert : khet;
+    public static BufferedImage draw(java.awt.Graphics g, Pion p) {
         int colonne = p.getType().ordinal();
         int ligne = p.getCouleur().ordinal();
         int rotation = p.getDirection().ordinal() * 90;
-        BufferedImage pieceImage = sourceImage.getSubimage(colonne * 100, ligne * 100, 100, 100);
+        // Extraire la sous-image correspondante au pion
+        BufferedImage pieceImage = khet.getSubimage(colonne * 100, ligne * 100, 100, 100);
 
-        int desiredWidth = 75;
-        int desiredHeight = 75;
+        // Taille désirée pour le redimensionnement
+        int desiredWidth = 75; // ou 50 pour une taille encore plus petite
+        int desiredHeight = 75; // ou 50 selon la largeur
 
         AffineTransform transform = new AffineTransform();
         transform.rotate(Math.toRadians(rotation), desiredWidth / 2.0, desiredHeight / 2.0);
         BufferedImage resizedImage = new BufferedImage(desiredWidth, desiredHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gg = resizedImage.createGraphics();
         gg.setTransform(transform);
+        // Redimensionner et dessiner l'image sur le nouveau BufferedImage
         gg.drawImage(pieceImage, 0, 0, desiredWidth, desiredHeight, null);
         gg.dispose();
 
-        // System.out.println("Piece drawn successfully.");
         return resizedImage;
     }
 
+
+
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(java.awt.Graphics g) {
         super.paintComponent(g);
-        BufferedImage image = draw(g, pion, isSelected);
+        BufferedImage image = draw(g, pion);
         g.drawImage(image, 0, 0, null);
     }
 

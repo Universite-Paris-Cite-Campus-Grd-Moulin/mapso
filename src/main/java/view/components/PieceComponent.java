@@ -12,7 +12,6 @@ public class PieceComponent extends JLabel {
     private BufferedImage image;
 
     public PieceComponent(String imagePath) {
-        System.out.println("Création d'un PieceComponent avec le chemin d'image : " + imagePath);
         loadImage(imagePath);
     }
 
@@ -20,27 +19,25 @@ public class PieceComponent extends JLabel {
         try {
             File file = new File(imagePath);
             if (file.exists()) {
-                System.out.println("Chargement de l'image : " + imagePath);
                 image = ImageIO.read(file);
                 setIcon(new ImageIcon(image));
             } else {
-                System.out.println("Image non trouvée, chargement de l'image par défaut.");
                 handleMissingImage();
             }
         } catch (IOException e) {
-            System.err.println("Erreur lors du chargement de l'image : " + e.getMessage());
+            System.err.println("Error loading image: " + e.getMessage());
             handleMissingImage();
         }
     }
 
     private void handleMissingImage() {
-        System.err.println("Fichier d'image non trouvé, affichage de l'image par défaut.");
+        System.err.println("Image file not found, displaying default image.");
         try {
             image = ImageIO.read(getClass().getResource("/path/to/default/image.png"));
             setIcon(new ImageIcon(image));
         } catch (IOException e) {
-            System.err.println("Échec du chargement de l'image par défaut : " + e.getMessage());
-            this.setText("Image non disponible");
+            System.err.println("Failed to load default image: " + e.getMessage());
+            this.setText("Image not available");
         }
     }
 }

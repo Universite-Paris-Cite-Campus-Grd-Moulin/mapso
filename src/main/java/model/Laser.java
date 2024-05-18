@@ -17,44 +17,38 @@ public class Laser {
     // Constantes pour les positions de départ
     private static final int START_I_RED = 0;
     private static final int START_J_RED = 0;
-    private static final int START_I_YELLOW = 7;
     private static final int START_J_YELLOW = 9;
+    private static final int START_I_YELLOW = 7;
 
     // Constructeur de la classe Laser
     public Laser(Couleur couleur) {
         this.couleur = couleur;
         if (couleur == Couleur.ROUGE) {
             this.startPosition = new Point(START_I_RED, START_J_RED);
-            this.direction = Direction.SUD;
+            this.direction = Direction.SUD; // Part du haut et va vers le bas
         } else if (couleur == Couleur.JAUNE) {
             this.startPosition = new Point(START_I_YELLOW, START_J_YELLOW);
-            this.direction = Direction.NORD;
+            this.direction = Direction.NORD; // Part du bas et va vers le haut
         }
         this.racine = new NoeudTrajectoire(this.direction, startPosition.x, startPosition.y, TypeInteraction.NONE);
-        System.out.println(
-                "Laser initialized for " + couleur + " at position " + startPosition + " with direction " + direction);
     }
 
-    // Propage le laser à partir du noeud racine
+     // Propage le laser à partir du noeud racine
     public void propagerLaser(Plateau plateau) {
-        System.out.println("Propagating laser for " + couleur);
         racine.avancerLaser(plateau);
     }
-
     // Calcule et renvoie le chemin complet du laser sous forme de liste de points
-    public List<Point> obtenirCheminLaser() {
-        List<Point> chemin = new ArrayList<>();
+    public List<NoeudTrajectoire> obtenirCheminLaser() {
+        List<NoeudTrajectoire> chemin = new ArrayList<>();
         NoeudTrajectoire courant = racine;
-        System.out.println("Calculating laser path");
         while (courant != null) {
-            chemin.add(new Point(courant.getPositionJ(), courant.getPositionI()));
+            chemin.add(new NoeudTrajectoire(courant.getDirection(),courant.getPositionJ(), courant.getPositionI(),courant.getTypeInteraction()));
             if (!courant.getSuccesseurs().isEmpty()) {
                 courant = courant.getSuccesseurs().get(0);
             } else {
                 courant = null;
             }
         }
-        System.out.println("Laser path: " + chemin);
         return chemin;
     }
 
@@ -81,5 +75,31 @@ public class Laser {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public static void main(String[] args) {
+        Plateau plateau = new Plateau("Classic");  // Exemple d'instanciation de ton plateau
+        Laser laserRouge = new Laser(Couleur.JAUNE);
+        Laser laserJaune = new Laser(Couleur.ROUGE);
+        laserRouge.propagerLaser(plateau);
+        laserJaune.propagerLaser(plateau);
+
+        System.out.println("Chemin du Laser Rouge:");
+        imprimerCheminLaser(laserRouge.obtenirCheminLaser());
+
+        System.out.println("Chemin du Laser Jaune:");
+        imprimerCheminLaser(laserJaune.obtenirCheminLaser());
+    }
+
+    private static void imprimerCheminLaser(List<NoeudTrajectoire> chemin) {
+        for (NoeudTrajectoire noeud : chemin) {
+            System.out.println("Position: (" + noeud.getPositionI() + ", " + noeud.getPositionJ() + 
+                               ") Direction: " + noeud.getDirection() + 
+                               " Interaction: " + noeud.getTypeInteraction());
+        }
+    }
+
+    public void reinitialiserChemin() {
+        this.racine = new NoeudTrajectoire(this.direction, startPosition.x, startPosition.y, TypeInteraction.NONE);
     }
 }

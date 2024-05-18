@@ -1,106 +1,98 @@
 package controller;
 
-import java.awt.Point;
+import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.swing.JPanel;
+import java.util.List;
 
 import model.Game;
+import model.Laser;
+import model.NoeudTrajectoire;
 import model.Pion;
 import model.Plateau;
 import model.enums.Couleur;
-import model.enums.TypeDePion;
 import view.GameView;
+import view.components.BoardPanel;
 
-public class GameController extends JPanel implements MouseListener {
+public class GameController implements MouseListener {
     private Game game;
     private Plateau board;
     private GameView gameView;
+    private BoardPanel panel;
     private Pion selectedPiece = null;
     private static final int BOARD_COLUMNS = 10; // Nombre de colonnes du plateau
     private static final int BOARD_ROWS = 8; // Nombre de lignes du plateau
     private int startX, startY; // Ajout pour stocker la position initiale lors du glisser
-    private Set<Point> validMoves = new HashSet<>(); // To store valid move positions
-
-    public Game getGame() {
-        return game;
-    }
-
-    public GameController(Game game) {
-        this.game = game;
-        System.out.println("GameController initialized with game.");
-    }
-
-    public GameController(Plateau board) {
-        this.board = board;
-        this.game = new Game(board);
-        System.out.println("GameController initialized with board.");
-    }
 
     public GameController(String boardType) {
         this.board = new Plateau(boardType); // Create board with a specific type
         this.game = new Game(board);
-        System.out.println("GameController initialized with board type: " + boardType);
+
     }
 
     public GameController(GameView gameView, String boardType) {
         this.board = new Plateau(boardType); // Create board with a specific type
         this.game = new Game(board);
         this.gameView = gameView;
-        System.out.println("GameController initialized with game view and board type: " + boardType);
+        this.panel = gameView.getBoardPanel();
     }
 
     public GameController(Game game, GameView gameView) {
         this.game = game;
         this.gameView = gameView;
-        System.out.println("GameController initialized with game and game view.");
+        this.panel = gameView.getBoardPanel();
     }
 
     public void startGame() {
         game.start();
-        if (gameView != null) {
+        if (gameView != null || board != null) {
             gameView.update();
-            System.out.println("Game started and game view updated.");
+            gameView.update();
         }
+    }
+
+    public void propagerLaser() {
+        // Obtenir la couleur actuelle du joueur (ou du laser si différent)
+        Couleur couleurLaser = game.getCurrentPlayer();  // Supposons que `getCouleurCourante()` existe dans ton jeu.
+    
+        // Créer une instance de Laser et propager
+        Laser laser = new Laser(couleurLaser);
+        laser.propagerLaser(board);
+    
+        // Obtenir le chemin du laser et le passer à la vue
+        List<NoeudTrajectoire> cheminLaser = laser.obtenirCheminLaser();
+        gameView.updateLaserPath(cheminLaser, couleurLaser); //bbbbb
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (game == null) {
-            System.err.println("Game instance is not initialized.");
-            return;
-        }
-        int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
-        int col = e.getX() / cellSize;
-        int row = e.getY() / cellSize;
-        Pion clickedPiece = game.getPieceAt(col, row);
+        int x = e.getX() / gameView.getCellSize();
+        int y = e.getY() / gameView.getCellSize();
+        Pion piece = game.getPieceAt(x, y);
 
-        if (clickedPiece != null) {
-            System.out.println("Clicked Piece Info:");
-            System.out.println("Type: " + clickedPiece.getType());
-            System.out.println("Color: " + clickedPiece.getCouleur());
-            System.out.println("Direction: " + clickedPiece.getDirection());
+        if (piece != null && piece.getCouleur() == game.getCurrentPlayer()) {
+            if (selectedPiece == null) {
+                selectedPiece = piece; // Sélection de la pièce
+                System.out.println("Pièce sélectionnée");
+            } else {
+                if (game.movePiece(selectedPiece.getX(), selectedPiece.getY(), x, y)) {
+                    gameView.update();
+                    selectedPiece = null; // Désélectionner après un mouvement
+                } else {
+                    System.out.println("Mouvement invalide");
+                }
+            }
         } else {
-            System.out.println("Clicked on empty cell.");
-        }
-
-        if (clickedPiece != null && clickedPiece.getCouleur() == game.getCurrentPlayer()) {
-            selectedPiece = clickedPiece;
-            validMoves = calculateValidMoves(selectedPiece, col, row);
-            System.out.println("Valid moves calculated: " + validMoves);
-            gameView.repaint();
-        } else {
-            System.out.println("Click not on current player's piece or no piece selected.");
+            System.out.println("Ce n'est pas le tour de ce joueur ou aucune pièce à sélectionner.");
         }
     }
 
-    private int calculateCellSize() {
-        int cellSize = Math.min(getWidth() / 10, getHeight() / 8);
-        System.out.println("Calculated cell size: " + cellSize);
-        return cellSize;
+    private void selectPiece(int x, int y) {
+        if (game.getPieceAt(x, y) != null && game.getPieceAt(x, y).getCouleur() == game.getCurrentPlayer()) {
+            System.out.println("Pièce sélectionnée : " + game.getPieceAt(x, y));
+        } else {
+            System.out.println("Sélection invalide ou ce n'est pas le tour du joueur.");
+        }
     }
 
     public void handleUserAction(int startX, int startY, int endX, int endY) {
@@ -152,58 +144,22 @@ public class GameController extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println("Mouse pressed");
-        int cellSize = calculateCellSize();
-        startX = e.getX() / cellSize;
-        startY = e.getY() / cellSize;
-        System.out.println("Start position set to (" + startX + ", " + startY + ")");
-
-        if (startX >= 0 && startX < 10 && startY >= 0 && startY < 8) {
-            selectedPiece = board.getPieceAt(startX, startY);
-            if (selectedPiece != null && selectedPiece.getType() != TypeDePion.NONE) {
-                System.out.println(
-                        "Mouse pressed at (" + startX + ", " + startY + ") with piece " + selectedPiece.getType());
-            } else {
-                System.out.println("No valid piece at cell (" + startX + ", " + startY + ")");
-            }
-        }
+        System.out.println("Mouse pressed at (" + e.getX() + ", " + e.getY() + ")");
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        System.out.println("Mouse released");
-        int cellSize = calculateCellSize();
-        int endX = e.getX() / cellSize;
-        int endY = e.getY() / cellSize;
-        System.out.println("End position set to (" + endX + ", " + endY + ")");
-
-        Pion endPiece = board.getPieceAt(endX, endY); // Get piece at the end position
-
-        if (e.getButton() == MouseEvent.BUTTON3 && selectedPiece != null) {
-            if (endPiece != null && endPiece.getType() != TypeDePion.NONE) {
-                endPiece.rotate(true); // Rotate the piece 90 degrees clockwise
-                System.out.println("Piece rotated at (" + endX + ", " + endY + ")");
-                gameView.update(); // Update the game view
-                game.switchPlayer();
-            }
-        } else if (e.getButton() == MouseEvent.BUTTON1 && selectedPiece != null) {
-            if (endPiece == null || !endPiece.equals(selectedPiece)) {
-                game.movePieceAndSwitchPlayer(startX, startY, endX, endY);
-                selectedPiece = null; // Clear the selected piece after the move
-                validMoves.clear(); // Clear valid moves after moving the piece
-            } else {
-                System.out.println("Invalid move.");
-            }
-        }
-        repaint(); // Redraw the board with the original images
+        System.out.println("Mouse released at (" + e.getX() + ", " + e.getY() + ")");
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
+        panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
+        panel.setCursor(Cursor.getDefaultCursor());
     }
 
     private void handleMouseClick(int x, int y) {
@@ -229,28 +185,5 @@ public class GameController extends JPanel implements MouseListener {
         }
     }
 
-    public Set<Point> calculateValidMoves(Pion pion, int col, int row) {
-        Set<Point> validMoves = new HashSet<>();
-        int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
-        int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
-        for (int direction = 0; direction < dx.length; direction++) {
-            int newX = col + dx[direction];
-            int newY = row + dy[direction];
-            if (newX >= 0 && newX < 10 && newY >= 0 && newY < 8) {
-                Pion targetPion = board.getPieceAt(newX, newY);
-                if (targetPion == null) {
-                    validMoves.add(new Point(newX, newY));
-                }
-            }
-        }
-        return validMoves;
-    }
-
-    private boolean isMoveAllowedByColor(Couleur couleurPion, int x, int y) {
-        // Implémentez la logique qui vérifie si le pion peut se déplacer sur la case
-        // basée sur la couleur
-        Couleur couleurCase = board.initCouleur(x, y);
-        return couleurPion != couleurCase; // Les pions rouges ne peuvent pas aller sur les cases jaunes et vice versa
-    }
 }

@@ -4,14 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-import view.GameView;
-import view.Settings;
 import model.Audio;
 import view.components.*;
 import java.awt.event.ActionEvent;
 
-// Cette classe crée le menu
-// qui nous permet de se redériger vers le jeu
 public class Menu extends JPanel {
     private JButton startButton, settingsButton, exitButton;
     private JFrame mainFrame;
@@ -39,7 +35,7 @@ public class Menu extends JPanel {
         exitButton = createButton("src/main/resources/images/button_exit.png");
 
         startButton.addActionListener(e -> {
-            Audio.playSound("ressources/click.wav");
+            Audio.playSound("src/main/resources/audio/click.wav");
             Timer timer = new Timer(800, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     showGameOptions();
@@ -51,7 +47,7 @@ public class Menu extends JPanel {
         });
 
         settingsButton.addActionListener(e -> {
-            Audio.playSound("ressources/click.wav");
+            Audio.playSound("src/main/resources/audio/click.wav");
             Timer timer = new Timer(800, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     openSettings();
@@ -63,7 +59,7 @@ public class Menu extends JPanel {
         });
 
         exitButton.addActionListener(e -> {
-            Audio.playSound("ressources/click.wav");
+            Audio.playSound("src/main/resources/audio/click.wav");
             Timer timer = new Timer(800, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     System.exit(0);
@@ -85,6 +81,9 @@ public class Menu extends JPanel {
         add(Box.createVerticalGlue(), gbc);
 
         mainFrame.add(this); // Mettre le JPanel du menu dans le JFrame
+
+        // Jouer la musique de fond
+        Audio.playSound("ressources/Music.wav"); // Chemin vers votre fichier audio
     }
 
     private JButton createButton(String imagePath) {
@@ -157,6 +156,7 @@ public class Menu extends JPanel {
     }
 
     private void openBoard(String type) {
+        Audio.stopSound(); // Arrêter la musique de fond lorsque le jeu commence
         mainFrame.getContentPane().removeAll();
         // Création et ajout de la vue du jeu
         GameView jeu = new GameView(mainFrame, type);

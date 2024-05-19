@@ -253,7 +253,7 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
         mainFrame.setContentPane(gameOverBoard);
         mainFrame.revalidate();
         mainFrame.repaint();
-}
+    }
 
     @Override
     public void updateGameOver(Couleur couleur) {

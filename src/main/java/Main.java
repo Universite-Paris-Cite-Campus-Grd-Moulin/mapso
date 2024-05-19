@@ -1,9 +1,7 @@
-package main.java;
-
 import javax.swing.*;
 
-import main.java.view.GameView;
-import main.java.view.Menu;
+import view.GameView;
+import view.Menu;
 
 import java.awt.*;
 

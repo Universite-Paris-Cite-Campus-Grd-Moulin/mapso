@@ -1,4 +1,4 @@
-package main.java.view.components;
+package view.components;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -11,10 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import main.java.model.Pion;
+import model.Pion;
 import model.enums.Couleur;
 import model.enums.Direction;
-import main.java.model.enums.TypeDePion;
+import model.enums.TypeDePion;
 
 // PieceComponent pourrait ressembler à ceci
 public class PiecePanel extends JPanel {

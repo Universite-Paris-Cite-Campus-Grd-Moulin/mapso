@@ -1,13 +1,13 @@
-package main.java.view;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-import main.java.view.GameView;
-import main.java.view.Settings;
-import main.java.model.Audio;
-import main.java.view.components.*;
+import view.GameView;
+import view.Settings;
+import model.Audio;
+import view.components.*;
 import java.awt.event.ActionEvent;
 
 // Cette classe crée le menu

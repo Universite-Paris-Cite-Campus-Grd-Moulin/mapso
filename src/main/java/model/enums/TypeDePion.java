@@ -1,7 +1,7 @@
-package main.java.model.enums;
+package model.enums;
 
-import main.java.model.Pion;
-import main.java.model.Plateau;
+import model.Pion;
+import model.Plateau;
 import model.enums.Direction;
 
 

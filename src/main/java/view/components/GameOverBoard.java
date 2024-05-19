@@ -1,12 +1,12 @@
-package main.java.view.components;
+package view.components;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import main.java.view.GameView;
-import main.java.view.Menu;
+import view.GameView;
+import view.Menu;
 
 public class GameOverBoard extends JPanel {
     private Image backgroundImage;

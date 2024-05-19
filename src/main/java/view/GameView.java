@@ -1,15 +1,15 @@
-package main.java.view;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
-import main.java.model.NoeudTrajectoire;
-import main.java.model.Observer;
-import main.java.view.components.GameOverBoard;
+import model.NoeudTrajectoire;
+import model.Observer;
+import view.components.GameOverBoard;
 import model.enums.Couleur;
-import main.java.view.components.BoardPanel;
+import view.components.BoardPanel;
 import view.components.GameNavigationListener;
 
 public class GameView extends JPanel implements GameNavigationListener, Observer {

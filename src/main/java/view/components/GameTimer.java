@@ -1,4 +1,4 @@
-package main.java.view.components;
+package view.components;
 
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;

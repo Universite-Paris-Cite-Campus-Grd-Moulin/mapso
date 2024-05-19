@@ -1,20 +1,20 @@
-package main.java.view.components;
+package view.components;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.*;
 import javax.swing.*;
 
-import main.java.controller.GameController;
-import main.java.model.Game;
-import main.java.model.NoeudTrajectoire;
-import main.java.model.Observer;
-import main.java.model.Pion;
-import main.java.model.Plateau;
+import controller.GameController;
+import model.Game;
+import model.NoeudTrajectoire;
+import model.Observer;
+import model.Pion;
+import model.Plateau;
 import model.enums.Couleur;
 import model.enums.Direction;
-import main.java.model.enums.TypeDePion;
-import main.java.view.GameView;
+import model.enums.TypeDePion;
+import view.GameView;
 import java.util.List;
 import view.components.GameNavigationListener;
 
@@ -79,10 +79,10 @@ public class BoardPanel extends JPanel implements MouseListener, Observer {
         super.paintComponent(g);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
-                g.drawImage(main.java.view.components.PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j))),
+                g.drawImage(view.components.PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j))),
                         j * 75, i * 75, this);
                 if (board.getGrille()[i][j] != null) {
-                    g.drawImage(main.java.view.components.PiecePanel.draw(g, board.getGrille()[i][j]), j * 75, i * 75, this);
+                    g.drawImage(view.components.PiecePanel.draw(g, board.getGrille()[i][j]), j * 75, i * 75, this);
                 }
             }
         }

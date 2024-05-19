@@ -1,13 +1,13 @@
-package main.java.model;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.view.GameView;
+import view.GameView;
 import model.enums.Couleur;
 import model.enums.Direction;
-import main.java.model.enums.TypeDePion;
-import main.java.model.Laser;
+import model.enums.TypeDePion;
+import model.Laser;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

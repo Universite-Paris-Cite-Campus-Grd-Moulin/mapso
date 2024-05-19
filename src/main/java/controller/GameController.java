@@ -1,21 +1,21 @@
-package main.java.controller;
+package controller;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-import main.java.model.Game;
-import main.java.model.Laser;
-import main.java.model.NoeudTrajectoire;
-import main.java.model.Pion;
-import main.java.model.Plateau;
-import main.java.view.GameView;
-import main.java.view.Menu;
-import main.java.view.components.BoardPanel;
-import main.java.view.components.GameOverBoard;
+import model.Game;
+import model.Laser;
+import model.NoeudTrajectoire;
+import model.Pion;
+import model.Plateau;
+import view.GameView;
+import view.Menu;
+import view.components.BoardPanel;
+import view.components.GameOverBoard;
 import model.enums.Couleur;
-import main.java.model.enums.TypeDePion;
+import model.enums.TypeDePion;
 
 public class GameController implements MouseListener {
     private Game game;

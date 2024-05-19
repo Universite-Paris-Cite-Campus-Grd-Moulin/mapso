@@ -1,6 +1,12 @@
 package main.java.model;
 
+<<<<<<< HEAD
 import main.java.model.enums.Couleur;
+=======
+import java.util.Random;
+
+import model.enums.Couleur;
+>>>>>>> 002fb299eb0ee9a54c3bb226b229718f74589f7a
 
 public class Game {
     private Plateau board;
@@ -29,6 +35,29 @@ public class Game {
         }
         return false;
 
+    }
+
+    public void botMove() {
+        Random random = new Random();
+        int startX, startY, endX, endY;
+    
+        while (true) {
+            startX = random.nextInt(10); // Génère une coordonnée aléatoire entre 0 et 9
+            startY = random.nextInt(10);
+            Pion piece = board.getPieceAt(startX, startY);
+            
+            if (piece != null && piece.getCouleur() == Couleur.ROUGE) {
+                // Trouve une position de destination valide
+                do {
+                    endX = random.nextInt(10); 
+                    endY = random.nextInt(10);
+                } while (!board.isMoveValid(startX, startY, endX, endY));
+    
+                board.movePiece(startX, startY, endX, endY);
+                break;
+            }
+        }
+        switchPlayer() ; // Change de joueur après un mouvement réussi
     }
 
     public void rotatePiece(Pion pion) {
@@ -64,6 +93,10 @@ public class Game {
 
     private void nextTurn() {
         currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
+        if (currentPlayer == Couleur.ROUGE) {
+            // Appeler la méthode pour le déplacement du bot
+            botMove();
+        }
     }
 
     public boolean selectPiece(int x, int y) {

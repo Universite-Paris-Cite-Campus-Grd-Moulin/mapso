@@ -1,12 +1,12 @@
 package main.java.model;
 
-<<<<<<< HEAD
+
 import main.java.model.enums.Couleur;
-=======
+
 import java.util.Random;
 
-import model.enums.Couleur;
->>>>>>> 002fb299eb0ee9a54c3bb226b229718f74589f7a
+import main.java.model.enums.Couleur;
+
 
 public class Game {
     private Plateau board;

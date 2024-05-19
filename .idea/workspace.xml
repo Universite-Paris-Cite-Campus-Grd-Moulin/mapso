@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7ef56ca9-bafa-40ae-b06b-14ac55de618a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Rôle de chaque lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ressources/Background.png" beforeDir="false" afterPath="$PROJECT_DIR$/ressources/Background.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ressources/sprites_khet.png" beforeDir="false" afterPath="$PROJECT_DIR$/ressources/sprites_khet.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Laser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Laser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/NoeudTrajectoire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/NoeudTrajectoire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Pion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Pion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Plateau.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Plateau.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/GameView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/GameView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/components/BoardPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/components/BoardPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/components/PiecePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/components/PiecePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/Utilisation de JUnit" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/MainTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/controller/GameControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/ArbreTrajectoireTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/GameTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/LaserTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/NoeudTrajectoireTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/PionTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/PlateauTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/enums/CouleurTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/enums/DirectionTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/enums/TypeDePionTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/model/enums/TypeInteractionTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/view/GameViewTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/view/SpriteDimensionsTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/view/components/BoardPanelTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/view/components/PieceComponentTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/khet/view/components/PiecePanelTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/boardConfig.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/config/gameConfig.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/Background.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/DjedJaune.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/DjedRouge.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/Fond_Khet.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/Gris.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/HorusJaune.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/HorusRouge.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/Jaune.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/ObelisqueDoubleJaune.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/ObelisqueDoubleRouge.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/ObelisqueJaune.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/ObelisqueRouge.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/PharaonJaune.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/PharaonRouge.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/PyramideJaune.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/PyramideRouge.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/Rouge.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/button_exit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/button_setting.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/images/button_start.png" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2gVDzBT6ZJyl3LVHOnRQTKxQhQl" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;amelioration&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/paulm/Desktop/mapso&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.16920471&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\paulm\Desktop\mapso\src\main\resources\images" />
+      <recent name="C:\Users\paulm\Desktop\mapso\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.java.Main" />
+      <module name="mapso" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.1-openjdk-21.0.1-f644763e9732-f98dd351" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7ef56ca9-bafa-40ae-b06b-14ac55de618a" name="Changes" comment="" />
+      <created>1715774114157</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1715774114157</updated>
+      <workItem from="1715774118495" duration="7825000" />
+      <workItem from="1715839435829" duration="11620000" />
+      <workItem from="1715852097952" duration="1239000" />
+      <workItem from="1715892318336" duration="15001000" />
+      <workItem from="1715977990783" duration="5001000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

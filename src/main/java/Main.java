@@ -1,9 +1,9 @@
-import javax.swing.*;
+import java.awt.BorderLayout;
 
-import view.GameView;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 import view.Menu;
-
-import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {

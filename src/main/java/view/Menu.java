@@ -19,6 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
 import model.Audio;
 
 public class Menu extends JPanel {
@@ -122,13 +123,16 @@ public class Menu extends JPanel {
     private void showGameOptions() {
         JDialog gameOptionsDialog = new JDialog(mainFrame, "Choose Game Mode", true);
         gameOptionsDialog.setLayout(new GridLayout(1, 0));
-        gameOptionsDialog.setSize(400, 100);
+        gameOptionsDialog.setSize(500, 150); // Taille augmentée
         gameOptionsDialog.setLocationRelativeTo(mainFrame);
         gameOptionsDialog.setResizable(false);
 
-        JButton classicButton = createCustomButton("Classic", new Color(70, 130, 180), Color.WHITE, new Font("Arial", Font.BOLD, 16));
-        JButton imhotepButton = createCustomButton("Imhotep", new Color(239, 200, 127), Color.WHITE, new Font("Arial", Font.BOLD, 16));
-        JButton dynastyButton = createCustomButton("Dynastie", new Color(255, 160, 122), Color.WHITE, new Font("Arial", Font.BOLD, 16));
+        JButton classicButton = createCustomButton("Classic", new Color(70, 130, 180), Color.WHITE,
+                new Font("Arial", Font.BOLD, 16));
+        JButton imhotepButton = createCustomButton("Imhotep", new Color(239, 200, 127), Color.WHITE,
+                new Font("Arial", Font.BOLD, 16));
+        JButton dynastyButton = createCustomButton("Dynastie", new Color(255, 160, 122), Color.WHITE,
+                new Font("Arial", Font.BOLD, 16));
 
         gameOptionsDialog.add(classicButton);
         gameOptionsDialog.add(imhotepButton);

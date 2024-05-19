@@ -2,6 +2,9 @@ package model;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +15,8 @@ import model.enums.Direction;
 import model.enums.TypeDePion;
 import view.GameView;
 
-public class Plateau implements Observable{
-    
+public class Plateau implements Observable {
+
     private List<Observer> observers = new ArrayList<>();
     private Pion[][] grille;
     private int largeurDuPlateau = 10;
@@ -24,6 +27,7 @@ public class Plateau implements Observable{
     public boolean Imhotep = false;
     private List<Laser> lasers;
     private Couleur joueurActuel = Couleur.JAUNE; // Le joueur jaune commence
+
     public Pion[][] getGrille() {
         return grille;
     }
@@ -33,192 +37,80 @@ public class Plateau implements Observable{
         lasers = new ArrayList<>();
         switch (type) {
             case "Classic":
-                initializeClassic();
+                initializeFromFile("ressources/initial_board_classic.txt");
                 break;
             case "Dynastie":
-                initializeDynastie();
+                initializeFromFile("ressources/initial_board_dynastie.txt");
                 break;
             case "Imhotep":
-                initializeImhotep();
+                initializeFromFile("ressources/initial_board_imhotep.txt");
                 break;
             default:
-                initializeClassic();
+                initializeFromFile("ressources/initial_board_classic.txt");
         }
     }
 
-    public void initializeClassic() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 10; j++) {
-                // Obelisque
-                if (i == 0 && j == 4 || i == 0 && j == 6) {
-                    this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 3 || i == 7 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.JAUNE);
-                }
-                // Pharaon
-                if (i == 0 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.JAUNE);
-                }
-                // Horus
-                if (i == 3 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 4 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.NORD, Couleur.JAUNE);
-                }
-                // Djed
-                if (i == 3 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.EST, Couleur.ROUGE);
-                }
-                if (i == 4 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.EST, Couleur.JAUNE);
-                }
-                // Pyramide
-                if (i == 0 && j == 7 || i == 3 && j == 7 || i == 4 && j == 0 || i == 5 && j == 6) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 2 || i == 4 && j == 2 || i == 3 && j == 9 || i == 2 && j == 3) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.JAUNE);
-                }
-                if (i == 4 && j == 9 || i == 3 && j == 2) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.JAUNE);
-                }
-                if (i == 1 && j == 2) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 3 && j == 0 || i == 4 && j == 7) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.ROUGE);
-                }
-                if (i == 6 && j == 7) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.JAUNE);
-                }
+    private void initializeFromFile(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                int i = Integer.parseInt(parts[0]);
+                int j = Integer.parseInt(parts[1]);
+                TypeDePion type = parseType(parts[2]);
+                Couleur couleur = parseCouleur(parts[2].charAt(2));
+                Direction direction = parseDirection(parts[3]);
+                this.grille[i][j] = new Pion(type, direction, couleur);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         lasers.add(new Laser(Couleur.JAUNE));
         lasers.add(new Laser(Couleur.ROUGE));
     }
 
-    private void initializeImhotep() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 10; j++) {
-                // Obelisque
-                if (i == 0 && j == 4 || i == 0 && j == 6) {
-                    this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 3 || i == 7 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.JAUNE);
-                }
-                // Pharaon
-                if (i == 0 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.JAUNE);
-                }
-                // Horus
-                if (i == 3 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST, Couleur.ROUGE);
-                }
-                if (i == 4 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST, Couleur.JAUNE);
-                }
-                // Djed
-                if (i == 0 && j == 7) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.EST, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 2) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.EST, Couleur.JAUNE);
-                }
-                // Pyramide
-                if (i == 2 && j == 3 || i == 4 && j == 1 || i == 3 && j == 9) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.JAUNE);
-                }
-                if (i == 3 && j == 1 || i == 5 && j == 3 || i == 4 && j == 9) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.JAUNE);
-                }
-                if (i == 3 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.JAUNE);
-                }
-                if (i == 2 && j == 6 || i == 3 && j == 0 || i == 4 && j == 8) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.ROUGE);
-                }
-                if (i == 4 && j == 0 || i == 5 && j == 6 || i == 3 && j == 8) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.ROUGE);
-                }
-                if (i == 4 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.ROUGE);
-                }
-            }
+    private TypeDePion parseType(String code) {
+        switch (code.substring(0, 2)) {
+            case "Ob":
+                return TypeDePion.OBELISQUE;
+            case "Ph":
+                return TypeDePion.PHARAON;
+            case "Ho":
+                return TypeDePion.HORUS;
+            case "Dj":
+                return TypeDePion.DJED;
+            case "Py":
+                return TypeDePion.PYRAMIDE;
+            default:
+                throw new IllegalArgumentException("Type de pion inconnu: " + code);
         }
-        lasers.add(new Laser(Couleur.JAUNE));
-        lasers.add(new Laser(Couleur.ROUGE));
     }
 
-    private void initializeDynastie() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 10; j++) {
-                // Obelisque
-                if (i == 0 && j == 5 || i == 2 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 4 || i == 5 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.JAUNE);
-                }
-                // Pharaon
-                if (i == 1 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.ROUGE);
-                }
-                if (i == 6 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.JAUNE);
-                }
-                // Horus
-                if (i == 2 && j == 6) {
-                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST, Couleur.ROUGE);
-                }
-                if (i == 5 && j == 3) {
-                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST, Couleur.JAUNE);
-                }
-                // Djed
-                if (i == 3 && j == 2) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 4 && j == 7) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.NORD, Couleur.JAUNE);
-                }
-                // Pyramide
-                if (i == 0 && j == 6 || i == 3 && j == 0 || i == 4 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.ROUGE);
-                }
-                if (i == 0 && j == 4 || i == 2 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 2 && j == 0) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.ROUGE);
-                }
-                if (i == 4 && j == 3) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 3 || i == 3 && j == 4 || i == 4 && j == 9) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.JAUNE);
-                }
-                if (i == 7 && j == 5 || i == 5 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.JAUNE);
-                }
-                if (i == 5 && j == 9) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.JAUNE);
-                }
-                if (i == 3 && j == 6) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.JAUNE);
-                }
-            }
+    private Couleur parseCouleur(char couleur) {
+        switch (couleur) {
+            case 'R':
+                return Couleur.ROUGE;
+            case 'J':
+                return Couleur.JAUNE;
+            default:
+                throw new IllegalArgumentException("Couleur inconnue: " + couleur);
         }
-        lasers.add(new Laser(Couleur.JAUNE));
-        lasers.add(new Laser(Couleur.ROUGE));
+    }
+
+    private Direction parseDirection(String dir) {
+        switch (dir) {
+            case "N":
+                return Direction.NORD;
+            case "E":
+                return Direction.EST;
+            case "S":
+                return Direction.SUD;
+            case "W":
+                return Direction.OUEST;
+            default:
+                throw new IllegalArgumentException("Direction inconnue: " + dir);
+        }
     }
 
     public boolean deplacerPion(int iDepart, int jDepart, int iArrivee, int jArrivee) {
@@ -245,7 +137,6 @@ public class Plateau implements Observable{
             System.out.println("Ce n'est pas le tour du joueur " + grille[startY][startX].getCouleur());
             return false;
         }
-
 
         if (startX == endX && startY == endY) {
             System.out.println("Erreur: La position de départ est la même que la position d'arrivée.");
@@ -311,7 +202,8 @@ public class Plateau implements Observable{
                 && movingPiece.getCouleur() == destinationPiece.getCouleur()) {
             grille[endY][endX] = new Pion(TypeDePion.DOUBLE_OBELISQUE, Direction.NONE, movingPiece.getCouleur());
             grille[startY][startX] = null;
-            System.out.println("Deux obélisques empilés pour former un double obélisque en (" + endX + ", " + endY + ").");
+            System.out.println(
+                    "Deux obélisques empilés pour former un double obélisque en (" + endX + ", " + endY + ").");
             togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
@@ -327,7 +219,8 @@ public class Plateau implements Observable{
             grille[startY][startX] = null;
             grille[endY][endX] = movingPiece;
             movingPiece.setPosition(endX, endY);
-            System.out.println("Déplacement réussi de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
+            System.out
+                    .println("Déplacement réussi de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
             togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
@@ -336,7 +229,7 @@ public class Plateau implements Observable{
             mettreAJourLesCheminsDesLasers();
             return false;
         }
-        
+
     }
 
     private boolean isCoordonneeValide(int x, int y) {
@@ -603,7 +496,7 @@ public class Plateau implements Observable{
             Timer timer = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ((Timer)e.getSource()).stop(); // Arrêter le timer
+                    ((Timer) e.getSource()).stop(); // Arrêter le timer
                     System.out.println("Appel de notifyObserversGameOver avec couleur: " + couleur);
                     notifyObserversGameOver(couleur);
                 }
@@ -627,14 +520,12 @@ public class Plateau implements Observable{
         }
     }
 
-
-
     public Laser getRed() {
         return lasers.get(0);
     }
 
     public void setRed(Laser red) {
-        
+
     }
 
     public Laser getYellow() {

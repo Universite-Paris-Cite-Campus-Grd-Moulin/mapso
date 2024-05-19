@@ -15,11 +15,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import main.java.view.GameView;
+
 public class GameOverPanel extends JPanel {
     private Image backgroundImage;
     private JButton okButton;
+    private GameView gameView;
 
-    public GameOverPanel(String loserColor, Runnable okAction) {
+    public GameOverPanel(GameView gameView, String loserColor, Runnable okAction) {
+        this.gameView = gameView;
+
         try {
             Image originalImage = Toolkit.getDefaultToolkit().createImage("src/main/resources/images/GameOverPhoto.png");
             backgroundImage = originalImage.getScaledInstance(1100, 650, Image.SCALE_SMOOTH);
@@ -41,9 +46,12 @@ public class GameOverPanel extends JPanel {
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Créer le bouton personnalisé
-        okButton = createCustomButton("Procéder", new Color(58, 126, 234), Color.WHITE, new Font("Times New Roman", Font.BOLD, 30));
+        okButton = createCustomButton("Continuer", new Color(58, 126, 234), Color.WHITE, new Font("Times New Roman", Font.BOLD, 30));
         okButton.setAlignmentX(CENTER_ALIGNMENT);
-        okButton.addActionListener(e -> okAction.run());
+        okButton.addActionListener(e -> {
+            okAction.run();
+            gameView.showGameOverBoard();
+        });
 
         add(Box.createVerticalStrut(20));
         add(messageLabel);
@@ -71,3 +79,4 @@ public class GameOverPanel extends JPanel {
         return button;
     }
 }
+

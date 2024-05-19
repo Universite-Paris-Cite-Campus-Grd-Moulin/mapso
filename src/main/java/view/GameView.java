@@ -387,30 +387,34 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
 
     public void showGameOver(Couleur couleurGagnante) {
         System.out.println("showGameOver appelé avec couleurGagnante: " + couleurGagnante); // Message de débogage
-
+    
         // Arrêter le timer
         timer.stop();
-
+    
         // Déterminer le joueur gagnant à afficher
         String winnerColorText;
         if (couleurGagnante == Couleur.JAUNE) {
-            winnerColorText = "BLEU";
-        } else if (couleurGagnante == Couleur.ROUGE) {
             winnerColorText = "ORANGE";
+        } else if (couleurGagnante == Couleur.ROUGE) {
+            winnerColorText = "BLEU";
         } else {
             winnerColorText = couleurGagnante.toString();
         }
-
+    
         // Créer et afficher le panel de fin de jeu avec l'image et le bouton OK
         mainFrame.getContentPane().removeAll();
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    
         System.out.println("Game Over enclenché");
-        GameOverPanel gameOverPanel = new GameOverPanel(winnerColorText, () -> {
+        GameOverPanel gameOverPanel = new GameOverPanel(this, winnerColorText, () -> {
             mainFrame.getContentPane().removeAll();
             Menu menu = new Menu(mainFrame);
             mainFrame.setContentPane(menu);
             mainFrame.revalidate();
             mainFrame.repaint();
         });
+    
         mainFrame.setContentPane(gameOverPanel);
         mainFrame.revalidate();
         mainFrame.repaint();
@@ -428,6 +432,15 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
     public JFrame getMainFrame() {
         return mainFrame;
     }
+
+    public void showGameOverBoard() {
+        GameOverBoard gameOverBoard = new GameOverBoard(this);
+        mainFrame.getContentPane().removeAll();
+        mainFrame.setContentPane(gameOverBoard);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+    
 
     public void restartGame(String type) {
         mainFrame.getContentPane().removeAll();

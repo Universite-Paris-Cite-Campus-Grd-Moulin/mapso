@@ -58,43 +58,43 @@ public class Plateau implements Observable{
                 }
                 // Pharaon
                 if (i == 0 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.ROUGE);
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.ROUGE);
                 }
                 if (i == 7 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.JAUNE);
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.JAUNE);
                 }
                 // Horus
                 if (i == 3 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST, Couleur.ROUGE);
+                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.NORD, Couleur.ROUGE);
                 }
                 if (i == 4 && j == 5) {
                     this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.NORD, Couleur.JAUNE);
                 }
                 // Djed
                 if (i == 3 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.NORD, Couleur.ROUGE);
+                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.EST, Couleur.ROUGE);
                 }
                 if (i == 4 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.NORD, Couleur.JAUNE);
+                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.EST, Couleur.JAUNE);
                 }
                 // Pyramide
                 if (i == 0 && j == 7 || i == 3 && j == 7 || i == 4 && j == 0 || i == 5 && j == 6) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 2 || i == 4 && j == 2 || i == 3 && j == 9 || i == 2 && j == 3) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.JAUNE);
-                }
-                if (i == 4 && j == 9 || i == 3 && j == 2) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.JAUNE);
-                }
-                if (i == 1 && j == 2) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.ROUGE);
-                }
-                if (i == 3 && j == 0 || i == 4 && j == 7) {
                     this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.ROUGE);
                 }
+                if (i == 7 && j == 2 || i == 4 && j == 2 || i == 3 && j == 9 || i == 2 && j == 3) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.JAUNE);
+                }
+                if (i == 4 && j == 9 || i == 3 && j == 2) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.JAUNE);
+                }
+                if (i == 1 && j == 2) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
+                }
+                if (i == 3 && j == 0 || i == 4 && j == 7) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.ROUGE);
+                }
                 if (i == 6 && j == 7) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.JAUNE);
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.JAUNE);
                 }
             }
         }
@@ -115,105 +115,112 @@ public class Plateau implements Observable{
                 }
                 // Pharaon
                 if (i == 0 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.ROUGE);
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.ROUGE);
                 }
                 if (i == 7 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.JAUNE);
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.JAUNE);
                 }
                 // Horus
-                if (i == 3 && j == 4) {
+                if (i == 3 && j == 5) {
                     this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST, Couleur.ROUGE);
                 }
-                if (i == 4 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.NORD, Couleur.JAUNE);
+                if (i == 4 && j == 4) {
+                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST, Couleur.JAUNE);
                 }
                 // Djed
-                if (i == 3 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.NORD, Couleur.ROUGE);
+                if (i == 0 && j == 7) {
+                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.EST, Couleur.ROUGE);
                 }
-                if (i == 4 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.NORD, Couleur.JAUNE);
+                if (i == 7 && j == 2) {
+                    this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.EST, Couleur.JAUNE);
                 }
                 // Pyramide
-                if (i == 0 && j == 7 || i == 3 && j == 7 || i == 4 && j == 0 || i == 5 && j == 6) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 2 || i == 4 && j == 2 || i == 3 && j == 9 || i == 2 && j == 3) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.JAUNE);
-                }
-                if (i == 4 && j == 9 || i == 3 && j == 2) {
+                if (i == 2 && j == 3 || i == 4 && j == 1 || i == 3 && j == 9) {
                     this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.JAUNE);
                 }
-                if (i == 1 && j == 2) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.ROUGE);
+                if (i == 3 && j == 1 || i == 5 && j == 3 || i == 4 && j == 9) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.JAUNE);
                 }
-                if (i == 3 && j == 0 || i == 4 && j == 7) {
+                if (i == 3 && j == 4) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.JAUNE);
+                }
+                if (i == 2 && j == 6 || i == 3 && j == 0 || i == 4 && j == 8) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.ROUGE);
+                }
+                if (i == 4 && j == 0 || i == 5 && j == 6 || i == 3 && j == 8) {
                     this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.ROUGE);
                 }
-                if (i == 6 && j == 7) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.JAUNE);
+                if (i == 4 && j == 5) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.ROUGE);
                 }
             }
         }
-        lasers.add(new Laser(Couleur.ROUGE));
         lasers.add(new Laser(Couleur.JAUNE));
+        lasers.add(new Laser(Couleur.ROUGE));
     }
 
     private void initializeDynastie() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Obelisque
-                if (i == 0 && j == 4 || i == 0 && j == 6) {
+                if (i == 0 && j == 5 || i == 2 && j == 5) {
                     this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.ROUGE);
                 }
-                if (i == 7 && j == 3 || i == 7 && j == 5) {
+                if (i == 7 && j == 4 || i == 5 && j == 4) {
                     this.grille[i][j] = new Pion(TypeDePion.OBELISQUE, Direction.NORD, Couleur.JAUNE);
                 }
                 // Pharaon
-                if (i == 0 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.ROUGE);
+                if (i == 1 && j == 5) {
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.ROUGE);
                 }
-                if (i == 7 && j == 4) {
-                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.NORD, Couleur.JAUNE);
+                if (i == 6 && j == 4) {
+                    this.grille[i][j] = new Pion(TypeDePion.PHARAON, Direction.OUEST, Couleur.JAUNE);
                 }
                 // Horus
-                if (i == 3 && j == 4) {
+                if (i == 2 && j == 6) {
                     this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST, Couleur.ROUGE);
                 }
-                if (i == 4 && j == 5) {
-                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.NORD, Couleur.JAUNE);
+                if (i == 5 && j == 3) {
+                    this.grille[i][j] = new Pion(TypeDePion.HORUS, Direction.EST, Couleur.JAUNE);
                 }
                 // Djed
-                if (i == 3 && j == 5) {
+                if (i == 3 && j == 2) {
                     this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.NORD, Couleur.ROUGE);
                 }
-                if (i == 4 && j == 4) {
+                if (i == 4 && j == 7) {
                     this.grille[i][j] = new Pion(TypeDePion.DJED, Direction.NORD, Couleur.JAUNE);
                 }
                 // Pyramide
-                if (i == 0 && j == 7 || i == 3 && j == 7 || i == 4 && j == 0 || i == 5 && j == 6) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
-                }
-                if (i == 7 && j == 2 || i == 4 && j == 2 || i == 3 && j == 9 || i == 2 && j == 3) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.JAUNE);
-                }
-                if (i == 4 && j == 9 || i == 3 && j == 2) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.JAUNE);
-                }
-                if (i == 1 && j == 2) {
-                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.ROUGE);
-                }
-                if (i == 3 && j == 0 || i == 4 && j == 7) {
+                if (i == 0 && j == 6 || i == 3 && j == 0 || i == 4 && j == 5) {
                     this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.ROUGE);
                 }
-                if (i == 6 && j == 7) {
+                if (i == 0 && j == 4 || i == 2 && j == 4) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.ROUGE);
+                }
+                if (i == 2 && j == 0) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.ROUGE);
+                }
+                if (i == 4 && j == 3) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.ROUGE);
+                }
+                if (i == 7 && j == 3 || i == 3 && j == 4 || i == 4 && j == 9) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.EST, Couleur.JAUNE);
+                }
+                if (i == 7 && j == 5 || i == 5 && j == 5) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.SUD, Couleur.JAUNE);
+                }
+                if (i == 5 && j == 9) {
+                    this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.NORD, Couleur.JAUNE);
+                }
+                if (i == 3 && j == 6) {
                     this.grille[i][j] = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.JAUNE);
                 }
             }
         }
-        lasers.add(new Laser(Couleur.ROUGE));
         lasers.add(new Laser(Couleur.JAUNE));
+        lasers.add(new Laser(Couleur.ROUGE));
     }
+
 
     public boolean deplacerPion(int iDepart, int jDepart, int iArrivee, int jArrivee) {
         Pion movingPiece = grille[iDepart][jDepart];
@@ -602,34 +609,27 @@ public class Plateau implements Observable{
     }
 
     public void setPharaonTouche(Couleur couleur) {
-        if (!isGameOver) { // Vérifiez si le jeu n'est pas déjà terminé
-            System.out.println("Le Pharaon " + couleur + " a été touché!");
-            isGameOver = true; // Marquez le jeu comme terminé
-
-            // Délai de 1 seconde avant d'afficher le message
-            Timer timer = new Timer(1000, new ActionListener() {
+        if (!isGameOver) {
+            System.out.println("Le Pharaon " + couleur + " a Ã©tÃ© touchÃ©!");
+            isGameOver = true;
+            Timer timer = new Timer(800, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ((Timer)e.getSource()).stop(); // Arrêter le timer
-                    System.out.println("Appel de notifyObserversGameOver avec couleur: " + couleur);
+                    ((Timer)e.getSource()).stop();
                     notifyObserversGameOver(couleur);
                 }
             });
-            timer.setRepeats(false); // Ne répète pas le timer
-            timer.start(); // Démarre le timer
+            timer.setRepeats(false);
+            timer.start();
         } else {
-            System.out.println("Jeu déjà terminé, pas d'action nécessaire.");
+            System.out.println("Jeu dÃ©jÃ  terminÃ©, pas d'action nÃ©cessaire.");
         }
     }
 
     private void notifyObserversGameOver(Couleur couleur) {
-        System.out.println("notifyObserversGameOver appelé avec couleur: " + couleur);
         for (Observer observer : observers) {
             if (observer instanceof GameView) {
-                System.out.println("Observer est une instance de GameView, appel de showGameOver");
                 ((GameView) observer).showGameOver(couleur);
-            } else {
-                System.out.println("Observer n'est pas une instance de GameView");
             }
         }
     }

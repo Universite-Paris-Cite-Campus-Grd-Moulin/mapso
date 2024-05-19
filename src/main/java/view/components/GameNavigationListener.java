@@ -1,7 +1,9 @@
-package view.components;
+package main.java.view.components;
+
+import main.java.model.enums.*;;
 
 public interface GameNavigationListener {
     void onBackToMenuRequested();
 
-    void updateGameOver(model.enums.Couleur couleur);
+    void updateGameOver(Couleur couleur);
 }

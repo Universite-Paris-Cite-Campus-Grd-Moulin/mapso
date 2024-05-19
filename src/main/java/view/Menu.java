@@ -1,29 +1,17 @@
-package view;
+package main.java.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-
-import model.Audio;
+import main.java.view.GameView;
+import main.java.view.Settings;
+import main.java.model.Audio;
+import main.java.view.components.*;
+import java.awt.event.ActionEvent;
 
 public class Menu extends JPanel {
-    private JButton startButton, settingsButton, exitButton;
+    private JButton startButton, settingsButton, exitButton, rulesButton;
     private JFrame mainFrame;
     private final ImageIcon backgroundImage = new ImageIcon("src/main/resources/images/Fond_Khet.png");
 
@@ -37,11 +25,9 @@ public class Menu extends JPanel {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Ajoute un espace pour pousser les composants vers le bas
-        gbc.weighty = 1;
-        add(Box.createVerticalGlue(), gbc); // Utilisation de Box.createVerticalGlue() pour espacer verticalement
+        gbc.weighty = 1.8;
+        add(Box.createVerticalGlue(), gbc);
 
-        // Réinitialise le poids y pour les boutons
         gbc.weighty = 0;
 
         startButton = createButton("src/main/resources/images/button_start.png");
@@ -49,9 +35,10 @@ public class Menu extends JPanel {
         exitButton = createButton("src/main/resources/images/button_exit.png");
 
         startButton.addActionListener(e -> {
-            Audio.playSound("src/main/resources/audio/click.wav");
-            Timer timer = new Timer(800, new ActionListener() {
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(400, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    Audio.stopSound();
                     showGameOptions();
                     ((Timer) e.getSource()).stop();
                 }
@@ -61,9 +48,10 @@ public class Menu extends JPanel {
         });
 
         settingsButton.addActionListener(e -> {
-            Audio.playSound("src/main/resources/audio/click.wav");
-            Timer timer = new Timer(800, new ActionListener() {
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(400, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    Audio.stopSound();
                     openSettings();
                     ((Timer) e.getSource()).stop();
                 }
@@ -73,9 +61,10 @@ public class Menu extends JPanel {
         });
 
         exitButton.addActionListener(e -> {
-            Audio.playSound("src/main/resources/audio/click.wav");
-            Timer timer = new Timer(800, new ActionListener() {
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(400, new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    Audio.stopSound();
                     System.exit(0);
                     ((Timer) e.getSource()).stop();
                 }
@@ -84,20 +73,36 @@ public class Menu extends JPanel {
             timer.start();
         });
 
-        // Ajoute les boutons
-        gbc.gridy = GridBagConstraints.RELATIVE; // Utilise RELATIVE pour une meilleure gestion des positions
+        gbc.gridy = GridBagConstraints.RELATIVE;
         add(startButton, gbc);
         add(settingsButton, gbc);
         add(exitButton, gbc);
 
-        // Ajoute un espace pour pousser les boutons vers le haut
         gbc.weighty = 1;
         add(Box.createVerticalGlue(), gbc);
 
-        mainFrame.add(this); // Mettre le JPanel du menu dans le JFrame
+        mainFrame.add(this);
 
-        // Jouer la musique de fond
-        Audio.playSound("ressources/Music.wav"); // Chemin vers votre fichier audio
+        // Jouer la musique de fond en boucle
+        //Audio.playSound("ressources/Music.wav"); // Chemin vers votre fichier audio
+
+        // Ajouter le bouton des règles du jeu en bas à droite
+        addRulesButton();
+    }
+
+    private void addRulesButton() {
+        rulesButton = createButton("src/main/resources/images/acceuil.png");
+        rulesButton.addActionListener(e -> {
+            showRulesDialog();
+        });
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 950, 10, 10);
+        gbc.gridx = GridBagConstraints.RELATIVE;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.anchor = GridBagConstraints.SOUTHEAST;
+
+        add(rulesButton, gbc);
     }
 
     private JButton createButton(String imagePath) {
@@ -116,7 +121,6 @@ public class Menu extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Dessine l'image de fond
         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
     }
 
@@ -136,16 +140,43 @@ public class Menu extends JPanel {
         gameOptionsDialog.add(dynastyButton);
 
         classicButton.addActionListener(e -> {
-            openBoard("Classic");
-            gameOptionsDialog.dispose();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    openBoard("Classic");
+                     gameOptionsDialog.dispose();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+            
         });
         imhotepButton.addActionListener(e -> {
-            openBoard("Imhotep");
-            gameOptionsDialog.dispose();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    openBoard("Imhotep");
+                    gameOptionsDialog.dispose();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+            
         });
         dynastyButton.addActionListener(e -> {
-            openBoard("Dynastie");
-            gameOptionsDialog.dispose();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    openBoard("Dynastie");
+                    gameOptionsDialog.dispose();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+           
         });
         gameOptionsDialog.setVisible(true);
     }
@@ -170,19 +201,19 @@ public class Menu extends JPanel {
     }
 
     private void openBoard(String type) {
-        Audio.stopSound(); // Arrêter la musique de fond lorsque le jeu commence
+        //Audio.stopSound(); // Arrêter la musique de fond lorsque le jeu commence
         mainFrame.getContentPane().removeAll();
-        
+
         // Obtenir le temps par défaut en fonction du type de jeu
         int timeLeft = getDefaultTimeLeft(type);
-        
+
         // Création et ajout de la vue du jeu
         GameView jeu = new GameView(mainFrame, type, timeLeft);
         mainFrame.setContentPane(jeu);
         mainFrame.revalidate();
         mainFrame.repaint();
     }
-    
+
     private int getDefaultTimeLeft(String type) {
         switch (type) {
             case "Classic":
@@ -195,5 +226,42 @@ public class Menu extends JPanel {
                 return 30;
         }
     }
-    
+
+    private void showRulesDialog() {
+        String rules = "<html><body>" +
+                "<h2>Règles du jeu Khet</h2>" +
+                "<p><strong>Matériel de jeu :</strong><br>" +
+                "Khet est un jeu à deux joueurs, Jaune et Rouge. Il se joue sur un damier rectangulaire de taille 10 × 8. " +
+                "<br>Chaque joueur contrôle un laser de sa couleur placé sur l’un des bords horizontaux du plateau, émettant un rayon lumineux verticalement. " +
+                "<br>Chaque joueur dispose également d’un ensemble de pièces de sa couleur : un Pharaon, sept Pyramides, un Djed, un Horus, deux Obélisques. " +
+                "<br>Deux Obélisques de même couleur peuvent temporairement être empilés l’un sur l’autre, formant un Obélisque double.</p>" +
+
+                "<p><strong>But du jeu :</strong><br>" +
+                "Le but est d'atteindre le Pharaon adverse avec le laser de votre couleur à travers une série de réflexions de miroirs.</p>" +
+
+                "<p><strong>Règles du jeu :</strong><br>" +
+                "1. Les joueurs jouent à tour de rôle, en commençant par le joueur Jaune.<br>" +
+                "2. À son tour, un joueur doit effectuer une action parmi les suivantes :<br>" +
+                "- Déplacer une pièce vers une case vide adjacente et valide.<br>" +
+                "- Empiler l’un de ses Obélisques sur un autre adjacent, ou dépiler le sommet d’un Obélisque double sur une case vide adjacente et valide.<br>" +
+                "- Échanger la position de son Djed ou Horus avec une Pyramide ou un Obélisque adjacent, quelle que soit leur couleur.<br>" +
+                "- Tourner de +/− 90° l’une de ses Pyramides, son Djed ou son Horus.<br>" +
+                "3. Après avoir effectué une action, le joueur actionne son laser. Si le rayon touche une partie non réfléchissante d’une pièce, cette pièce est retirée du jeu.<br> Si le rayon atteint un Pharaon, le joueur adverse est déclaré perdant.</p>" +
+
+                "<p><strong>Types de pièces :</strong><br>" +
+                "- Pyramide : A un unique miroir réfléchissant le rayon à 90°.<br>" +
+                "- Djed : Dispose de deux miroirs accolés, réfléchissant le rayon à 90°.<br>" +
+                "- Horus : Possède un miroir semi-réfléchissant qui sépare le rayon en deux, l’un réfléchissant à 90° et l’autre continuant en ligne droite.<br>" +
+                "- Obélisque : Peut être empilé pour former un double Obélisque.<br>" +
+                "- Pharaon : Ne se déplace pas, doit être protégé.</p>" +
+
+                "<p><strong>Interaction avec les pièces :</strong><br>" +
+                "- Pour déplacer une pièce, cliquez sur celle-ci puis cliquez sur une case adjacente vide.<br>" +
+                "- Pour tourner une pièce (Pyramide, Djed ou Horus), cliquez sur la pièce avec le bouton droit de la souris pour la faire pivoter de 90° dans le sens horaire.<br>" +
+                "- Pour empiler des Obélisques, cliquez sur l'un puis sur l'autre lorsqu'ils sont adjacents.<br>" +
+                "- Pour dépiler un double Obélisque, cliquez sur celui-ci puis sur une case adjacente vide.</p>" +
+
+                "</body></html>";
+        JOptionPane.showMessageDialog(mainFrame, rules, "Règles du jeu", JOptionPane.INFORMATION_MESSAGE);
+    }
 }

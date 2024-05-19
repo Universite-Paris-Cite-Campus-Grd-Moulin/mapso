@@ -1,7 +1,6 @@
-package view.components;
+package main.java.view.components;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,10 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import model.Pion;
-import model.enums.Couleur;
-import model.enums.Direction;
-import model.enums.TypeDePion;
+import main.java.model.Pion;
+import main.java.model.enums.Couleur;
+import main.java.model.enums.Direction;
+import main.java.model.enums.TypeDePion;
 
 // PieceComponent pourrait ressembler à ceci
 public class PiecePanel extends JPanel {

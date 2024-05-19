@@ -1,4 +1,4 @@
-package model.enums;
+package main.java.model.enums;
 
 public enum Direction {
     NONE, NORD, EST, SUD, OUEST, NORD_EST, SUD_EST, SUD_OUEST, NORD_OUEST;

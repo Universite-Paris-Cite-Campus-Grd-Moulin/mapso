@@ -1,34 +1,18 @@
-package view;
+package main.java.view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-
-import model.NoeudTrajectoire;
-import model.Observer;
-import model.enums.Couleur;
-import view.components.BoardPanel;
-import view.components.GameNavigationListener;
-import view.components.GameOverPanel;
+import main.java.model.Audio;
+import main.java.model.NoeudTrajectoire;
+import main.java.model.Observer;
+import main.java.view.components.GameOverBoard;
+import main.java.view.components.GameOverPanel;
+import main.java.model.enums.Couleur;
+import main.java.view.components.BoardPanel;
+import main.java.view.components.GameNavigationListener;
 
 public class GameView extends JPanel implements GameNavigationListener, Observer {
     private BoardPanel boardPanel;
@@ -124,12 +108,21 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
     }
 
     private void addPauseButton(JPanel panel) {
-        JButton pauseButton = Menu.createCustomButton("Pause", new Color(255, 172, 250), new Color(255, 255, 255), new Font("Arial", Font.BOLD, 16));
+        JButton pauseButton = Menu.createCustomButton("Pause", new Color(200, 200, 220), new Color(255, 255, 255), new Font("Arial", Font.BOLD, 16));
         pauseButton.setPreferredSize(new Dimension(100, 40));
 
         pauseButton.addActionListener(e -> {
-            pauseTimer();
-            showPauseMenu();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    pauseTimer();
+                    showPauseMenu();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+           ;
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -146,27 +139,65 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
         JButton exitButton = Menu.createCustomButton("Exit", new Color(11, 43, 66), Color.WHITE, new Font("Arial", Font.BOLD, 16));
 
         continueButton.addActionListener(e -> {
-            pauseMenu.dispose();
-            resumeTimer();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    pauseMenu.dispose();
+                    resumeTimer();
+            }
+        });
+            timer.setRepeats(false);
+            timer.start();
+           ;
         });
 
         restartButton.addActionListener(e -> {
-            showGameOptions(e);
-            pauseMenu.dispose();  // Fermer la fenêtre de pause après le redémarrage du jeu
-            resumeTimer();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    showGameOptions(e);
+                    pauseMenu.dispose();  // Fermer la fenêtre de pause après le redémarrage du jeu
+                    resumeTimer();
+            }
+        });
+            timer.setRepeats(false);
+            timer.start();
+           ;
+            
         });
 
         backToMenuButton.addActionListener(e -> {
-            pauseMenu.dispose();
-            mainFrame.getContentPane().removeAll();
-            Menu menu = new Menu(mainFrame);
-            mainFrame.setContentPane(menu);
-            mainFrame.revalidate();
-            mainFrame.repaint();
-            resumeTimer();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    pauseMenu.dispose();
+                    mainFrame.getContentPane().removeAll();
+                    Menu menu = new Menu(mainFrame);
+                    mainFrame.setContentPane(menu);
+                    mainFrame.revalidate();
+                    mainFrame.repaint();
+                    resumeTimer();
+            }
         });
-
-        exitButton.addActionListener(e -> System.exit(0));
+            timer.setRepeats(false);
+            timer.start();
+           ;    
+           
+        });
+        exitButton.addActionListener(e -> {
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                    ((Timer) e.getSource()).stop();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+        });
 
         pauseMenu.add(continueButton);
         pauseMenu.add(restartButton);
@@ -195,16 +226,43 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
         gameOptionsDialog.add(dynastyButton);
 
         classicButton.addActionListener(ev -> {
-            openBoard("Classic");
-            gameOptionsDialog.dispose();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    openBoard("Classic");
+                     gameOptionsDialog.dispose();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+            
         });
         imhotepButton.addActionListener(ev -> {
-            openBoard("Imhotep");
-            gameOptionsDialog.dispose();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    openBoard("Imhotep");
+                   gameOptionsDialog.dispose();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+            
         });
         dynastyButton.addActionListener(ev -> {
-            openBoard("Dynastie");
-            gameOptionsDialog.dispose();
+            Audio.playSound("ressources/click.wav");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer) e.getSource()).stop();
+                    openBoard("Dynastie");
+                    gameOptionsDialog.dispose();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+            
         });
         gameOptionsDialog.setVisible(true);
     }

@@ -1,9 +1,11 @@
-import java.awt.BorderLayout;
+package main.java;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
-import view.Menu;
+import main.java.view.GameView;
+import main.java.view.Menu;
+
+import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package model.enums;
+package main.java.model.enums;
 
 public enum TypeInteraction {
     NONE, // Aucune interaction: le laser continue tout droit

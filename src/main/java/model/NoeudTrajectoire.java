@@ -1,12 +1,12 @@
-    package model;
+    package main.java.model;
 
     import java.util.ArrayList;
     import java.util.List;
 
-    import model.enums.Direction;
-    import model.enums.TypeDePion;
-    import model.enums.TypeInteraction;
-    import model.Plateau;
+    import main.java.model.enums.Direction;
+    import main.java.model.enums.TypeDePion;
+    import main.java.model.enums.TypeInteraction;
+    import main.java.model.Plateau;
 
     // Un noeud générique pour l'arbre de trajectoire
     public class NoeudTrajectoire {

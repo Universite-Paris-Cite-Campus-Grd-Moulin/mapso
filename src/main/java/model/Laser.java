@@ -1,12 +1,12 @@
-package model;
+package main.java.model;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.enums.Couleur;
-import model.enums.Direction;
-import model.enums.TypeInteraction;
+import main.java.model.enums.Couleur;
+import main.java.model.enums.Direction;
+import main.java.model.enums.TypeInteraction;
 
 public class Laser {
     private NoeudTrajectoire racine;

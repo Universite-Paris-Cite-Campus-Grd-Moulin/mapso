@@ -674,4 +674,17 @@ public class Plateau implements Observable{
         return this.largeurDuPlateau;
     }
 
+    public int getDefaultTimeLeft(String gameType) {
+        switch (gameType) {
+            case "Classic":
+                return 30;
+            case "Imhotep":
+                return 20;
+            case "Dynastie":
+                return 15;
+            default:
+                return 30;
+        }
+    }
+    
 }

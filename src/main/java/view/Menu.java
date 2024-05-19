@@ -19,6 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
 import model.Audio;
 
 public class Menu extends JPanel {
@@ -171,10 +172,28 @@ public class Menu extends JPanel {
     private void openBoard(String type) {
         Audio.stopSound(); // Arrêter la musique de fond lorsque le jeu commence
         mainFrame.getContentPane().removeAll();
+        
+        // Obtenir le temps par défaut en fonction du type de jeu
+        int timeLeft = getDefaultTimeLeft(type);
+        
         // Création et ajout de la vue du jeu
-        GameView jeu = new GameView(mainFrame, type);
+        GameView jeu = new GameView(mainFrame, type, timeLeft);
         mainFrame.setContentPane(jeu);
         mainFrame.revalidate();
         mainFrame.repaint();
     }
+    
+    private int getDefaultTimeLeft(String type) {
+        switch (type) {
+            case "Classic":
+                return 30;
+            case "Imhotep":
+                return 20;
+            case "Dynastie":
+                return 15;
+            default:
+                return 30;
+        }
+    }
+    
 }

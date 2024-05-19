@@ -36,17 +36,19 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
     private JLabel tour;
     private JLabel timerLabel;
     private Timer timer;
-    private int timeLeft = 30;
+    private int timeLeft;
     private boolean isPaused = false;
+    private String gameType;
 
-    public GameView(JFrame frame, String type) {
+    public GameView(JFrame frame, String type, int timeLeft) {
         this.mainFrame = frame;
+        this.gameType = type; // Ajouter ce champ pour suivre le type de jeu
+        this.timeLeft = timeLeft; // Initialiser le temps restant
         setPreferredSize(new Dimension(1000, 650));
 
         setLayout(new BorderLayout());
 
         boardPanel = new BoardPanel(type, mainFrame, this);
-
         boardPanel.getBoard().addObserver(this);
 
         JPanel otherPanel = new JPanel();
@@ -57,7 +59,7 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
         String playerColorText;
         if (c == Couleur.JAUNE) {
             playerColorText = "ORANGE";
-        }else if (c == Couleur.ROUGE) {
+        } else if (c == Couleur.ROUGE) {
             playerColorText = "BLEU";
         } else {
             playerColorText = c.toString();
@@ -220,8 +222,10 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
 
     private void openBoard(String type) {
         mainFrame.getContentPane().removeAll();
-        // Création et ajout de la vue du jeu
-        GameView jeu = new GameView(mainFrame, type);
+        // Récupérer le temps par défaut pour le type de jeu
+        int defaultTimeLeft = boardPanel.getBoard().getDefaultTimeLeft(type);
+        // Création et ajout de la vue du jeu avec la durée du timer
+        GameView jeu = new GameView(mainFrame, type, defaultTimeLeft);
         mainFrame.setContentPane(jeu);
         mainFrame.revalidate();
         mainFrame.repaint();
@@ -254,6 +258,21 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
     }
 
     private void initializeTimer() {
+        // Initialiser le timer en fonction du type de jeu
+        switch (gameType) {
+            case "Classic":
+                timeLeft = 30;
+                break;
+            case "Imhotep":
+                timeLeft = 20;
+                break;
+            case "Dynastie":
+                timeLeft = 15;
+                break;
+            default:
+                timeLeft = 30;
+        }
+
         timer = new Timer(1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (timeLeft > 0 && !isPaused) {
@@ -276,7 +295,19 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
     }
 
     public void resetTimer() {
-        timeLeft = 30;
+        switch (gameType) {
+            case "Classic":
+                timeLeft = 30;
+                break;
+            case "Imhotep":
+                timeLeft = 20;
+                break;
+            case "Dynastie":
+                timeLeft = 15;
+                break;
+            default:
+                timeLeft = 30;
+        }
         timerLabel.setText("Temps restant: " + timeLeft + "s");
     }
 
@@ -298,20 +329,20 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
 
     public void showGameOver(Couleur couleurGagnante) {
         System.out.println("showGameOver appelé avec couleurGagnante: " + couleurGagnante); // Message de débogage
-    
+
         // Arrêter le timer
         timer.stop();
-    
-        // Déterminer la couleur gagnante à afficher
+
+        // Déterminer le joueur gagnant à afficher
         String winnerColorText;
         if (couleurGagnante == Couleur.JAUNE) {
-            winnerColorText = "ORANGE";
-        } else if (couleurGagnante == Couleur.ROUGE) {
             winnerColorText = "BLEU";
+        } else if (couleurGagnante == Couleur.ROUGE) {
+            winnerColorText = "ORANGE";
         } else {
             winnerColorText = couleurGagnante.toString();
         }
-    
+
         // Créer et afficher le panel de fin de jeu avec l'image et le bouton OK
         mainFrame.getContentPane().removeAll();
         System.out.println("Game Over enclenché");
@@ -326,7 +357,7 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
         mainFrame.revalidate();
         mainFrame.repaint();
     }
-    
+
     @Override
     public void updateGameOver(Couleur couleur) {
         showGameOver(couleur);
@@ -342,7 +373,8 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
 
     public void restartGame(String type) {
         mainFrame.getContentPane().removeAll();
-        GameView newGameView = new GameView(mainFrame, type);
+        int defaultTimeLeft = boardPanel.getBoard().getDefaultTimeLeft(type);
+        GameView newGameView = new GameView(mainFrame, type, defaultTimeLeft);
         mainFrame.setContentPane(newGameView);
         mainFrame.revalidate();
         mainFrame.repaint();

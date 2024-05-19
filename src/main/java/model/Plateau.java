@@ -367,6 +367,19 @@ public class Plateau implements Observable{
         return Math.abs(endX - startX) <= 1 && Math.abs(endY - startY) <= 1;
     }
 
+    public boolean isMoveValid(int startX, int startY, int endX, int endY) {
+        if (startX < 0 || startX >= 10 || startY < 0 || startY >= 10 ||
+            endX < 0 || endX >= 10 || endY < 0 || endY >= 10) {
+            return false;
+        }
+        
+        if (this.getPieceAt(endX, endY) == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private boolean peutEchangerAvecDjed(Pion pion, int startX, int startY, int endX, int endY) {
         if (!estMouvementDuneCase(startX, startY, endX, endY))
             return false;

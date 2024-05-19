@@ -52,9 +52,20 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
         JPanel otherPanel = new JPanel();
         otherPanel.setPreferredSize(new Dimension(250, 650));
 
-        tour = new JLabel("Tour du Joueur " + boardPanel.getCurrentColor());
+        Couleur c = boardPanel.getCurrentColor();
+
+        String playerColorText;
+        if (c == Couleur.JAUNE) {
+            playerColorText = "ORANGE";
+        }else if (c == Couleur.ROUGE) {
+            playerColorText = "BLEU";
+        } else {
+            playerColorText = c.toString();
+        }
+
+        tour = new JLabel("Tour du Joueur " + playerColorText);
         tour.setFont(new Font("Arial", Font.BOLD, 20));
-        tour.setBorder(BorderFactory.createEmptyBorder(200, 30, 0, 20));
+        tour.setBorder(BorderFactory.createEmptyBorder(200, 10, 0, 20));
         otherPanel.add(tour);
 
         timerLabel = new JLabel("Temps restant: " + timeLeft + "s");
@@ -277,10 +288,10 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
 
     public void updateTourLabel() {
         if (boardPanel.getCurrentColor() == Couleur.JAUNE) {
-            tour.setText("Tour du Joueur Jaune");
+            tour.setText("Tour du Joueur ORANGE");
             tour.setForeground(new Color(255, 160, 122));
         } else {
-            tour.setText("Tour du Joueur Rouge");
+            tour.setText("Tour du Joueur BLEU");
             tour.setForeground(new Color(80, 198, 236));
         }
     }

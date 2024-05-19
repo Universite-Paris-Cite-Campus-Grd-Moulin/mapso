@@ -28,7 +28,7 @@ import model.Observer;
 import model.enums.Couleur;
 import view.components.BoardPanel;
 import view.components.GameNavigationListener;
-import view.components.GameOverBoard;
+import view.components.GameOverPanel;
 
 public class GameView extends JPanel implements GameNavigationListener, Observer {
     private BoardPanel boardPanel;
@@ -298,22 +298,35 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
 
     public void showGameOver(Couleur couleurGagnante) {
         System.out.println("showGameOver appelé avec couleurGagnante: " + couleurGagnante); // Message de débogage
-
+    
         // Arrêter le timer
         timer.stop();
-
-        // Afficher le message de fin de jeu avec un bouton OK
-        String message = "Le Pharaon " + couleurGagnante + " a été touché! Fin du jeu.";
-        JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE);
-
+    
+        // Déterminer la couleur gagnante à afficher
+        String winnerColorText;
+        if (couleurGagnante == Couleur.JAUNE) {
+            winnerColorText = "ORANGE";
+        } else if (couleurGagnante == Couleur.ROUGE) {
+            winnerColorText = "BLEU";
+        } else {
+            winnerColorText = couleurGagnante.toString();
+        }
+    
+        // Créer et afficher le panel de fin de jeu avec l'image et le bouton OK
         mainFrame.getContentPane().removeAll();
         System.out.println("Game Over enclenché");
-        GameOverBoard gameOverBoard = new GameOverBoard(this);
-        mainFrame.setContentPane(gameOverBoard);
+        GameOverPanel gameOverPanel = new GameOverPanel(winnerColorText, () -> {
+            mainFrame.getContentPane().removeAll();
+            Menu menu = new Menu(mainFrame);
+            mainFrame.setContentPane(menu);
+            mainFrame.revalidate();
+            mainFrame.repaint();
+        });
+        mainFrame.setContentPane(gameOverPanel);
         mainFrame.revalidate();
         mainFrame.repaint();
     }
-
+    
     @Override
     public void updateGameOver(Couleur couleur) {
         showGameOver(couleur);

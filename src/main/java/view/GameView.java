@@ -1,16 +1,34 @@
 package view;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import model.NoeudTrajectoire;
 import model.Observer;
-import view.components.GameOverBoard;
 import model.enums.Couleur;
 import view.components.BoardPanel;
 import view.components.GameNavigationListener;
+import view.components.GameOverBoard;
 
 public class GameView extends JPanel implements GameNavigationListener, Observer {
     private BoardPanel boardPanel;
@@ -19,6 +37,7 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
     private JLabel timerLabel;
     private Timer timer;
     private int timeLeft = 30;
+    private boolean isPaused = false;
 
     public GameView(JFrame frame, String type) {
         this.mainFrame = frame;
@@ -81,6 +100,12 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
         pauseMenu.setLayout(new GridLayout(4, 1));
         pauseMenu.setSize(200, 200);
         pauseMenu.setLocationRelativeTo(mainFrame);
+        pauseMenu.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                resumeTimer();
+            }
+        });
         addPauseMenuButtons(pauseMenu);
         pauseMenu.setVisible(true);
     }
@@ -89,7 +114,10 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
         JButton pauseButton = Menu.createCustomButton("Pause", new Color(255, 172, 250), new Color(255, 255, 255), new Font("Arial", Font.BOLD, 16));
         pauseButton.setPreferredSize(new Dimension(100, 40));
 
-        pauseButton.addActionListener(e -> showPauseMenu());
+        pauseButton.addActionListener(e -> {
+            pauseTimer();
+            showPauseMenu();
+        });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false);
@@ -104,11 +132,15 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
         JButton backToMenuButton = Menu.createCustomButton("Back To Menu", new Color(16, 76, 126), Color.WHITE, new Font("Arial", Font.BOLD, 16));
         JButton exitButton = Menu.createCustomButton("Exit", new Color(11, 43, 66), Color.WHITE, new Font("Arial", Font.BOLD, 16));
 
-        continueButton.addActionListener(e -> pauseMenu.dispose());
+        continueButton.addActionListener(e -> {
+            pauseMenu.dispose();
+            resumeTimer();
+        });
 
         restartButton.addActionListener(e -> {
             showGameOptions(e);
             pauseMenu.dispose();  // Fermer la fenêtre de pause après le redémarrage du jeu
+            resumeTimer();
         });
 
         backToMenuButton.addActionListener(e -> {
@@ -118,6 +150,7 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
             mainFrame.setContentPane(menu);
             mainFrame.revalidate();
             mainFrame.repaint();
+            resumeTimer();
         });
 
         exitButton.addActionListener(e -> System.exit(0));
@@ -212,15 +245,23 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
     private void initializeTimer() {
         timer = new Timer(1000, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (timeLeft > 0) {
+                if (timeLeft > 0 && !isPaused) {
                     timeLeft--;
-                } else {
+                } else if (timeLeft == 0) {
                     switchPlayer();  // Change de joueur lorsque le temps est écoulé
                 }
                 timerLabel.setText("Temps restant: " + timeLeft + "s");
             }
         });
         timer.start();
+    }
+
+    private void pauseTimer() {
+        isPaused = true;
+    }
+
+    private void resumeTimer() {
+        isPaused = false;
     }
 
     public void resetTimer() {
@@ -246,14 +287,21 @@ public class GameView extends JPanel implements GameNavigationListener, Observer
 
     public void showGameOver(Couleur couleurGagnante) {
         System.out.println("showGameOver appelé avec couleurGagnante: " + couleurGagnante); // Message de débogage
-        JOptionPane.showMessageDialog(this, "Le Pharaon " + couleurGagnante + " a été touché! Fin du jeu.");
+
+        // Arrêter le timer
+        timer.stop();
+
+        // Afficher le message de fin de jeu avec un bouton OK
+        String message = "Le Pharaon " + couleurGagnante + " a été touché! Fin du jeu.";
+        JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE);
+
         mainFrame.getContentPane().removeAll();
         System.out.println("Game Over enclenché");
         GameOverBoard gameOverBoard = new GameOverBoard(this);
         mainFrame.setContentPane(gameOverBoard);
         mainFrame.revalidate();
         mainFrame.repaint();
-}
+    }
 
     @Override
     public void updateGameOver(Couleur couleur) {

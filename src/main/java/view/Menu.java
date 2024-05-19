@@ -12,8 +12,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-<<<<<<< HEAD
-=======
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,8 +19,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
->>>>>>> c526514a43e4c337b18c3a4799023aebeb542bd8
 import model.Audio;
 
 public class Menu extends JPanel {

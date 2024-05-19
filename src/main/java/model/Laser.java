@@ -17,12 +17,12 @@ public class Laser {
     // Constantes pour les positions de départ
     private static final int START_I_RED = 0;
     private static final int START_J_RED = 0;
-    private static final int START_J_YELLOW = 9;
     private static final int START_I_YELLOW = 7;
+    private static final int START_J_YELLOW = 9;
 
     // Constructeur de la classe Laser
     public Laser(Couleur couleur) {
-        this.couleur = couleur;
+        this.couleur = couleur; 
         if (couleur == Couleur.ROUGE) {
             this.startPosition = new Point(START_I_RED, START_J_RED);
             this.direction = Direction.SUD; // Part du haut et va vers le bas
@@ -73,6 +73,10 @@ public class Laser {
         return startPosition;
     }
 
+    public String getPositionInitiale() {
+        return "(" + startPosition.x + ", " + startPosition.y + ")";
+    }
+
     public Direction getDirection() {
         return direction;
     }
@@ -93,9 +97,7 @@ public class Laser {
 
     private static void imprimerCheminLaser(List<NoeudTrajectoire> chemin) {
         for (NoeudTrajectoire noeud : chemin) {
-            System.out.println("Position: (" + noeud.getPositionI() + ", " + noeud.getPositionJ() + 
-                               ") Direction: " + noeud.getDirection() + 
-                               " Interaction: " + noeud.getTypeInteraction());
+            System.out.println("Position: (" + noeud.getPositionI() + ", " + noeud.getPositionJ() + ") Direction: " + noeud.getDirection() + " Interaction: " + noeud.getTypeInteraction());
         }
     }
 

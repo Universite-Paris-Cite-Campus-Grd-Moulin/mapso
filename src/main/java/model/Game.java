@@ -3,7 +3,7 @@ package model;
 import model.enums.Couleur;
 
 public class Game {
-    private model.Plateau board;
+    private Plateau board;
     private Couleur currentPlayer;
 
     // classe joueur , elle contient le booleen que il est vivanmt ou non
@@ -13,7 +13,7 @@ public class Game {
     //si un joueur est plus vivcant pas tu le remove de la list , jeu game over et
     private boolean isGameOver;
 
-    public Game(model.Plateau board) {
+    public Game(Plateau board) {
         this.board = board;
         this.currentPlayer = Couleur.JAUNE; // Le jeu commence toujours par le joueur Jaune
     }
@@ -43,7 +43,6 @@ public class Game {
 
     private void switchPlayer() {
         currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
-        System.out.println("Toggled to : " + currentPlayer);
     }
 
     public boolean isPlayerTurn(Couleur playerColor) {

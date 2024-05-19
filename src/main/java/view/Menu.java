@@ -9,21 +9,12 @@ import java.awt.event.ActionEvent;
 
 // Cette classe crée le menu
 // qui nous permet de se redériger vers le jeu
-public class Menu extends JPanel{
+public class Menu extends JPanel {
     private JButton startButton, settingsButton, exitButton;
-    private JFrame mainFrame ;
+    private JFrame mainFrame;
     private final ImageIcon backgroundImage = new ImageIcon("src/main/resources/images/Fond_Khet.png");
 
-    private void openBoard(String type) {
-        mainFrame.getContentPane().removeAll();
-        // Création et ajout de la vue du jeu
-        GameView jeu = new GameView(mainFrame,type);
-        mainFrame.setContentPane(jeu);
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
-
-    public Menu( JFrame mainFrame) {
+    public Menu(JFrame mainFrame) {
         this.mainFrame = mainFrame;
         setLayout(new GridBagLayout());
 
@@ -32,14 +23,10 @@ public class Menu extends JPanel{
         gbc.gridx = 0;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.PAGE_END;
 
         // Ajoute un espace pour pousser les composants vers le bas
-        JPanel spacer = new JPanel();
-        spacer.setSize(100,200);
-        spacer.setOpaque(false);
         gbc.weighty = 1;
-        add(spacer, gbc); // Le spacer est ajouté en premier
+        add(Box.createVerticalGlue(), gbc); // Utilisation de Box.createVerticalGlue() pour espacer verticalement
 
         // Réinitialise le poids y pour les boutons
         gbc.weighty = 0;
@@ -50,31 +37,38 @@ public class Menu extends JPanel{
 
         startButton.addActionListener(e -> {
             Audio.playSound("ressources/click.wav");
-            Timer timer = new Timer(800, new ActionListener(){
-                public void actionPerformed(ActionEvent e){
-                openBoard("Classic");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    showGameOptions();
+                    ((Timer) e.getSource()).stop();
                 }
             });
+            timer.setRepeats(false);
             timer.start();
         });
+
         settingsButton.addActionListener(e -> {
             Audio.playSound("ressources/click.wav");
-             Timer timer = new Timer(800, new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-            openBoard("Classic");
-            }
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    openSettings();
+                    ((Timer) e.getSource()).stop();
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
         });
-        openSettings();
-    });
 
         exitButton.addActionListener(e -> {
             Audio.playSound("ressources/click.wav");
-            Timer timer = new Timer(800, new ActionListener(){
-                public void actionPerformed(ActionEvent e){
-                openBoard("Classic");
+            Timer timer = new Timer(800, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                    ((Timer) e.getSource()).stop();
                 }
             });
-            System.exit(0); 
+            timer.setRepeats(false);
+            timer.start();
         });
 
         // Ajoute les boutons
@@ -83,7 +77,11 @@ public class Menu extends JPanel{
         add(settingsButton, gbc);
         add(exitButton, gbc);
 
-        mainFrame.add(this); //  mettre le Jpanel du menu dans le jframe
+        // Ajoute un espace pour pousser les boutons vers le haut
+        gbc.weighty = 1;
+        add(Box.createVerticalGlue(), gbc);
+
+        mainFrame.add(this); // Mettre le JPanel du menu dans le JFrame
     }
 
     private JButton createButton(String imagePath) {
@@ -98,7 +96,7 @@ public class Menu extends JPanel{
         button.setOpaque(false);
         return button;
     }
-   
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -111,9 +109,8 @@ public class Menu extends JPanel{
         gameOptionsDialog.setLayout(new GridLayout(1, 0));
         gameOptionsDialog.setSize(400, 100);
         gameOptionsDialog.setLocationRelativeTo(mainFrame);
-        gameOptionsDialog.setResizable(false); //  non redimensionnable
+        gameOptionsDialog.setResizable(false);
 
-        // Personnaliser les boutons
         JButton classicButton = createCustomButton("Classic", new Color(70, 130, 180), Color.WHITE, new Font("Arial", Font.BOLD, 16));
         JButton imhotepButton = createCustomButton("Imhotep", new Color(239, 200, 127), Color.WHITE, new Font("Arial", Font.BOLD, 16));
         JButton dynastyButton = createCustomButton("Dynastie", new Color(255, 160, 122), Color.WHITE, new Font("Arial", Font.BOLD, 16));
@@ -123,15 +120,9 @@ public class Menu extends JPanel{
         gameOptionsDialog.add(dynastyButton);
 
         classicButton.addActionListener(e -> {
-            Audio.playSound("ressources/click.wav");
-            Timer timer = new Timer(800, new ActionListener(){
-                public void actionPerformed(ActionEvent e){
-                openBoard("Classic");
-                }
-            });
+            openBoard("Classic");
             gameOptionsDialog.dispose();
-        });  
-
+        });
         imhotepButton.addActionListener(e -> {
             openBoard("Imhotep");
             gameOptionsDialog.dispose();
@@ -153,6 +144,7 @@ public class Menu extends JPanel{
         button.setBorderPainted(false);
         return button;
     }
+
     private void openSettings() {
         mainFrame.getContentPane().removeAll();
         Settings settingsPanel = new Settings(mainFrame);
@@ -161,5 +153,12 @@ public class Menu extends JPanel{
         mainFrame.repaint();
     }
 
-   
+    private void openBoard(String type) {
+        mainFrame.getContentPane().removeAll();
+        // Création et ajout de la vue du jeu
+        GameView jeu = new GameView(mainFrame, type);
+        mainFrame.setContentPane(jeu);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
 }

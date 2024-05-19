@@ -6,6 +6,7 @@ import java.util.List;
 import model.enums.Couleur;
 import model.enums.Direction;
 import model.enums.TypeDePion;
+import model.Laser;
 
 public class Plateau implements Observable{
     
@@ -17,10 +18,7 @@ public class Plateau implements Observable{
     public boolean Classic = false;
     public boolean Dynastie = false;
     public boolean Imhotep = false;
-
     private List<Laser> lasers;
-
-    private Couleur joueurActuel = Couleur.JAUNE;
 
     public Pion[][] getGrille() {
         return grille;
@@ -45,7 +43,6 @@ public class Plateau implements Observable{
     }
 
     public void initializeClassic() {
-        this.grille = new Pion[8][10];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Obelisque
@@ -100,12 +97,9 @@ public class Plateau implements Observable{
 
         lasers.add(new Laser(Couleur.JAUNE));
         lasers.add(new Laser(Couleur.ROUGE));
-        // red = new Laser(Couleur.ROUGE);
-        // yellow = new Laser(Couleur.JAUNE);
     }
 
     private void initializeImhotep() {
-        this.grille = new Pion[8][10];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Obelisque
@@ -159,12 +153,9 @@ public class Plateau implements Observable{
         }
         lasers.add(new Laser(Couleur.ROUGE));
         lasers.add(new Laser(Couleur.JAUNE));
-        // red = new Laser(Couleur.ROUGE);
-        // yellow = new Laser(Couleur.JAUNE);
     }
 
     private void initializeDynastie() {
-        this.grille = new Pion[8][10];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 // Obelisque
@@ -218,8 +209,25 @@ public class Plateau implements Observable{
         }
         lasers.add(new Laser(Couleur.ROUGE));
         lasers.add(new Laser(Couleur.JAUNE));
-        // red = new Laser(Couleur.ROUGE);
-        // yellow = new Laser(Couleur.JAUNE);
+    }
+
+    public boolean deplacerPion(int iDepart, int jDepart, int iArrivee, int jArrivee) {
+        Pion movingPiece = grille[iDepart][jDepart];
+        if (iDepart < 0 || iDepart >= grille.length || jDepart < 0 || jDepart >= grille[0].length ||
+                iArrivee < 0 || iArrivee >= grille.length || jArrivee < 0 || jArrivee >= grille[0].length) {
+            mettreAJourLesCheminsDesLasers();
+            return false;
+        }
+        if (grille[iArrivee][jArrivee] != null) {
+            mettreAJourLesCheminsDesLasers();
+            return false;
+        }
+        grille[iArrivee][jArrivee] = grille[iDepart][jDepart];
+        grille[iDepart][jDepart] = null;
+        movingPiece.setPosition(iArrivee, jArrivee); // Met à jour la position du pion
+
+        mettreAJourLesCheminsDesLasers();
+        return true;
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
@@ -265,7 +273,6 @@ public class Plateau implements Observable{
             movingPiece.setPosition(endX, endY);
             destinationPiece.setPosition(startX, startY);
             System.out.println("Échange réussi entre le Djed/Horus et la Pyramide/Obélisque.");
-            togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
         } else if ((destinationPiece != null) &&
@@ -276,7 +283,6 @@ public class Plateau implements Observable{
             movingPiece.setPosition(endX, endY);
             destinationPiece.setPosition(startX, startY);
             System.out.println("Échange réussi entre la Pyramide/Obélisque et le Djed/Horus.");
-            togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
         }
@@ -288,7 +294,6 @@ public class Plateau implements Observable{
             grille[endY][endX] = new Pion(TypeDePion.DOUBLE_OBELISQUE, Direction.NONE, movingPiece.getCouleur());
             grille[startY][startX] = null;
             System.out.println("Deux obélisques empilés pour former un double obélisque en (" + endX + ", " + endY + ").");
-            togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
         }
@@ -304,7 +309,6 @@ public class Plateau implements Observable{
             grille[endY][endX] = movingPiece;
             movingPiece.setPosition(endX, endY);
             System.out.println("Déplacement réussi de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
-            togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
         } else {
@@ -313,11 +317,6 @@ public class Plateau implements Observable{
             return false;
         }
         
-    }
-
-    private void togglePlayer() {
-        joueurActuel = (joueurActuel == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
-        System.out.println("C'est maintenant le tour de " + ((joueurActuel == Couleur.JAUNE ? "Jaune" : "Rouge")));
     }
 
     private boolean isCoordonneeValide(int x, int y) {
@@ -480,14 +479,11 @@ public class Plateau implements Observable{
     }
 
     public Pion getPieceAt2(int i, int j) {
-        if (i >= 0 && i < hauteurDuPlateau && j >= 0 && j < largeurDuPlateau) {
-            System.out.println("Indices dans les limites: i = " + i + ", j = " + j);
+        if (i >= 0 && i < largeurDuPlateau && j >= 0 && j < hauteurDuPlateau) {
             return grille[i][j];
         }
-        System.out.println("Indices hors limites: i = " + i + ", j = " + j);
         return null;
     }
-
 
     public boolean estTourneeDemandee(Pion pion) {
         return pion.isRotationRequested();
@@ -557,7 +553,7 @@ public class Plateau implements Observable{
         return false;
     }
 
-    private void mettreAJourLesCheminsDesLasers() {
+    public void mettreAJourLesCheminsDesLasers() {
         System.out.println("Mise à jour des chemins des lasers...");
         for (Laser laser : lasers) {
             laser.reinitialiserChemin();
@@ -571,23 +567,23 @@ public class Plateau implements Observable{
        
     }
 
-    public model.Laser getRed() {
+    public Laser getRed() {
         return lasers.get(0);
     }
 
-    public void setRed(model.Laser red) {
+    public void setRed(Laser red) {
         
     }
 
-    public model.Laser getYellow() {
+    public Laser getYellow() {
         return lasers.get(1);
     }
 
-    public void setYellow(model.Laser yellow) {
+    public void setYellow(Laser yellow) {
     }
 
     @Override
-    public void addObserver(model.Observer o) {
+    public void addObserver(Observer o) {
         observers.add(o);
     }
 
@@ -598,9 +594,17 @@ public class Plateau implements Observable{
 
     @Override
     public void notifyObservers() {
-        for (model.Observer observer : observers) {
+        for (Observer observer : observers) {
             observer.update();
         }
+    }
+
+    public int getHauteurDuPlateau() {
+        return this.hauteurDuPlateau;
+    }
+
+    public int getLargeurDuPlateau() {
+        return this.largeurDuPlateau;
     }
 
 }

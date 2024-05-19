@@ -1,18 +1,21 @@
-package controller;
+package main.java.controller;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-import model.Game;
-import model.Laser;
-import model.NoeudTrajectoire;
-import model.Pion;
-import model.Plateau;
+import main.java.model.Game;
+import main.java.model.Laser;
+import main.java.model.NoeudTrajectoire;
+import main.java.model.Pion;
+import main.java.model.Plateau;
+import main.java.view.GameView;
+import main.java.view.Menu;
+import main.java.view.components.BoardPanel;
+import main.java.view.components.GameOverBoard;
 import model.enums.Couleur;
-import view.GameView;
-import view.components.BoardPanel;
+import main.java.model.enums.TypeDePion;
 
 public class GameController implements MouseListener {
     private Game game;
@@ -27,7 +30,6 @@ public class GameController implements MouseListener {
     public GameController(String boardType) {
         this.board = new Plateau(boardType); // Create board with a specific type
         this.game = new Game(board);
-
     }
 
     public GameController(GameView gameView, String boardType) {
@@ -35,40 +37,40 @@ public class GameController implements MouseListener {
         this.game = new Game(board);
         this.gameView = gameView;
         this.panel = gameView.getBoardPanel();
+        this.panel.addMouseListener(this); // Ajout du MouseListener
     }
 
     public GameController(Game game, GameView gameView) {
         this.game = game;
         this.gameView = gameView;
         this.panel = gameView.getBoardPanel();
+        this.panel.addMouseListener(this); // Ajout du MouseListener
     }
 
     public void startGame() {
         game.start();
         if (gameView != null || board != null) {
             gameView.update();
-            gameView.update();
         }
     }
 
+    public Couleur getCurrentPlayer() {
+        return game.getCurrentPlayer();
+    }
+
     public void propagerLaser() {
-        // Obtenir la couleur actuelle du joueur (ou du laser si différent)
-        Couleur couleurLaser = game.getCurrentPlayer();  // Supposons que `getCouleurCourante()` existe dans ton jeu.
-    
-        // Créer une instance de Laser et propager
+        Couleur couleurLaser = game.getCurrentPlayer();
         Laser laser = new Laser(couleurLaser);
         laser.propagerLaser(board);
-    
-        // Obtenir le chemin du laser et le passer à la vue
         List<NoeudTrajectoire> cheminLaser = laser.obtenirCheminLaser();
-        gameView.updateLaserPath(cheminLaser, couleurLaser); //bbbbb
+        gameView.updateLaserPath(cheminLaser, couleurLaser);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         int x = e.getX() / gameView.getCellSize();
         int y = e.getY() / gameView.getCellSize();
-        Pion piece = game.getPieceAt(x, y);
+        Pion piece = board.getPieceAt(x, y);
 
         if (piece != null && piece.getCouleur() == game.getCurrentPlayer()) {
             if (selectedPiece == null) {
@@ -87,69 +89,65 @@ public class GameController implements MouseListener {
         }
     }
 
-    private void selectPiece(int x, int y) {
-        if (game.getPieceAt(x, y) != null && game.getPieceAt(x, y).getCouleur() == game.getCurrentPlayer()) {
-            System.out.println("Pièce sélectionnée : " + game.getPieceAt(x, y));
-        } else {
-            System.out.println("Sélection invalide ou ce n'est pas le tour du joueur.");
-        }
-    }
-
-    public void handleUserAction(int startX, int startY, int endX, int endY) {
-        if (board.movePiece(startX, startY, endX, endY)) {
-            shootLaser();
-            gameView.update();
-        } else {
-            System.out.println("Mouvement invalide");
-            gameView.displayMessage("Mouvement invalide. Veuillez essayer à nouveau.");
-        }
-    }
-
-    public void rotatePiece(int x, int y, boolean clockwise) {
-        Pion piece = board.getPieceAt(x, y);
-        if (piece != null) {
-            piece.rotate(clockwise);
-            shootLaser();
-            gameView.update();
-        }
-    }
-
-    private void shootLaser() {
-        game.shootLaser();
-        checkWinConditions();
-    }
-
-    private void checkWinConditions() {
-        if (game.isGameOver()) {
-            String winner = game.getCurrentPlayer() == Couleur.ROUGE ? "Jaune" : "Rouge";
-            System.out.println("Le jeu est terminé. Le joueur " + winner + " gagne !");
-            restartGame();
-        }
-    }
-
-    public void restartGame() {
-        this.board = new Plateau("Classic"); // or any other default or selected type
-        this.game = new Game(board);
-        startGame();
-    }
-
-    private void moveSelectedPiece(int newX, int newY) {
-        if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), newX, newY)) {
-            selectedPiece = null; // Désélectionner la pièce après le mouvement
-            gameView.update();
-        } else {
-            gameView.displayMessage("Déplacement invalide.");
-        }
-    }
-
     @Override
     public void mousePressed(MouseEvent e) {
         System.out.println("Mouse pressed at (" + e.getX() + ", " + e.getY() + ")");
+        int cellSize = gameView.getCellSize();
+        startX = e.getX() / cellSize;
+        startY = e.getY() / cellSize;
+        System.out.println("Start position set to (" + startX + ", " + startY + ")");
+
+        if (startX >= 0 && startX < BOARD_COLUMNS && startY >= 0 && startY < BOARD_ROWS) {
+            selectedPiece = board.getPieceAt(startX, startY);
+            if (selectedPiece != null && selectedPiece.getType() != TypeDePion.NONE) {
+                board.mettreAJourLesCheminsDesLasers();
+                board.notifyObservers();
+                System.out.println("Mouse pressed at (" + startX + ", " + startY + ") with piece " + selectedPiece.getType());
+            } else {
+                board.mettreAJourLesCheminsDesLasers();
+                board.notifyObservers();
+                System.out.println("No valid piece at cell (" + startX + ", " + startY + ")");
+            }
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         System.out.println("Mouse released at (" + e.getX() + ", " + e.getY() + ")");
+        int cellSize = gameView.getCellSize();
+        int endX = e.getX() / cellSize;
+        int endY = e.getY() / cellSize;
+        System.out.println("End position set to (" + endX + ", " + endY + ")");
+
+        Pion endPiece = board.getPieceAt(endX, endY);
+
+        if (e.getButton() == MouseEvent.BUTTON3 && selectedPiece != null
+                && selectedPiece.getType() == TypeDePion.DOUBLE_OBELISQUE) {
+            if (endPiece == null || endPiece.getType() != TypeDePion.DOUBLE_OBELISQUE) {
+                if (board.depilerDoubleObelisque(selectedPiece, startX, startY, endX, endY)) {
+                    System.out.println("Double obelisk separated at (" + startX + ", " + startY + ") to (" + endX + ", " + endY + ")");
+                    board.mettreAJourLesCheminsDesLasers();
+                    board.notifyObservers();
+                } else {
+                    System.out.println("Unable to separate double obelisk.");
+                    board.mettreAJourLesCheminsDesLasers();
+                    board.notifyObservers();
+                }
+            }
+        } else if (e.getButton() == MouseEvent.BUTTON1 && selectedPiece != null) {
+            if (endPiece == null || !endPiece.equals(selectedPiece)) {
+                if (board.movePiece(startX, startY, endX, endY)) {
+                    System.out.println("Piece moved or stacked from (" + startX + ", " + startY + ") to (" + endX + ", " + endY + ")");
+                    board.mettreAJourLesCheminsDesLasers();
+                    board.notifyObservers();
+                } else {
+                    System.out.println("Invalid move.");
+                    board.mettreAJourLesCheminsDesLasers();
+                    board.notifyObservers();
+                }
+            }
+        }
+        gameView.getBoardPanel().repaint();
     }
 
     @Override
@@ -162,28 +160,21 @@ public class GameController implements MouseListener {
         panel.setCursor(Cursor.getDefaultCursor());
     }
 
-    private void handleMouseClick(int x, int y) {
-        int cellSize = gameView.getCellSize();
-        int col = x / cellSize;
-        int row = y / cellSize;
-
-        if (selectedPiece == null) {
-            // Select piece
-            selectedPiece = board.getPieceAt(row, col);
-            if (selectedPiece != null && selectedPiece.getCouleur() != game.getCurrentPlayer()) {
-                selectedPiece = null; // Ensure that player can only move their own pieces
-                gameView.displayMessage("Invalid selection. Please select your own piece.");
-            }
-        } else {
-            // Move piece
-            if (board.movePiece(selectedPiece.getX(), selectedPiece.getY(), col, row)) {
-                gameView.update(); // Update the view to reflect the new board state
-                selectedPiece = null; // Deselect piece after move
-            } else {
-                gameView.displayMessage("Invalid move. Try again.");
-            }
-        }
+    public void backToMenu() {
+        gameView.getMainFrame().getContentPane().removeAll();
+        Menu menu = new Menu(gameView.getMainFrame());
+        gameView.getMainFrame().setContentPane(menu);
+        gameView.getMainFrame().revalidate();
+        gameView.getMainFrame().repaint();
     }
 
+    public void restartGame(String boardType) {
+        this.board = new Plateau(boardType); // Recrée un nouveau plateau avec le type spécifié
+        this.game = new Game(board); // Recrée un nouveau jeu avec le nouveau plateau
+        this.gameView.setBoardPanel(new BoardPanel(boardType,gameView.getMainFrame(),gameView)); // Met à jour le panneau de jeu dans la vue du jeu
+        this.panel = gameView.getBoardPanel(); // Réinitialise le panneau pour écouter les événements de la souris
+        this.panel.addMouseListener(this); // Ajoute le MouseListener au nouveau panneau
 
+        gameView.update(); // Met à jour la vue du jeu
+    }
 }

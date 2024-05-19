@@ -1,12 +1,16 @@
-package model;
+package main.java.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.view.GameView;
 import model.enums.Couleur;
 import model.enums.Direction;
-import model.enums.TypeDePion;
-import model.Laser;
+import main.java.model.enums.TypeDePion;
+import main.java.model.Laser;
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Plateau implements Observable{
     
@@ -14,12 +18,12 @@ public class Plateau implements Observable{
     private Pion[][] grille;
     private int largeurDuPlateau = 10;
     private int hauteurDuPlateau = 10;
-
+    private boolean isGameOver = false; // Ajoutez cette ligne pour suivre l'état du jeu
     public boolean Classic = false;
     public boolean Dynastie = false;
     public boolean Imhotep = false;
     private List<Laser> lasers;
-
+    private Couleur joueurActuel = Couleur.JAUNE; // Le joueur jaune commence
     public Pion[][] getGrille() {
         return grille;
     }
@@ -231,6 +235,12 @@ public class Plateau implements Observable{
     }
 
     public boolean movePiece(int startX, int startY, int endX, int endY) {
+        if (joueurActuel != grille[startY][startX].getCouleur()) {
+            System.out.println("Ce n'est pas le tour du joueur " + grille[startY][startX].getCouleur());
+            return false;
+        }
+
+
         if (startX == endX && startY == endY) {
             System.out.println("Erreur: La position de départ est la même que la position d'arrivée.");
             mettreAJourLesCheminsDesLasers();
@@ -273,6 +283,7 @@ public class Plateau implements Observable{
             movingPiece.setPosition(endX, endY);
             destinationPiece.setPosition(startX, startY);
             System.out.println("Échange réussi entre le Djed/Horus et la Pyramide/Obélisque.");
+            togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
         } else if ((destinationPiece != null) &&
@@ -283,6 +294,7 @@ public class Plateau implements Observable{
             movingPiece.setPosition(endX, endY);
             destinationPiece.setPosition(startX, startY);
             System.out.println("Échange réussi entre la Pyramide/Obélisque et le Djed/Horus.");
+            togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
         }
@@ -294,6 +306,7 @@ public class Plateau implements Observable{
             grille[endY][endX] = new Pion(TypeDePion.DOUBLE_OBELISQUE, Direction.NONE, movingPiece.getCouleur());
             grille[startY][startX] = null;
             System.out.println("Deux obélisques empilés pour former un double obélisque en (" + endX + ", " + endY + ").");
+            togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
         }
@@ -309,6 +322,7 @@ public class Plateau implements Observable{
             grille[endY][endX] = movingPiece;
             movingPiece.setPosition(endX, endY);
             System.out.println("Déplacement réussi de (" + startX + ", " + startY + ") à (" + endX + ", " + endY + ").");
+            togglePlayer();
             mettreAJourLesCheminsDesLasers();
             return true;
         } else {
@@ -558,14 +572,56 @@ public class Plateau implements Observable{
         for (Laser laser : lasers) {
             laser.reinitialiserChemin();
             laser.propagerLaser(this);
+
+            // Vérifier si un Pharaon est touché
+            List<NoeudTrajectoire> cheminLaser = laser.obtenirCheminLaser();
+            for (NoeudTrajectoire noeud : cheminLaser) {
+                Pion pion = getPieceAt(noeud.getPositionI(), noeud.getPositionJ());
+                if (pion != null && pion.getType() == TypeDePion.PHARAON) {
+                    // Pharaon touché, fin du jeu
+                    setPharaonTouche(pion.getCouleur());
+                    return; // Sortir de la boucle car le jeu est terminé
+                }
+            }
         }
         System.out.println("Mise à jour terminée.");
         notifyObservers();
     }
 
     public void setPharaonTouche(Couleur couleur) {
-       
+        if (!isGameOver) { // Vérifiez si le jeu n'est pas déjà terminé
+            System.out.println("Le Pharaon " + couleur + " a été touché!");
+            isGameOver = true; // Marquez le jeu comme terminé
+
+            // Délai de 1 seconde avant d'afficher le message
+            Timer timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ((Timer)e.getSource()).stop(); // Arrêter le timer
+                    System.out.println("Appel de notifyObserversGameOver avec couleur: " + couleur);
+                    notifyObserversGameOver(couleur);
+                }
+            });
+            timer.setRepeats(false); // Ne répète pas le timer
+            timer.start(); // Démarre le timer
+        } else {
+            System.out.println("Jeu déjà terminé, pas d'action nécessaire.");
+        }
     }
+
+    private void notifyObserversGameOver(Couleur couleur) {
+        System.out.println("notifyObserversGameOver appelé avec couleur: " + couleur);
+        for (Observer observer : observers) {
+            if (observer instanceof GameView) {
+                System.out.println("Observer est une instance de GameView, appel de showGameOver");
+                ((GameView) observer).showGameOver(couleur);
+            } else {
+                System.out.println("Observer n'est pas une instance de GameView");
+            }
+        }
+    }
+
+
 
     public Laser getRed() {
         return lasers.get(0);
@@ -597,6 +653,11 @@ public class Plateau implements Observable{
         for (Observer observer : observers) {
             observer.update();
         }
+    }
+
+    private void togglePlayer() {
+        joueurActuel = (joueurActuel == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
+        System.out.println("C'est maintenant le tour de " + (joueurActuel == Couleur.JAUNE ? "Jaune" : "Rouge"));
     }
 
     public int getHauteurDuPlateau() {

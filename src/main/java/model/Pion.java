@@ -1,8 +1,8 @@
-package model;
+package main.java.model;
 
 import model.enums.Couleur;
 import model.enums.Direction;
-import model.enums.TypeDePion;
+import main.java.model.enums.TypeDePion;
 
 public class Pion {
     protected TypeDePion type;

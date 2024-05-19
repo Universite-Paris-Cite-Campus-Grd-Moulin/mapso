@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 import model.enums.Couleur;
 
@@ -41,7 +41,7 @@ public class Game {
         switchPlayer(); // Change de joueur après l'empilement/dépilement
     }
 
-    private void switchPlayer() {
+    public void switchPlayer() {
         currentPlayer = (currentPlayer == Couleur.JAUNE) ? Couleur.ROUGE : Couleur.JAUNE;
     }
 

@@ -1,7 +1,9 @@
-package model.enums;
+package main.java.model.enums;
 
-import model.Pion;
-import model.Plateau;
+import main.java.model.Pion;
+import main.java.model.Plateau;
+import model.enums.Direction;
+
 
 public enum TypeDePion {
 

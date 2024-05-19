@@ -1,24 +1,22 @@
-package view.components;
+package main.java.view.components;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.*;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import controller.GameController;
-import model.Game;
-import model.NoeudTrajectoire;
-import model.Observer;
-import model.Pion;
-import model.Plateau;
+import main.java.controller.GameController;
+import main.java.model.Game;
+import main.java.model.NoeudTrajectoire;
+import main.java.model.Observer;
+import main.java.model.Pion;
+import main.java.model.Plateau;
 import model.enums.Couleur;
 import model.enums.Direction;
-import model.enums.TypeDePion;
-import view.GameView;
+import main.java.model.enums.TypeDePion;
+import main.java.view.GameView;
 import java.util.List;
 import view.components.GameNavigationListener;
-import view.components.PiecePanel;
 
 public class BoardPanel extends JPanel implements MouseListener, Observer {
     private Plateau board;
@@ -30,14 +28,17 @@ public class BoardPanel extends JPanel implements MouseListener, Observer {
     private GameNavigationListener navigationListener;
     private List<NoeudTrajectoire> cheminLaserRouge;
     private List<NoeudTrajectoire> cheminLaserJaune;
+    private GameView gameView;
 
     public BoardPanel(String type, JFrame frame, GameView view){
         this.board = new Plateau(type);
         Game jeu = new Game(board);
         this.game = jeu;
+        this.gameView = view;
         view.addMouseListener(this);
         board.addObserver(this);
         this.parentFrame = frame;
+
         setupBoardPanel();
         initLasersAndDrawPaths();
         revalidate();
@@ -71,16 +72,17 @@ public class BoardPanel extends JPanel implements MouseListener, Observer {
             drawLaserPath(g, cheminLaserRouge, Color.RED);
             drawLaserPath(g, cheminLaserJaune, Color.YELLOW);
         }
+        gameView.updateTourLabel();
     }
 
     private void drawBoard(Graphics g) {
         super.paintComponent(g);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
-                g.drawImage(view.components.PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j))),
+                g.drawImage(main.java.view.components.PiecePanel.draw(g, new Pion(TypeDePion.NONE, Direction.NORD, board.initCouleur(i, j))),
                         j * 75, i * 75, this);
                 if (board.getGrille()[i][j] != null) {
-                    g.drawImage(view.components.PiecePanel.draw(g, board.getGrille()[i][j]), j * 75, i * 75, this);
+                    g.drawImage(main.java.view.components.PiecePanel.draw(g, board.getGrille()[i][j]), j * 75, i * 75, this);
                 }
             }
         }
@@ -88,34 +90,29 @@ public class BoardPanel extends JPanel implements MouseListener, Observer {
 
     private void drawLaserPath(Graphics g, List<NoeudTrajectoire> cheminLaser, Color couleurLaser) {
         if (cheminLaser == null || cheminLaser.isEmpty()) {
-            System.out.println("je retourne ici");
             return;
         }
 
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(couleurLaser);
+        g2d.setStroke(new BasicStroke(4));
+
         if (couleurLaser.equals(Color.YELLOW)) {
-            g2d.setColor(new Color(9, 100, 131));
+            g2d.setColor(new Color(8, 75, 101));
         } else if (couleurLaser.equals(Color.RED)) {
-            g2d.setColor(new Color(245, 125, 77));
+            g2d.setColor(new Color(173, 78, 32));
         }
-        g2d.setStroke(new BasicStroke(4)); // Épaisseur du trait du laser
 
-        NoeudTrajectoire prev = null;
-        NoeudTrajectoire prevprev = null;
-        for (NoeudTrajectoire point : cheminLaser) {
-            if (prev != null && prevprev != null) {
+        for (int i = 0; i < cheminLaser.size() - 1; i++) {
+            NoeudTrajectoire point = cheminLaser.get(i);
+            NoeudTrajectoire nextPoint = cheminLaser.get(i + 1);
 
-                int x1 = prev.getPositionI() * getCellSize() + getCellSize() / 2; // Centre de la cellule
-                int y1 = prev.getPositionJ() * getCellSize() + getCellSize() / 2;
-                int x2 = point.getPositionI() * getCellSize() + getCellSize() / 2;
-                int y2 = point.getPositionJ() * getCellSize() + getCellSize() / 2;
-                int x3 = prevprev.getPositionI() * getCellSize() + getCellSize() / 2;
-                int y3 = prevprev.getPositionJ() * getCellSize() + getCellSize() / 2;
-                g2d.drawLine(x1, y1, x2, y2);
-                // g2d.drawLine(x3,y3,x2,y2);
-            }
-            prevprev = prev;
-            prev = point;
+            int x1 = point.getPositionI() * getCellSize() + getCellSize() / 2;
+            int y1 = point.getPositionJ() * getCellSize() + getCellSize() / 2;
+            int x2 = nextPoint.getPositionI() * getCellSize() + getCellSize() / 2;
+            int y2 = nextPoint.getPositionJ() * getCellSize() + getCellSize() / 2;
+
+            g2d.drawLine(x1, y1, x2, y2);
         }
     }
 
@@ -173,6 +170,8 @@ public class BoardPanel extends JPanel implements MouseListener, Observer {
                 } else {
                     if (selectedPiece != null && selectedPiece == clickedPiece) {
                         game.rotatePiece(clickedPiece);
+                        gameView.resetTimer();
+                        gameView.switchPlayer();
                     } else {
                         selectedPiece = clickedPiece;
                     }
@@ -192,6 +191,8 @@ public class BoardPanel extends JPanel implements MouseListener, Observer {
             clickedPiece.rotate(true);
             board.mettreAJourLesCheminsDesLasers();
             board.notifyObservers();
+            gameView.resetTimer();
+            gameView.switchPlayer();
             System.out.println("Piece rotated at (" + col + ", " + row + ")");
         } else {
             System.out.println("Invalid action for right-click on this type of piece or empty cell.");
@@ -249,6 +250,8 @@ public class BoardPanel extends JPanel implements MouseListener, Observer {
                     System.out.println("Piece moved or stacked from (" + startX + ", " + startY + ") to (" + endX + ", " + endY + ")");
                     board.mettreAJourLesCheminsDesLasers();
                     board.notifyObservers();
+                    gameView.resetTimer();
+                    gameView.switchPlayer();
                 } else {
                     System.out.println("Invalid move.");
                     board.mettreAJourLesCheminsDesLasers();
@@ -273,5 +276,18 @@ public class BoardPanel extends JPanel implements MouseListener, Observer {
     public void update() {
         initLasersAndDrawPaths();
         repaint();
+    }
+
+    @Override
+    public void updateGameOver(Couleur couleur) {
+
+    }
+
+    public Plateau getBoard() {
+        return this.board;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

@@ -1,8 +1,9 @@
+package main.java;
 
 import javax.swing.*;
 
-import view.GameView;
-import view.Menu;
+import main.java.view.GameView;
+import main.java.view.Menu;
 
 import java.awt.*;
 
@@ -20,7 +21,6 @@ public class Main {
             // le Menu
             Menu game = new Menu(mainFrame); // Le menu
             mainFrame.setVisible(true);
-
         });
     }
 }

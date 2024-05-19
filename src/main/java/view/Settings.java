@@ -1,10 +1,9 @@
-package view;
+package main.java.view;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Settings extends JPanel {
-
 
     public Settings(JFrame mainFrame) {
         setLayout(new GridBagLayout());
@@ -49,17 +48,13 @@ public class Settings extends JPanel {
         gbc.gridy = 3;
         add(cancelButton, gbc);
 
-        // dans la classe Audio tu accedes a ce champ boolean isSoundEnabled , si il est faux tu mute ; sound.mute() sinon
-        // true ,
         applyButton.addActionListener(e -> {
-            boolean isSoundEnabled = soundCheckBox.isSelected(); //rendre static comme ca dans Audio tu l'accedes avec sETTINGS.isSoun
-            // le rendre un  static attriobut de cette classe
+            boolean isSoundEnabled = soundCheckBox.isSelected();
             int volume = volumeSlider.getValue();
             JOptionPane.showMessageDialog(this, "Paramètres appliqués!");
         });
 
         cancelButton.addActionListener(e -> {
-            // Retourner au menu principal
             mainFrame.getContentPane().removeAll();
             Menu menu = new Menu(mainFrame);
             mainFrame.setContentPane(menu);
@@ -73,7 +68,7 @@ public class Settings extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         Color startColor = new Color(80, 198, 236); // Light Blue
-        Color endColor = new Color(255, 160, 122);   // Shrimp
+        Color endColor = new Color(255, 160, 122); // Shrimp
         int width = getWidth();
         int height = getHeight();
         GradientPaint gradientPaint = new GradientPaint(0, 0, startColor, width, height, endColor);
@@ -81,4 +76,3 @@ public class Settings extends JPanel {
         g2d.fillRect(0, 0, width, height);
     }
 }
-

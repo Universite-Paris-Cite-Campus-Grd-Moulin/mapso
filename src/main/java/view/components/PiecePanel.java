@@ -1,4 +1,4 @@
-package view.components;
+package main.java.view.components;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -11,10 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import model.Pion;
+import main.java.model.Pion;
 import model.enums.Couleur;
 import model.enums.Direction;
-import model.enums.TypeDePion;
+import main.java.model.enums.TypeDePion;
 
 // PieceComponent pourrait ressembler à ceci
 public class PiecePanel extends JPanel {
@@ -69,7 +69,7 @@ public class PiecePanel extends JPanel {
     }
 
     public static void main(String[] args) {
-        Pion pion = new Pion(TypeDePion.DOUBLE_OBELISQUE, Direction.EST, Couleur.JAUNE);
+        Pion pion = new Pion(TypeDePion.PYRAMIDE, Direction.OUEST, Couleur.JAUNE);
         PiecePanel panel = new PiecePanel(pion);
         SwingUtilities.invokeLater(() -> {
             panel.revalidate();

@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class Laser {
 
     // Constructeur de la classe Laser
     public Laser(Couleur couleur) {
-        this.couleur = couleur; 
+        this.couleur = couleur;
         if (couleur == Couleur.ROUGE) {
             this.startPosition = new Point(START_I_RED, START_J_RED);
             this.direction = Direction.SUD; // Part du haut et va vers le bas

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 stages:
   - build
   - test
@@ -30,3 +31,32 @@ test:
     - mkdir -p target/test-classes
     - javac -d target/test-classes -classpath $CLASSPATH $(find $TEST_PATH -name "*.java")
     - java -classpath target/classes:target/test-classes:lib/* org.junit.runner.JUnitCore $(find src/test/java -name "*Test.java" | sed 's/src\/test\/java\///' | sed 's/\.java//' | tr '/' '.')
+=======
+image: openjdk:21
+
+stages:
+  - build
+  - test
+
+cache:
+  paths:
+    - .m2/repository
+    - lib/
+
+before_script:
+  - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+  - export PATH=$JAVA_HOME/bin:$PATH
+  - echo 'Compiling the project...'
+  - javac -cp "lib/*" src/main/java/**/*.java
+
+build:
+  stage: build
+  script:
+    - echo 'Build completed'
+
+test:
+  stage: test
+  script:
+    - echo 'Running tests...'
+    - java -cp "lib/*:src/main/java:src/test/java" org.junit.platform.console.ConsoleLauncher --scan-classpath
+>>>>>>> Stashed changes
